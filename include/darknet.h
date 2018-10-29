@@ -639,6 +639,8 @@ typedef enum {
 
 typedef struct network{
     int transpose;
+    int flag_vec;
+    int gemm_type;
     int n;
     int batch;
     size_t *seen;

@@ -144,6 +144,7 @@ typedef struct size_params
     int w;
     int c;
     int index;
+    int flag_vec;
     int time_steps;
     network *net;
 } size_params;
@@ -861,6 +862,10 @@ void parse_net_options16(list *options, network16 *net)
 }
 void parse_net_options(list *options, network *net)
 {
+    //TL: fixing transpose in alexnet
+    net->flag_vec = option_find_int_quiet(options, "flag_vec", 0);
+    net->transpose = option_find_int_quiet(options, "transpose", 0);
+
     net->batch = option_find_int(options, "batch", 1);
     net->learning_rate = option_find_float(options, "learning_rate", .001);
     net->momentum = option_find_float(options, "momentum", .9);
@@ -1976,7 +1981,6 @@ void load_convolutional_weights(layer l, FILE *fp)
         l.wei_max = l.wei_max > l.weights[i] ? l.wei_max : l.weights[i];
         l.wei_min = l.wei_min < l.weights[i] ? l.wei_min : l.weights[i];
         // printf("MAX:[%f]\tMIN:[%f]", l.wei_max, l.wei_min);
-
     }
     printf("MAX:[%f]\tMIN:[%f]\n", l.wei_max, l.wei_min);
 
