@@ -1,9 +1,17 @@
 # darknet-modified  
 A Darknet branch modified to FP16 excution.  
 No weights file uploaded.  
----
-Run with `` rm -f log.tl/log && make && ./darknet TL predict tiny >> log.tllog ``
+Run with `` rm -f log.tl/log && make && ./darknet TL predict tiny >> log.tllog ``  
 in which predict could be valid/predic16/valid16 and nets could be whoever with both ``cfg`` and ``weights`` files.  
+Original args still available.  
+
+Now they are:
+- alexnet
+- mobilenet
+- resnet50
+- squeezenet
+- tiny
+- vgg16
 
 # squeezenet-source
 convert from https://github.com/DeepScale/SqueezeNet/tree/master/SqueezeNet_v1.1

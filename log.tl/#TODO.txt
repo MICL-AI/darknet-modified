@@ -1,4 +1,26 @@
 TODO:
-1. alexnet f32 err in predict                   done
-2. Squeezenet label err --> valid err
-3. mobilenet top-1/top-5 --> predict right
+3. Squeezenet --> valid16 err others right
+4. vgg16 --> valid16 err
+5. alex predict/predict16 && valid/valid16 different results
+6. mobilenet predict/16 wrong label, valid right
+7. squeezenet valid16
+8. vgg16 vlid16/predict16 err see below
+
+FIXME:
+terrance@MICL:/mnt/e/Win_Unbuntu_Pub/darknet$ rm -f log.tl/log && make && ./darknet TL valid16 vgg16
+make: Nothing to be done for 'all'.
+layer_s:(null)
+layer:-1
+cfg/vgg16.cfg
+readdd cfg end
+layer     filters    size              input                output
+    0 Type not recognized: [crop]
+Unused field: 'crop_height = 224'
+Unused field: 'crop_width = 224'
+Unused field: 'flip = 1'
+Unused field: 'exposure = 1'
+Unused field: 'saturation = 1'
+Unused field: 'angle = 0'
+    1 Layer before convolutional layer must output image.: Success
+darknet: ./src/utils.c:267: error: Assertion `0' failed.
+Aborted (core dumped)
