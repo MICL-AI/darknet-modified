@@ -459,7 +459,7 @@ int main(int argc, char **argv)
         //malloc solving mem issue: from TL -> classifier
         argv[1] = (char *)malloc(sizeof(char) * 20);
         argv[2] = (char *)malloc(sizeof(char) * 20);
-        argv[3] = (char *)malloc(sizeof(char) * 20);
+        argv[3] = (char *)malloc(sizeof(char) * 40);
         argv[4] = (char *)malloc(sizeof(char) * 20);
 
         // set func to classifier,
@@ -467,7 +467,10 @@ int main(int argc, char **argv)
         // set type
         strcpy(argv[2], class_type);
         // set data content
-        strcpy(argv[3], "cfg/imagenet1k.data");
+        if (strstr(net_name, "mobile") || strstr(net_name, "squeeze"))
+            strcpy(argv[3], "cfg/synset.imagenet1k.data");
+        else
+            strcpy(argv[3], "cfg/imagenet1k.data");
         //set cfg path
         argv[4] = strcat(net_cfg, net_name);
         strcat(argv[4], ".cfg");
