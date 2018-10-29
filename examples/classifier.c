@@ -389,14 +389,19 @@ void validate_classifier_single16(char *datacfg, char *filename, char *weightfil
         printf("calloc failed");
         exit(1);
     }
-
-    printf("validate_classifier_single16 gemmtype:%d\n", gemmtype);
-    printf("please input image number begin and end: XXXX-YYYY\n");
-    scanf("%d%c%d%f%f%d", &base, &ct, &range, &avg_acc, &avg_topk, &init);
-    printf("validate will from image No%d to No%d\n", base, range - 1);
-    printf("avg_acc:%f,avg_topk:%f\n", avg_acc, avg_topk);
     network16 *net = load_network16(filename, weightfile, 0);
-    printf("set_batch_network16(net, 1):%d!!\n", net->n);
+
+    // printf("validate_classifier_single16 gemmtype:%d\n", gemmtype);
+    // printf("please input image number begin and end: XXXX-YYYY\n");
+    // scanf("%d%c%d%f%f%d", &base, &ct, &range, &avg_acc, &avg_topk, &init);
+    // printf("validate will from image No%d to No%d\n", base, range - 1);
+    // printf("avg_acc:%f,avg_topk:%f\n", avg_acc, avg_topk);
+    // printf("set_batch_network16(net, 1):%d!!\n", net->n);
+    //TL: valid with 0-99 imgs.
+    gemmtype = 0;
+    base = 0;
+    range = 100;
+    //end TL:
     if (gemmtype == 2 || gemmtype == 82 || gemmtype == 92) //mac2
         net->gemm_type = 2;
     else if (gemmtype == 5 || gemmtype == 85 || gemmtype == 95) //mac5
@@ -575,11 +580,12 @@ void validate_classifier_single(char *datacfg, char *filename, char *weightfile,
     // scanf("%d%c%d%f%f%d",&base,&ct,&range,&avg_acc,&avg_topk,&init);
     // printf("validate will from image No%d to No%d\n", base,range-1);
     // printf("avg_acc:%f,avg_topk:%f\n",avg_acc,avg_topk);
-
-    //for(i = 0; i < m; ++i){
-    clock_t time;
+    //TL: valid with 0-99 imgs.
     base = 0;
     range = 100;
+    //end TL:
+    //for(i = 0; i < m; ++i){
+    clock_t time;
     if (!base || base < 0 || base > m)
         base = 0;
     if (init > base)
@@ -602,7 +608,7 @@ void validate_classifier_single(char *datacfg, char *filename, char *weightfile,
             }
         }
         image im;
-        //TODO: load by net not gemm
+        //TL: load by net not gemm
         if (strstr(filename, "mobile") || strstr(weightfile, "mobile"))
             im = load_image_color_mobilenet(paths[i], 0, 0);
         else if (strstr(filename, "squeeze") || strstr(weightfile, "squeeze"))
@@ -1408,7 +1414,7 @@ void run_classifier(int argc, char **argv)
         label_classifier(data, cfg, weights);
     else if (0 == strcmp(argv[2], "valid"))
         validate_classifier_single(data, cfg, weights, layer);
-    else if (0 == strcmp(argv[2], "validfp16"))
+    else if (0 == strcmp(argv[2], "valid16"))
         validate_classifier_single16(data, cfg, weights, layer);
     else if (0 == strcmp(argv[2], "validmulti"))
         validate_classifier_multi(data, cfg, weights);

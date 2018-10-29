@@ -1,0 +1,4 @@
+TODO:
+1. alexnet f32 err in predict
+2. Squeezenet label err --> valid err
+3. mobilenet top-1/top-5 --> predict right

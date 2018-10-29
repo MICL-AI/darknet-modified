@@ -1,4 +1,0 @@
-TODO:
-1. alnexnet f32 err
-2. Squeezenet label err
-3. mobilenet top-1/top-5
