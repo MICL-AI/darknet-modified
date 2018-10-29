@@ -1,0 +1,489 @@
+#include "vec.h"
+#include "time.h"
+int g_time =0;
+clock_t aa,bb;
+struct MOD_TIMES calc_mod_and_times(int len, int flag_debug)
+{
+
+	int i=0;
+	mod_times.times_[6]=(len>>6);
+	len -=(mod_times.times_[6] <<6);
+
+	for(i=5;i>0;i--){
+		mod_times.times_[i]=(len>>i);
+		len -=(mod_times.times_[i] <<i);
+	}
+	mod_times.times_[0]=len;
+	mod_times.mod_=len;
+
+	return mod_times;
+}
+
+void mul_or_add_cpu16vec(int len ,FLT* A, FLT* B , int flag)
+{
+	mod_times = calc_mod_and_times(len,0);
+	int i=0, len_calculated=0;
+
+	if(mod_times.times_[6]!=0){
+		union f_64 *vecA, *vecB ,*vecres;
+		for(i=0;i<mod_times.times_[6];i++){
+			vecres = (union f_64*)&B[len_calculated];
+
+			vecA = (union f_64*)&A[ len_calculated ];
+			vecB = (union f_64*)&B[ len_calculated ];	
+			if(flag==0)	vecres->v = vecB->v * vecA->v ;
+			else 		vecres->v = vecB->v + vecA->v ;
+			len_calculated +=64;// each time plus 64
+		}		
+	}
+	if(mod_times.times_[5]!=0){
+		union f_32 *vecA, *vecB, *vecres ;
+		vecres = (union f_32*)&B[len_calculated];
+		vecA = (union f_32*)&A[len_calculated ];
+		vecB = (union f_32*)&B[len_calculated ];
+		if(flag==0)	vecres->v = vecB->v * vecA->v ;
+		else 		vecres->v = vecB->v + vecA->v ;
+		
+		len_calculated +=32;
+	}
+	if(mod_times.times_[4]!=0){
+		union f_16 *vecA, *vecB ,*vecres;
+		vecres = (union f_16*)&B[len_calculated];
+		vecA = (union f_16*)&A[len_calculated ];
+		vecB = (union f_16*)&B[len_calculated ];
+ 		if(flag==0)	vecres->v = vecB->v * vecA->v ;
+		else 		vecres->v = vecB->v + vecA->v ;
+
+		len_calculated +=16;
+	}
+	if(mod_times.times_[3]!=0){
+		union f_8  *vecA,  *vecB, *vecres;
+		vecres = (union f_8*)&B[len_calculated];
+		vecA = (union f_8*)&A[len_calculated ];
+		vecB = (union f_8*)&B[len_calculated ];
+		if(flag==0)	vecres->v = vecB->v * vecA->v ;
+		else 		vecres->v = vecB->v + vecA->v ;
+
+		len_calculated += 8;
+	}
+	if(mod_times.times_[2]!=0){
+		union f_4  *vecA,  *vecB ,*vecres;
+		vecres = (union f_4*)&B[len_calculated];
+		vecA = (union f_4*)&A[len_calculated ];
+		vecB = (union f_4*)&B[len_calculated ];
+		if(flag==0)	vecres->v = vecB->v * vecA->v ;
+		else 		vecres->v = vecB->v + vecA->v ;
+
+		len_calculated += 4;
+	}
+	if(mod_times.times_[1]!=0){
+		if(flag==0){
+			B[len_calculated   ] *= A[len_calculated    ];
+			B[len_calculated +1] *= A[len_calculated + 1];
+		}else{
+			B[len_calculated   ] += A[len_calculated    ];
+			B[len_calculated +1] += A[len_calculated + 1];
+		}
+		len_calculated += 2;
+	}
+	if(mod_times.mod_==1){
+		if(flag==0)	B[len_calculated ]*= A[len_calculated];
+		else		B[len_calculated ]+= A[len_calculated];	
+	}
+}
+
+void scal_cpu16vec(int len , FLT* ALPHA ,FLT*X)
+{//printf("scal_cpu16vec\n");
+/*	mod_times = calc_mod_and_times(len,0);
+	int i=0, len_calculated=0;
+
+	if(mod_times.times_[6]!=0){
+		union f_64 *vecX, *vecALPHA;
+		for(i=0;i<mod_times.times_[6];i++){
+			vecX = (union f_64*)&X[len_calculated];
+			vecALPHA = (union f_64*)&ALPHA[ len_calculated ];	
+			vecX->v *= vecALPHA->v;
+			len_calculated +=64;// each time plus 64
+		}		
+	}
+	if(mod_times.times_[5]!=0){
+		union f_32 *vecX, *vecALPHA ;
+		vecB = (union f_32*)&B[len_calculated];
+		vecA = (union f_32*)&A[len_calculated ];
+		vecB->v = vecA->v ;		
+		len_calculated +=32;
+	}
+	if(mod_times.times_[4]!=0){
+		union f_16 *vecA, *vecB ;
+		vecB = (union f_16*)&B[len_calculated];
+		vecA = (union f_16*)&A[len_calculated ];
+		vecB->v = vecA->v ;			
+		len_calculated +=16;
+	}
+	if(mod_times.times_[3]!=0){
+		union f_8  *vecA,  *vecB;
+		vecB = (union f_8*)&B[len_calculated];
+		vecA = (union f_8*)&A[len_calculated ];
+		vecB->v = vecA->v ;	
+		len_calculated += 8;
+
+	}
+	if(mod_times.times_[2]!=0){
+		union f_4  *vecA,  *vecB ;
+		vecB = (union f_4*)&B[len_calculated];
+		vecA = (union f_4*)&A[len_calculated ];
+		vecB->v = vecA->v ;	
+		len_calculated += 4;
+	}
+	if(mod_times.times_[1]!=0){
+		B[len_calculated   ] = A[len_calculated    ];
+		B[len_calculated +1] = A[len_calculated + 1];
+		len_calculated += 2;
+	}
+	if(mod_times.mod_==1){
+		B[len_calculated ] = A[len_calculated];	
+	}*/
+}
+
+
+
+void copy_cpu16vec(int len ,FLT* A, FLT* B )
+{//printf("mul_or_add_cpu16vec\n");
+	mod_times = calc_mod_and_times(len,0);
+
+	int i=0, len_calculated=0;
+
+	if(mod_times.times_[6]!=0){
+		union f_64 *vecA, *vecB;
+		for(i=0;i<mod_times.times_[6];i++){//2
+			vecB = (union f_64*)&B[len_calculated];
+			vecA = (union f_64*)&A[ len_calculated ];	
+			vecB->v = vecA->v ;
+			len_calculated +=64;// each time plus 64
+		}		
+	}
+	if(mod_times.times_[5]!=0){
+		union f_32 *vecA, *vecB ;
+		vecB = (union f_32*)&B[len_calculated];
+		vecA = (union f_32*)&A[len_calculated ];
+		vecB->v = vecA->v ;		
+		len_calculated +=32;
+	}
+	if(mod_times.times_[4]!=0){
+		union f_16 *vecA, *vecB ;
+		vecB = (union f_16*)&B[len_calculated];
+		vecA = (union f_16*)&A[len_calculated ];
+		vecB->v = vecA->v ;			
+		len_calculated +=16;
+	}
+	if(mod_times.times_[3]!=0){
+		union f_8  *vecA,  *vecB;
+		vecB = (union f_8*)&B[len_calculated];
+		vecA = (union f_8*)&A[len_calculated ];
+		vecB->v = vecA->v ;	
+		len_calculated += 8;
+
+	}
+	if(mod_times.times_[2]!=0){
+		union f_4  *vecA,  *vecB ;
+		vecB = (union f_4*)&B[len_calculated];
+		vecA = (union f_4*)&A[len_calculated ];
+		vecB->v = vecA->v ;	
+		len_calculated += 4;
+	}
+	if(mod_times.times_[1]!=0){
+		B[len_calculated   ] = A[len_calculated    ];
+		B[len_calculated +1] = A[len_calculated + 1];
+		len_calculated += 2;
+	}
+	if(mod_times.mod_==1){
+		B[len_calculated ] = A[len_calculated];	
+	}
+}
+
+
+
+
+
+
+
+int  find_max_index_vec(int len ,FLT *A )
+{
+	mod_times = calc_mod_and_times(len,0);
+	int i=0, len_calculated=0 , maxidx=0 , maxidx_old=0;
+	
+	if(mod_times.times_[6]!=0){
+		union f_64 *vecA;
+		for(i=0;i<mod_times.times_[6];i++){//2
+			vecA = (union f_64*)&A[ len_calculated ];
+			if(i>0) maxidx_old = maxidx;
+			maxidx = __builtin_gptx_vfindfirsthiv64hfhf (vecA->v, __builtin_gptx_smaxahfv64hf (vecA->v));
+			maxidx+=len_calculated;
+			if(i>0)	maxidx = A[maxidx_old] >=A[maxidx] ? maxidx_old :maxidx;
+
+			len_calculated +=64;// each time plus 64
+		}		
+	}
+	if(mod_times.times_[5]!=0){
+		union f_32 *vecA ;
+		vecA = (union f_32*)&A[len_calculated ];
+		maxidx_old = maxidx;
+		maxidx = __builtin_gptx_vfindfirsthiv32hfhf (vecA->v, __builtin_gptx_smaxahfv32hf (vecA->v));
+		maxidx+=len_calculated;
+		maxidx = A[maxidx_old] >=A[maxidx] ? maxidx_old :maxidx;
+
+		len_calculated +=32;
+	}
+	if(mod_times.times_[4]!=0){
+		union f_16 *vecA;
+		vecA = (union f_16*)&A[len_calculated ];
+		maxidx_old = maxidx;
+		maxidx = __builtin_gptx_vfindfirsthiv16hfhf (vecA->v, __builtin_gptx_smaxahfv16hf (vecA->v));
+		maxidx+=len_calculated;
+		maxidx = A[maxidx_old] >=A[maxidx] ? maxidx_old :maxidx;
+
+		len_calculated +=16;
+	}
+	if(mod_times.times_[3]!=0){
+		union f_8  *vecA;
+		vecA = (union f_8*)&A[len_calculated ];
+		maxidx_old = maxidx;
+		maxidx = __builtin_gptx_vfindfirsthiv8hfhf (vecA->v, __builtin_gptx_smaxahfv8hf (vecA->v));
+		maxidx+=len_calculated;
+		maxidx = A[maxidx_old] >=A[maxidx] ? maxidx_old :maxidx;
+
+		len_calculated += 8;
+	}
+	if(mod_times.times_[2]!=0){
+		union f_4  *vecA;
+		vecA = (union f_4*)&A[len_calculated ];
+		maxidx_old = maxidx;
+		maxidx = __builtin_gptx_vfindfirsthiv4hfhf (vecA->v, __builtin_gptx_smaxahfv4hf (vecA->v));
+		maxidx+=len_calculated;
+		maxidx = A[maxidx_old] >=A[maxidx] ? maxidx_old :maxidx;
+
+		len_calculated += 4;
+	}
+	if(mod_times.times_[1]!=0){
+		maxidx = A[len_calculated]   > A[maxidx] ? len_calculated :maxidx;
+		maxidx = A[len_calculated+1] > A[maxidx] ? len_calculated+1 :maxidx;
+
+		len_calculated += 2;
+	}
+	if(mod_times.mod_==1){
+		maxidx = A[len_calculated]   > A[maxidx] ? len_calculated :maxidx;
+	}
+
+
+return maxidx;
+}
+
+void mul_or_add_scalarbrd_vec(int len , FLT *A ,FLT B, FLT *res , int flag)
+{// all elements in array A  multiply(add) the scalar element B ,return res; 
+// flag=0:res[i] =A[i]*B; flag=1:res[i] =A[i]+B;
+	mod_times = calc_mod_and_times(len,0);
+	int i=0, len_calculated=0;
+
+	if(mod_times.times_[6]!=0){
+		union f_64 *vecA,brd ,*vecres64;
+		brd.v= __builtin_gptx_fix_len_dupv64hfhf(B);
+		
+		for(i=0;i<mod_times.times_[6];i++){
+			vecres64 = (union f_64*)&res[ len_calculated ];	
+			vecA = (union f_64*)&A[ len_calculated ];			
+			if(flag==0)	vecres64->v=brd.v * vecA->v ;
+			else		vecres64->v=brd.v + vecA->v ;
+
+			len_calculated +=64;// each time plus 64
+		}
+	}
+	if(mod_times.times_[5]!=0){
+		union f_32 *vecA, brd ,*vecres32 ;
+		vecres32 = (union f_32*)&res[ len_calculated ];
+		brd.v = __builtin_gptx_fix_len_dupv32hfhf(B);
+		vecA = (union f_32*)&A[len_calculated ];
+		if(flag==0)	vecres32->v=brd.v * vecA->v ;
+		else		vecres32->v=brd.v + vecA->v ;
+
+		len_calculated +=32;	
+	}
+	if(mod_times.times_[4]!=0){
+		union f_16 *vecA, brd ,*vecres16 ;
+		vecres16 = (union f_16*)&res[ len_calculated ];
+
+		brd.v = __builtin_gptx_fix_len_dupv16hfhf(B);
+		vecA = (union f_16*)&A[len_calculated ];
+		if(flag==0)	vecres16->v=brd.v * vecA->v ;
+		else		vecres16->v=brd.v + vecA->v ;
+
+		len_calculated +=16;
+	}
+	if(mod_times.times_[3]!=0){
+		union f_8 *vecA, brd ,*vecres8 ;
+		vecres8 = (union f_8*)&res[ len_calculated ];
+		brd.v = __builtin_gptx_fix_len_dupv8hfhf(B);
+		vecA = (union f_8*)&A[len_calculated ];
+		if(flag==0)	vecres8->v=brd.v * vecA->v ;
+		else		vecres8->v=brd.v + vecA->v ;
+
+		len_calculated += 8;
+	}
+	if(mod_times.times_[2]!=0){
+		union f_4 *vecA, brd ,*vecres4 ;
+		vecres4 = (union f_4*)&res[ len_calculated ];
+
+		brd.v = __builtin_gptx_fix_len_dupv4hfhf(B);
+		vecA = (union f_4*)&A[len_calculated ];
+		if(flag==0)	vecres4->v=brd.v * vecA->v ;
+		else		vecres4->v=brd.v + vecA->v ;
+	
+		len_calculated += 4;
+	}
+	if(mod_times.times_[1]!=0){
+		if(flag==0){	
+			res[len_calculated   ] *= B;
+			res[len_calculated +1] *= B;
+		}
+		else{
+			res[len_calculated   ] += B;
+			res[len_calculated +1] += B;			
+		}
+		
+		len_calculated += 2;
+	}
+	if(mod_times.mod_==1){
+		if(flag==0)	res[len_calculated ]*= B;
+		else		res[len_calculated ]+= B;
+	}
+}
+
+//activation use
+void set_Max_threshold(FLT *A , int len, FLT MaxValue) 
+{
+//if A[i] >MaxValue  set the A[i]=MaxValue ;
+
+	mod_times = calc_mod_and_times(len,0);
+	int i=0, len_calculated=0;
+
+	if(mod_times.times_[6]!=0){
+		union f_64 *vecA,vec_max ;
+		vec_max.v= __builtin_gptx_fix_len_dupv64hfhf(MaxValue);
+		
+		for(i=0;i<mod_times.times_[6];i++){//2
+			vecA = (union f_64*)&A[ len_calculated ];			
+			vecA->v=__builtin_gptx_sminv64hf(vecA->v,vec_max.v);
+
+			len_calculated +=64;// each time plus 64
+		}
+	}
+	if(mod_times.times_[5]!=0){
+		union f_32 *vecA, vec_max ;
+		vec_max.v = __builtin_gptx_fix_len_dupv32hfhf(MaxValue);
+		vecA = (union f_32*)&A[len_calculated ];
+		vecA->v=__builtin_gptx_sminv32hf(vecA->v,vec_max.v);
+
+		len_calculated +=32;	
+	}
+	if(mod_times.times_[4]!=0){
+		union f_16 *vecA, vec_max ;
+		vec_max.v = __builtin_gptx_fix_len_dupv16hfhf(MaxValue);
+		vecA = (union f_16*)&A[len_calculated ];
+		vecA->v=__builtin_gptx_sminv16hf(vecA->v,vec_max.v);
+
+		len_calculated +=16;
+	}
+	if(mod_times.times_[3]!=0){
+		union f_8 *vecA, vec_max ;
+		vec_max.v = __builtin_gptx_fix_len_dupv8hfhf(MaxValue);
+		vecA = (union f_8*)&A[len_calculated ];
+		vecA->v=__builtin_gptx_sminv8hf(vecA->v,vec_max.v);
+
+		len_calculated += 8;
+	}
+	if(mod_times.times_[2]!=0){
+		union f_4 *vecA, vec_max ;
+		vec_max.v = __builtin_gptx_fix_len_dupv4hfhf(MaxValue);
+		vecA = (union f_4*)&A[len_calculated ];
+		vecA->v=__builtin_gptx_sminv4hf(vecA->v,vec_max.v);
+
+		len_calculated += 4;
+	}
+	if(mod_times.times_[1]!=0){
+
+		if(A[len_calculated]>MaxValue )
+			A[len_calculated]=MaxValue;
+		if(A[len_calculated+1]>MaxValue )
+			A[len_calculated+1]=MaxValue;
+		 
+		len_calculated += 2;
+	}
+	if(mod_times.mod_==1){
+		if(A[len_calculated]>MaxValue )
+			A[len_calculated]=MaxValue;
+
+	}
+
+}
+
+void fill_cpu16vec(int N, FLT ALPHA, FLT *X)
+{
+    //int i;
+    //for(i = 0; i < N; ++i) X[i] = ALPHA;
+
+	mod_times = calc_mod_and_times(N,0);
+	int i=0, len_calculated=0;
+	if(mod_times.times_[6]!=0){
+		union f_64 *vecX, vec_value;
+		vec_value.v= __builtin_gptx_fix_len_dupv64hfhf(ALPHA);
+		for(i=0;i<mod_times.times_[6];i++){//2
+			vecX = (union f_64*)&X[ len_calculated ];
+			vecX->v=vec_value.v;
+
+			len_calculated +=64;// each time plus 64
+		}
+	}
+	if(mod_times.times_[5]!=0){
+		union f_32 *vecX, vec_value ;
+		vec_value.v= __builtin_gptx_fix_len_dupv32hfhf(ALPHA);
+		vecX = (union f_32*)&X[len_calculated ];
+		vecX->v=vec_value.v;
+
+		len_calculated +=32;	
+	}
+	if(mod_times.times_[4]!=0){
+		union f_16 *vecX, vec_value ;
+		vec_value.v= __builtin_gptx_fix_len_dupv16hfhf(ALPHA);
+		vecX = (union f_16*)&X[len_calculated ];
+		vecX->v=vec_value.v;
+
+		len_calculated +=16;
+	}
+	if(mod_times.times_[3]!=0){
+		union f_8 *vecX, vec_value ;
+		vec_value.v= __builtin_gptx_fix_len_dupv8hfhf(ALPHA);
+		vecX = (union f_8*)&X[len_calculated ];
+		vecX->v=vec_value.v;
+	
+		len_calculated += 8;
+	}
+	if(mod_times.times_[2]!=0){
+		union f_4 *vecX, vec_value ;
+		vec_value.v= __builtin_gptx_fix_len_dupv4hfhf(ALPHA);
+		vecX = (union f_4*)&X[len_calculated ];
+		vecX->v=vec_value.v;
+
+		len_calculated += 4;
+	}
+	if(mod_times.times_[1]!=0){
+		X[len_calculated]=ALPHA;
+		X[len_calculated+1]=ALPHA;
+		 
+		len_calculated += 2;
+	}
+	if(mod_times.mod_==1){
+		X[len_calculated]=ALPHA;
+
+	}
+
+
+}

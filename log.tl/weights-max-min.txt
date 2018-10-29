@@ -1,0 +1,936 @@
+MARK: VGG-16
+MAX:[77.457756] MIN:[-85.506470]
+load conv biases:64
+
+ biases[63]:-0.582516
+load weights:36864
+MAX:[0.288742]  MIN:[-0.216486]
+load conv biases:128
+
+ biases[127]:0.131520
+load weights:73728
+MAX:[0.419124]  MIN:[-0.335888]
+load conv biases:128
+
+ biases[127]:0.275073
+load weights:147456
+MAX:[0.273352]  MIN:[-0.181715]
+load conv biases:256
+
+ biases[255]:-0.027864
+load weights:294912
+MAX:[0.528377]  MIN:[-0.182592]
+load conv biases:256
+
+ biases[255]:0.163117
+load weights:589824
+MAX:[0.446311]  MIN:[-0.177160]
+load conv biases:256
+
+ biases[255]:-0.026758
+load weights:589824
+MAX:[0.393347]  MIN:[-0.179862]
+load conv biases:512
+
+ biases[511]:0.010166
+load weights:1179648
+MAX:[0.316352]  MIN:[-0.123496]
+load conv biases:512
+
+ biases[511]:-0.017192
+load weights:2359296
+MAX:[0.339429]  MIN:[-0.104838]
+load conv biases:512
+
+ biases[511]:0.053721
+load weights:2359296
+MAX:[0.256796]  MIN:[-0.127413]
+load conv biases:512
+
+ biases[511]:0.639749
+load weights:2359296
+MAX:[0.190066]  MIN:[-0.112775]
+load conv biases:512
+
+ biases[511]:-0.176725
+load weights:2359296
+MAX:[0.205779]  MIN:[-0.136459]
+load conv biases:512
+
+ biases[511]:-0.026544
+load weights:2359296
+MAX:[0.288491]  MIN:[-0.092850]
+
+MARK: TINY
+ biases[15]:4.735823
+batch_normalize
+load weights:432
+MAX:[0.639081]  MIN:[-0.797462]
+load conv biases:32
+
+ biases[31]:4.673299
+batch_normalize
+load weights:4608
+MAX:[0.502337]  MIN:[-0.624701]
+load conv biases:16
+
+ biases[15]:4.054129
+batch_normalize
+load weights:512
+MAX:[0.471877]  MIN:[-0.491311]
+load conv biases:128
+
+ biases[127]:-1.894542
+batch_normalize
+load weights:18432
+MAX:[0.384833]  MIN:[-0.301984]
+load conv biases:16
+
+ biases[15]:2.415259
+batch_normalize
+load weights:2048
+MAX:[0.196435]  MIN:[-0.313730]
+load conv biases:128
+
+ biases[127]:-1.389878
+batch_normalize
+load weights:18432
+MAX:[0.316187]  MIN:[-0.250155]
+load conv biases:32
+
+ biases[31]:3.743921
+batch_normalize
+load weights:4096
+MAX:[0.424470]  MIN:[-0.302000]
+load conv biases:256
+
+ biases[255]:-1.469027
+batch_normalize
+load weights:73728
+MAX:[0.337983]  MIN:[-0.235764]
+load conv biases:32
+
+ biases[31]:1.153375
+batch_normalize
+load weights:8192
+MAX:[0.283498]  MIN:[-0.300580]
+load conv biases:256
+
+ biases[255]:-1.309983
+batch_normalize
+load weights:73728
+MAX:[0.259596]  MIN:[-0.273926]
+load conv biases:64
+
+ biases[63]:1.031343
+batch_normalize
+load weights:16384
+MAX:[0.433014]  MIN:[-0.239552]
+load conv biases:512
+
+ biases[511]:-1.128729
+batch_normalize
+load weights:294912
+MAX:[0.277271]  MIN:[-0.248941]
+load conv biases:64
+
+ biases[63]:2.173216
+batch_normalize
+load weights:32768
+MAX:[0.226010]  MIN:[-0.451421]
+load conv biases:512
+
+ biases[511]:-2.993212
+batch_normalize
+load weights:294912
+MAX:[0.138450]  MIN:[-0.127138]
+load conv biases:128
+
+ biases[127]:-13.292295
+batch_normalize
+load weights:65536
+MAX:[0.259684]  MIN:[-0.209575]
+load conv biases:1000
+
+ biases[999]:0.776048
+load weights:128000
+MAX:[0.445155]  MIN:[-0.230387]
+
+MARK: squeeze
+MAX:[0.884893]	MIN:[-0.919847]
+load conv biases:16
+
+ biases[15]:0.242732
+load weights:1024
+MAX:[1.247713]	MIN:[-1.380013]
+load conv biases:64
+
+ biases[63]:0.005153
+load weights:1024
+MAX:[0.909821]	MIN:[-0.740602]
+load conv biases:64
+
+ biases[63]:0.008088
+load weights:9216
+MAX:[0.669053]	MIN:[-0.743970]
+load conv biases:16
+
+ biases[15]:0.118288
+load weights:2048
+MAX:[0.689388]	MIN:[-0.771878]
+load conv biases:64
+
+ biases[63]:-0.018612
+load weights:1024
+MAX:[0.976383]	MIN:[-0.720982]
+load conv biases:64
+
+ biases[63]:0.013610
+load weights:9216
+MAX:[0.775242]	MIN:[-0.613488]
+load conv biases:32
+
+ biases[31]:0.048715
+load weights:4096
+MAX:[1.089493]	MIN:[-0.741982]
+load conv biases:128
+
+ biases[127]:0.027095
+load weights:4096
+MAX:[0.629514]	MIN:[-0.532169]
+load conv biases:128
+
+ biases[127]:-0.005140
+load weights:36864
+MAX:[0.556623]	MIN:[-0.600759]
+load conv biases:32
+
+ biases[31]:0.079586
+load weights:8192
+MAX:[0.489097]	MIN:[-0.561380]
+load conv biases:128
+
+ biases[127]:0.002375
+load weights:4096
+MAX:[0.676342]	MIN:[-0.440480]
+load conv biases:128
+
+ biases[127]:-0.015704
+load weights:36864
+MAX:[0.771952]	MIN:[-0.395165]
+load conv biases:48
+
+ biases[47]:0.134697
+load weights:12288
+MAX:[0.570030]	MIN:[-0.707822]
+load conv biases:192
+
+ biases[191]:0.041762
+load weights:9216
+MAX:[0.461235]	MIN:[-0.477358]
+load conv biases:192
+
+ biases[191]:0.007001
+load weights:82944
+MAX:[0.618229]	MIN:[-0.465604]
+load conv biases:48
+
+ biases[47]:0.081962
+load weights:18432
+MAX:[0.608059]	MIN:[-0.462871]
+load conv biases:192
+
+ biases[191]:0.080539
+load weights:9216
+MAX:[0.444897]	MIN:[-0.381886]
+load conv biases:192
+
+ biases[191]:-0.017826
+load weights:82944
+MAX:[0.449644]	MIN:[-0.419945]
+load conv biases:64
+
+ biases[63]:0.004705
+load weights:24576
+MAX:[0.663536]	MIN:[-0.567436]
+load conv biases:256
+
+ biases[255]:0.023381
+load weights:16384
+MAX:[0.630914]	MIN:[-0.336979]
+load conv biases:256
+
+ biases[255]:0.050650
+load weights:147456
+MAX:[0.527759]	MIN:[-0.258714]
+load conv biases:64
+
+ biases[63]:-0.059738
+load weights:32768
+MAX:[0.431432]	MIN:[-0.378983]
+load conv biases:256
+
+ biases[255]:0.020253
+load weights:16384
+MAX:[0.520016]	MIN:[-0.401604]
+load conv biases:256
+
+ biases[255]:0.010036
+load weights:147456
+MAX:[0.438416]	MIN:[-0.253155]
+load conv biases:1000
+
+ biases[999]:0.061612
+load weights:512000
+MAX:[0.254454]	MIN:[-0.187180]
+
+MARK: resnet-50
+
+
+ biases[63]:-0.783696
+batch_normalize
+load weights:9408
+MAX:[0.332273]	MIN:[-0.339937]
+load conv biases:64
+
+ biases[63]:-1.583107
+batch_normalize
+load weights:4096
+MAX:[0.340160]	MIN:[-0.411821]
+load conv biases:64
+
+ biases[63]:0.057896
+batch_normalize
+load weights:36864
+MAX:[0.309489]	MIN:[-0.263326]
+load conv biases:256
+
+ biases[255]:-0.647585
+batch_normalize
+load weights:16384
+MAX:[0.275050]	MIN:[-0.266839]
+load conv biases:64
+
+ biases[63]:0.095535
+batch_normalize
+load weights:16384
+MAX:[0.137508]	MIN:[-0.320892]
+load conv biases:64
+
+ biases[63]:-3.107030
+batch_normalize
+load weights:36864
+MAX:[0.169856]	MIN:[-0.104721]
+load conv biases:256
+
+ biases[255]:-0.067276
+batch_normalize
+load weights:16384
+MAX:[0.136006]	MIN:[-0.197830]
+load conv biases:64
+
+ biases[63]:0.699130
+batch_normalize
+load weights:16384
+MAX:[0.103482]	MIN:[-0.117866]
+load conv biases:64
+
+ biases[63]:-0.675635
+batch_normalize
+load weights:36864
+MAX:[0.090075]	MIN:[-0.103875]
+load conv biases:256
+
+ biases[255]:0.524881
+batch_normalize
+load weights:16384
+MAX:[0.111256]	MIN:[-0.161809]
+load conv biases:128
+
+ biases[127]:0.386262
+batch_normalize
+load weights:32768
+MAX:[0.218303]	MIN:[-0.141058]
+load conv biases:128
+
+ biases[127]:-1.269991
+batch_normalize
+load weights:147456
+MAX:[0.071758]	MIN:[-0.123419]
+load conv biases:512
+
+ biases[511]:0.191186
+batch_normalize
+load weights:65536
+MAX:[0.157569]	MIN:[-0.215162]
+load conv biases:128
+
+ biases[127]:-0.533051
+batch_normalize
+load weights:65536
+MAX:[0.151795]	MIN:[-0.091179]
+load conv biases:128
+
+ biases[127]:-1.105311
+batch_normalize
+load weights:147456
+MAX:[0.101365]	MIN:[-0.131625]
+load conv biases:512
+
+ biases[511]:-0.155658
+batch_normalize
+load weights:65536
+MAX:[0.136894]	MIN:[-0.147005]
+load conv biases:128
+
+ biases[127]:-0.754731
+batch_normalize
+load weights:65536
+MAX:[0.104278]	MIN:[-0.118591]
+load conv biases:128
+
+ biases[127]:-1.044133
+batch_normalize
+load weights:147456
+MAX:[0.073587]	MIN:[-0.055315]
+load conv biases:512
+
+ biases[511]:-0.799433
+batch_normalize
+load weights:65536
+MAX:[0.136239]	MIN:[-0.158275]
+load conv biases:128
+
+ biases[127]:0.145365
+batch_normalize
+load weights:65536
+MAX:[0.105154]	MIN:[-0.102623]
+load conv biases:128
+
+ biases[127]:-0.752027
+batch_normalize
+load weights:147456
+MAX:[0.074483]	MIN:[-0.065936]
+load conv biases:512
+
+ biases[511]:-0.714141
+batch_normalize
+load weights:65536
+MAX:[0.127387]	MIN:[-0.143443]
+load conv biases:256
+
+ biases[255]:-0.741681
+batch_normalize
+load weights:131072
+MAX:[0.195839]	MIN:[-0.211093]
+load conv biases:256
+
+ biases[255]:-0.855379
+batch_normalize
+load weights:589824
+MAX:[0.090841]	MIN:[-0.128503]
+load conv biases:1024
+
+ biases[1023]:-0.621515
+batch_normalize
+load weights:262144
+MAX:[0.147282]	MIN:[-0.148295]
+load conv biases:256
+
+ biases[255]:-1.769564
+batch_normalize
+load weights:262144
+MAX:[0.146765]	MIN:[-0.189572]
+load conv biases:256
+
+ biases[255]:-0.417747
+batch_normalize
+load weights:589824
+MAX:[0.106583]	MIN:[-0.083737]
+load conv biases:1024
+
+ biases[1023]:-0.825851
+batch_normalize
+load weights:262144
+MAX:[0.169779]	MIN:[-0.174604]
+load conv biases:256
+
+ biases[255]:-0.399547
+batch_normalize
+load weights:262144
+MAX:[0.127233]	MIN:[-0.137683]
+load conv biases:256
+
+ biases[255]:-1.346774
+batch_normalize
+load weights:589824
+MAX:[0.069280]	MIN:[-0.084795]
+load conv biases:1024
+
+ biases[1023]:-1.083659
+batch_normalize
+load weights:262144
+MAX:[0.153854]	MIN:[-0.201417]
+load conv biases:256
+
+ biases[255]:-0.182735
+batch_normalize
+load weights:262144
+MAX:[0.373047]	MIN:[-0.244921]
+load conv biases:256
+
+ biases[255]:-1.010057
+batch_normalize
+load weights:589824
+MAX:[0.098482]	MIN:[-0.104418]
+load conv biases:1024
+
+ biases[1023]:-0.445012
+batch_normalize
+load weights:262144
+MAX:[0.116744]	MIN:[-0.147334]
+load conv biases:256
+
+ biases[255]:-1.092840
+batch_normalize
+load weights:262144
+MAX:[0.191507]	MIN:[-0.143519]
+load conv biases:256
+
+ biases[255]:-1.588128
+batch_normalize
+load weights:589824
+MAX:[0.120152]	MIN:[-0.082767]
+load conv biases:1024
+
+ biases[1023]:-0.780407
+batch_normalize
+load weights:262144
+MAX:[0.148002]	MIN:[-0.144024]
+load conv biases:256
+
+ biases[255]:-0.957735
+batch_normalize
+load weights:262144
+MAX:[0.161749]	MIN:[-0.164495]
+load conv biases:256
+
+ biases[255]:-1.840505
+batch_normalize
+load weights:589824
+MAX:[0.089262]	MIN:[-0.084799]
+load conv biases:1024
+
+ biases[1023]:-0.770352
+batch_normalize
+load weights:262144
+MAX:[0.119012]	MIN:[-0.136154]
+load conv biases:512
+
+ biases[511]:-0.753196
+batch_normalize
+load weights:524288
+MAX:[0.101916]	MIN:[-0.089810]
+load conv biases:512
+
+ biases[511]:-0.729066
+batch_normalize
+load weights:2359296
+MAX:[0.051390]	MIN:[-0.054154]
+load conv biases:2048
+
+ biases[2047]:-0.431285
+batch_normalize
+load weights:1048576
+MAX:[0.110149]	MIN:[-0.082072]
+load conv biases:512
+
+ biases[511]:-0.608207
+batch_normalize
+load weights:1048576
+MAX:[0.094874]	MIN:[-0.071515]
+load conv biases:512
+
+ biases[511]:-0.944830
+batch_normalize
+load weights:2359296
+MAX:[0.086448]	MIN:[-0.123116]
+load conv biases:2048
+
+ biases[2047]:-1.061421
+batch_normalize
+load weights:1048576
+MAX:[0.131098]	MIN:[-0.092458]
+load conv biases:512
+
+ biases[511]:-0.999923
+batch_normalize
+load weights:1048576
+MAX:[0.226016]	MIN:[-0.182379]
+load conv biases:512
+
+ biases[511]:-1.518837
+batch_normalize
+load weights:2359296
+MAX:[0.060427]	MIN:[-0.061765]
+load conv biases:2048
+
+ biases[2047]:-3.455164
+batch_normalize
+load weights:1048576
+MAX:[0.149848]	MIN:[-0.095362]
+load conv biases:1000
+
+ biases[999]:0.762687
+load weights:2048000
+MAX:[0.317497]	MIN:[-0.111164]
+
+MARK: mobilenet
+
+biases[31]:-0.005457
+batch_normalize
+load weights:864
+MAX:[2.108974]	MIN:[-1.650352]
+load conv biases:32
+
+ biases[31]:1.173052
+batch_normalize
+load weights:1024
+MAX:[2.275268]	MIN:[-1.914554]
+load conv biases:32
+
+ biases[31]:0.474210
+batch_normalize
+load weights:288
+MAX:[4.966589]	MIN:[-3.453245]
+load conv biases:16
+
+ biases[15]:-0.000006
+batch_normalize
+load weights:512
+MAX:[2.132532]	MIN:[-2.424716]
+load conv biases:96
+
+ biases[95]:-0.009177
+batch_normalize
+load weights:1536
+MAX:[2.182770]	MIN:[-2.408703]
+load conv biases:96
+
+ biases[95]:-0.000079
+batch_normalize
+load weights:864
+MAX:[2.811391]	MIN:[-2.193281]
+load conv biases:24
+
+ biases[23]:-0.000002
+batch_normalize
+load weights:2304
+MAX:[2.160115]	MIN:[-1.928357]
+load conv biases:144
+
+ biases[143]:0.504487
+batch_normalize
+load weights:3456
+MAX:[1.450549]	MIN:[-0.987659]
+load conv biases:144
+
+ biases[143]:-0.030837
+batch_normalize
+load weights:1296
+MAX:[1.833212]	MIN:[-1.552577]
+load conv biases:24
+
+ biases[23]:0.000000
+batch_normalize
+load weights:3456
+MAX:[0.875168]	MIN:[-1.101498]
+load conv biases:144
+
+ biases[143]:0.445897
+batch_normalize
+load weights:3456
+MAX:[2.525592]	MIN:[-1.571728]
+load conv biases:144
+
+ biases[143]:0.782076
+batch_normalize
+load weights:1296
+MAX:[0.910479]	MIN:[-0.865544]
+load conv biases:32
+
+ biases[31]:0.000000
+batch_normalize
+load weights:4608
+MAX:[1.780191]	MIN:[-2.210240]
+load conv biases:192
+
+ biases[191]:-0.018440
+batch_normalize
+load weights:6144
+MAX:[0.944376]	MIN:[-0.771688]
+load conv biases:192
+
+ biases[191]:-0.009594
+batch_normalize
+load weights:1728
+MAX:[1.206601]	MIN:[-0.948376]
+load conv biases:32
+
+ biases[31]:-0.000000
+batch_normalize
+load weights:6144
+MAX:[0.860400]	MIN:[-0.807631]
+load conv biases:192
+
+ biases[191]:0.261112
+batch_normalize
+load weights:6144
+MAX:[0.871228]	MIN:[-0.849271]
+load conv biases:192
+
+ biases[191]:0.147860
+batch_normalize
+load weights:1728
+MAX:[0.857161]	MIN:[-0.724384]
+load conv biases:32
+
+ biases[31]:-0.000000
+batch_normalize
+load weights:6144
+MAX:[0.703568]	MIN:[-0.834459]
+load conv biases:192
+
+ biases[191]:0.432588
+batch_normalize
+load weights:6144
+MAX:[1.671957]	MIN:[-1.207879]
+load conv biases:192
+
+ biases[191]:0.055422
+batch_normalize
+load weights:1728
+MAX:[2.033349]	MIN:[-1.504997]
+load conv biases:64
+
+ biases[63]:0.000000
+batch_normalize
+load weights:12288
+MAX:[1.303444]	MIN:[-1.226113]
+load conv biases:384
+
+ biases[383]:0.259149
+batch_normalize
+load weights:24576
+MAX:[0.708813]	MIN:[-0.636643]
+load conv biases:384
+
+ biases[383]:-0.215097
+batch_normalize
+load weights:3456
+MAX:[1.149052]	MIN:[-0.922412]
+load conv biases:64
+
+ biases[63]:0.000000
+batch_normalize
+load weights:24576
+MAX:[0.695454]	MIN:[-0.846282]
+load conv biases:384
+
+ biases[383]:0.308928
+batch_normalize
+load weights:24576
+MAX:[0.914028]	MIN:[-0.849222]
+load conv biases:384
+
+ biases[383]:-0.183110
+batch_normalize
+load weights:3456
+MAX:[1.140865]	MIN:[-0.994381]
+load conv biases:64
+
+ biases[63]:0.000000
+batch_normalize
+load weights:24576
+MAX:[0.594420]	MIN:[-0.832307]
+load conv biases:384
+
+ biases[383]:-0.005792
+batch_normalize
+load weights:24576
+MAX:[0.799936]	MIN:[-0.741261]
+load conv biases:384
+
+ biases[383]:-0.000901
+batch_normalize
+load weights:3456
+MAX:[1.111287]	MIN:[-1.143138]
+load conv biases:64
+
+ biases[63]:-0.000000
+batch_normalize
+load weights:24576
+MAX:[0.707226]	MIN:[-0.654562]
+load conv biases:384
+
+ biases[383]:-0.515187
+batch_normalize
+load weights:24576
+MAX:[1.374545]	MIN:[-1.098479]
+load conv biases:384
+
+ biases[383]:0.256133
+batch_normalize
+load weights:3456
+MAX:[0.510780]	MIN:[-0.482049]
+load conv biases:96
+
+ biases[95]:0.000000
+batch_normalize
+load weights:36864
+MAX:[0.889841]	MIN:[-1.111258]
+load conv biases:576
+
+ biases[575]:0.306671
+batch_normalize
+load weights:55296
+MAX:[0.662863]	MIN:[-0.560408]
+load conv biases:576
+
+ biases[575]:-0.407215
+batch_normalize
+load weights:5184
+MAX:[1.397015]	MIN:[-1.228678]
+load conv biases:96
+
+ biases[95]:0.000000
+batch_normalize
+load weights:55296
+MAX:[0.646566]	MIN:[-0.920344]
+load conv biases:576
+
+ biases[575]:0.421173
+batch_normalize
+load weights:55296
+MAX:[0.746805]	MIN:[-0.702477]
+load conv biases:576
+
+ biases[575]:-0.521581
+batch_normalize
+load weights:5184
+MAX:[1.139342]	MIN:[-1.142339]
+load conv biases:96
+
+ biases[95]:-0.000000
+batch_normalize
+load weights:55296
+MAX:[0.599853]	MIN:[-0.659131]
+load conv biases:576
+
+ biases[575]:0.014913
+batch_normalize
+load weights:55296
+MAX:[1.000589]	MIN:[-0.974808]
+load conv biases:576
+
+ biases[575]:0.457315
+batch_normalize
+load weights:5184
+MAX:[0.635231]	MIN:[-0.729589]
+load conv biases:160
+
+ biases[159]:0.062461
+batch_normalize
+load weights:92160
+MAX:[0.763270]	MIN:[-0.728104]
+load conv biases:960
+
+ biases[959]:0.188795
+batch_normalize
+load weights:153600
+MAX:[0.495858]	MIN:[-0.528474]
+load conv biases:960
+
+ biases[959]:-0.139146
+batch_normalize
+load weights:8640
+MAX:[1.088804]	MIN:[-1.132045]
+load conv biases:160
+
+ biases[159]:0.000000
+batch_normalize
+load weights:153600
+MAX:[0.465643]	MIN:[-0.550034]
+load conv biases:960
+
+ biases[959]:0.138562
+batch_normalize
+load weights:153600
+MAX:[0.771526]	MIN:[-0.666434]
+load conv biases:960
+
+ biases[959]:-0.109124
+batch_normalize
+load weights:8640
+MAX:[1.054325]	MIN:[-0.935035]
+load conv biases:160
+
+ biases[159]:0.000000
+batch_normalize
+load weights:153600
+MAX:[0.593575]	MIN:[-0.523470]
+load conv biases:960
+
+ biases[959]:-0.325378
+batch_normalize
+load weights:153600
+MAX:[0.729965]	MIN:[-0.724854]
+load conv biases:960
+
+ biases[959]:0.122542
+batch_normalize
+load weights:8640
+MAX:[0.529163]	MIN:[-0.681611]
+load conv biases:320
+
+ biases[319]:-0.000000
+batch_normalize
+load weights:307200
+MAX:[0.570480]	MIN:[-0.514811]
+load conv biases:1280
+
+ biases[1279]:-1.138297
+batch_normalize
+load weights:409600
+MAX:[0.521073]	MIN:[-0.498223]
+load conv biases:1000
+
+ biases[999]:0.042857
+load weights:1280000
+MAX:[1.292167]	MIN:[-0.608012]
+
+MARK: alexnet
+
+ biases[95]:0.022649
+load weights:34848
+MAX:[0.656124]	MIN:[-0.549289]
+load conv biases:256
+
+ biases[255]:0.226209
+load weights:614400
+MAX:[0.669356]	MIN:[-0.355590]
+load conv biases:384
+
+ biases[383]:-0.254968
+load weights:884736
+MAX:[0.416969]	MIN:[-0.307043]
+load conv biases:384
+
+ biases[383]:-2.977566
+load weights:1327104
+MAX:[0.263076]	MIN:[-0.211545]
+load conv biases:256
+
+ biases[255]:0.084100
+load weights:884736
+MAX:[0.318213]	MIN:[-0.320113]

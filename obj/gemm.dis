@@ -1,0 +1,1541 @@
+
+gemm.o:     file format elf64-littleaarch64
+
+
+Disassembly of section .text:
+
+0000000000000000 <gemm_bin>:
+        char  *A, int lda, 
+        float *B, int ldb,
+        float *C, int ldc)
+{
+    int i,j,k;
+    for(i = 0; i < M; ++i){
+   0:	7100001f 	cmp	w0, #0x0
+#include "time.h"
+void gemm_bin(int M, int N, int K, float ALPHA, 
+        char  *A, int lda, 
+        float *B, int ldb,
+        float *C, int ldc)
+{
+   4:	b94003f1 	ldr	w17, [sp]
+    int i,j,k;
+    for(i = 0; i < M; ++i){
+   8:	5400062d 	b.le	cc <gemm_bin+0xcc>
+   c:	52800010 	mov	w16, #0x0                   	// #0
+  10:	5280000f 	mov	w15, #0x0                   	// #0
+  14:	5280000e 	mov	w14, #0x0                   	// #0
+        for(k = 0; k < K; ++k){
+  18:	7100005f 	cmp	w2, #0x0
+  1c:	540002cd 	b.le	74 <gemm_bin+0x74>
+  20:	8b2fc8e9 	add	x9, x7, w15, sxtw #2
+            char A_PART = A[i*lda+k];
+  24:	8b30c06d 	add	x13, x3, w16, sxtw
+        float *B, int ldb,
+        float *C, int ldc)
+{
+    int i,j,k;
+    for(i = 0; i < M; ++i){
+        for(k = 0; k < K; ++k){
+  28:	5280000c 	mov	w12, #0x0                   	// #0
+  2c:	d280000b 	mov	x11, #0x0                   	// #0
+            char A_PART = A[i*lda+k];
+            if(A_PART){
+  30:	386b69a8 	ldrb	w8, [x13,x11]
+                for(j = 0; j < N; ++j){
+  34:	7100003f 	cmp	w1, #0x0
+{
+    int i,j,k;
+    for(i = 0; i < M; ++i){
+        for(k = 0; k < K; ++k){
+            char A_PART = A[i*lda+k];
+            if(A_PART){
+  38:	350002c8 	cbnz	w8, 90 <gemm_bin+0x90>
+  3c:	8b2cc8aa 	add	x10, x5, w12, sxtw #2
+                for(j = 0; j < N; ++j){
+                    C[i*ldc+j] += B[k*ldb+j];
+                }
+            } else {
+                for(j = 0; j < N; ++j){
+  40:	d2800008 	mov	x8, #0x0                   	// #0
+  44:	5400010d 	b.le	64 <gemm_bin+0x64>
+                    C[i*ldc+j] -= B[k*ldb+j];
+  48:	bc687920 	ldr	s0, [x9,x8,lsl #2]
+  4c:	bc687941 	ldr	s1, [x10,x8,lsl #2]
+  50:	1e213800 	fsub	s0, s0, s1
+  54:	bc287920 	str	s0, [x9,x8,lsl #2]
+  58:	91000508 	add	x8, x8, #0x1
+            if(A_PART){
+                for(j = 0; j < N; ++j){
+                    C[i*ldc+j] += B[k*ldb+j];
+                }
+            } else {
+                for(j = 0; j < N; ++j){
+  5c:	6b08003f 	cmp	w1, w8
+  60:	54ffff4c 	b.gt	48 <gemm_bin+0x48>
+  64:	9100056b 	add	x11, x11, #0x1
+  68:	0b06018c 	add	w12, w12, w6
+        float *B, int ldb,
+        float *C, int ldc)
+{
+    int i,j,k;
+    for(i = 0; i < M; ++i){
+        for(k = 0; k < K; ++k){
+  6c:	6b0b005f 	cmp	w2, w11
+  70:	54fffe0c 	b.gt	30 <gemm_bin+0x30>
+        char  *A, int lda, 
+        float *B, int ldb,
+        float *C, int ldc)
+{
+    int i,j,k;
+    for(i = 0; i < M; ++i){
+  74:	110005ce 	add	w14, w14, #0x1
+  78:	0b1101ef 	add	w15, w15, w17
+  7c:	6b0e001f 	cmp	w0, w14
+  80:	0b040210 	add	w16, w16, w4
+  84:	54fffca1 	b.ne	18 <gemm_bin+0x18>
+  88:	d65f03c0 	ret
+  8c:	d503201f 	nop
+        for(k = 0; k < K; ++k){
+            char A_PART = A[i*lda+k];
+            if(A_PART){
+                for(j = 0; j < N; ++j){
+  90:	54fffead 	b.le	64 <gemm_bin+0x64>
+  94:	8b2cc8aa 	add	x10, x5, w12, sxtw #2
+  98:	d2800008 	mov	x8, #0x0                   	// #0
+                    C[i*ldc+j] += B[k*ldb+j];
+  9c:	bc687920 	ldr	s0, [x9,x8,lsl #2]
+  a0:	bc687941 	ldr	s1, [x10,x8,lsl #2]
+  a4:	1e212800 	fadd	s0, s0, s1
+  a8:	bc287920 	str	s0, [x9,x8,lsl #2]
+  ac:	91000508 	add	x8, x8, #0x1
+    int i,j,k;
+    for(i = 0; i < M; ++i){
+        for(k = 0; k < K; ++k){
+            char A_PART = A[i*lda+k];
+            if(A_PART){
+                for(j = 0; j < N; ++j){
+  b0:	6b08003f 	cmp	w1, w8
+  b4:	54ffff4c 	b.gt	9c <gemm_bin+0x9c>
+  b8:	9100056b 	add	x11, x11, #0x1
+  bc:	0b06018c 	add	w12, w12, w6
+        float *B, int ldb,
+        float *C, int ldc)
+{
+    int i,j,k;
+    for(i = 0; i < M; ++i){
+        for(k = 0; k < K; ++k){
+  c0:	6b0b005f 	cmp	w2, w11
+  c4:	54fffb6c 	b.gt	30 <gemm_bin+0x30>
+  c8:	17ffffeb 	b	74 <gemm_bin+0x74>
+  cc:	d65f03c0 	ret
+
+00000000000000d0 <random_matrix>:
+        }
+    }
+}
+
+float *random_matrix(int rows, int cols)
+{
+  d0:	a9bd7bfd 	stp	x29, x30, [sp,#-48]!
+  d4:	910003fd 	mov	x29, sp
+  d8:	a90153f3 	stp	x19, x20, [sp,#16]
+    int i;
+    float *m = calloc(rows*cols, sizeof(float));
+  dc:	1b017c14 	mul	w20, w0, w1
+  e0:	d2800081 	mov	x1, #0x4                   	// #4
+        }
+    }
+}
+
+float *random_matrix(int rows, int cols)
+{
+  e4:	f90013f5 	str	x21, [sp,#32]
+    int i;
+    float *m = calloc(rows*cols, sizeof(float));
+  e8:	93407e80 	sxtw	x0, w20
+        }
+    }
+}
+
+float *random_matrix(int rows, int cols)
+{
+  ec:	fd0017e8 	str	d8, [sp,#40]
+    int i;
+    float *m = calloc(rows*cols, sizeof(float));
+  f0:	94000000 	bl	0 <calloc>
+  f4:	aa0003f5 	mov	x21, x0
+    for(i = 0; i < rows*cols; ++i){
+  f8:	7100029f 	cmp	w20, #0x0
+  fc:	5400014d 	b.le	124 <random_matrix+0x54>
+ 100:	1c0001e8 	ldr	s8, 13c <random_matrix+0x6c>
+ 104:	d2800013 	mov	x19, #0x0                   	// #0
+        m[i] = (float)rand()/RAND_MAX;
+ 108:	94000000 	bl	0 <rand>
+ 10c:	1e220000 	scvtf	s0, w0
+ 110:	1e280800 	fmul	s0, s0, s8
+ 114:	bc337aa0 	str	s0, [x21,x19,lsl #2]
+ 118:	91000673 	add	x19, x19, #0x1
+
+float *random_matrix(int rows, int cols)
+{
+    int i;
+    float *m = calloc(rows*cols, sizeof(float));
+    for(i = 0; i < rows*cols; ++i){
+ 11c:	6b13029f 	cmp	w20, w19
+ 120:	54ffff4c 	b.gt	108 <random_matrix+0x38>
+        m[i] = (float)rand()/RAND_MAX;
+    }
+    return m;
+}
+ 124:	aa1503e0 	mov	x0, x21
+ 128:	fd4017e8 	ldr	d8, [sp,#40]
+ 12c:	a94153f3 	ldp	x19, x20, [sp,#16]
+ 130:	f94013f5 	ldr	x21, [sp,#32]
+ 134:	a8c37bfd 	ldp	x29, x30, [sp],#48
+ 138:	d65f03c0 	ret
+ 13c:	30000000 	.word	0x30000000
+
+0000000000000140 <gemm_nn>:
+        float *C, int ldc)
+{
+
+    int i,j,k;
+    #pragma omp parallel for
+    for(i = 0; i < M; ++i){
+ 140:	7100001f 	cmp	w0, #0x0
+
+void gemm_nn(int M, int N, int K, float ALPHA, 
+        float *A, int lda, 
+        float *B, int ldb,
+        float *C, int ldc)
+{
+ 144:	b94003f1 	ldr	w17, [sp]
+
+    int i,j,k;
+    #pragma omp parallel for
+    for(i = 0; i < M; ++i){
+ 148:	5400042d 	b.le	1cc <gemm_nn+0x8c>
+ 14c:	52800010 	mov	w16, #0x0                   	// #0
+ 150:	5280000f 	mov	w15, #0x0                   	// #0
+ 154:	5280000e 	mov	w14, #0x0                   	// #0
+        for(k = 0; k < K; ++k){
+ 158:	7100005f 	cmp	w2, #0x0
+ 15c:	540002cd 	b.le	1b4 <gemm_nn+0x74>
+ 160:	8b2fc86d 	add	x13, x3, w15, sxtw #2
+ 164:	8b30c8e9 	add	x9, x7, w16, sxtw #2
+ 168:	5280000c 	mov	w12, #0x0                   	// #0
+ 16c:	d280000b 	mov	x11, #0x0                   	// #0
+            register float A_PART = ALPHA*A[i*lda+k];
+ 170:	bc6b79a3 	ldr	s3, [x13,x11,lsl #2]
+            for(j = 0; j < N; ++j){
+ 174:	7100003f 	cmp	w1, #0x0
+ 178:	8b2cc8aa 	add	x10, x5, w12, sxtw #2
+ 17c:	d2800008 	mov	x8, #0x0                   	// #0
+
+    int i,j,k;
+    #pragma omp parallel for
+    for(i = 0; i < M; ++i){
+        for(k = 0; k < K; ++k){
+            register float A_PART = ALPHA*A[i*lda+k];
+ 180:	1e230803 	fmul	s3, s0, s3
+            for(j = 0; j < N; ++j){
+ 184:	5400010d 	b.le	1a4 <gemm_nn+0x64>
+                C[i*ldc+j] += A_PART*B[k*ldb+j];
+ 188:	bc687941 	ldr	s1, [x10,x8,lsl #2]
+ 18c:	bc687922 	ldr	s2, [x9,x8,lsl #2]
+ 190:	1f010861 	fmadd	s1, s3, s1, s2
+ 194:	bc287921 	str	s1, [x9,x8,lsl #2]
+ 198:	91000508 	add	x8, x8, #0x1
+    int i,j,k;
+    #pragma omp parallel for
+    for(i = 0; i < M; ++i){
+        for(k = 0; k < K; ++k){
+            register float A_PART = ALPHA*A[i*lda+k];
+            for(j = 0; j < N; ++j){
+ 19c:	6b08003f 	cmp	w1, w8
+ 1a0:	54ffff4c 	b.gt	188 <gemm_nn+0x48>
+ 1a4:	9100056b 	add	x11, x11, #0x1
+ 1a8:	0b06018c 	add	w12, w12, w6
+{
+
+    int i,j,k;
+    #pragma omp parallel for
+    for(i = 0; i < M; ++i){
+        for(k = 0; k < K; ++k){
+ 1ac:	6b0b005f 	cmp	w2, w11
+ 1b0:	54fffe0c 	b.gt	170 <gemm_nn+0x30>
+        float *C, int ldc)
+{
+
+    int i,j,k;
+    #pragma omp parallel for
+    for(i = 0; i < M; ++i){
+ 1b4:	110005ce 	add	w14, w14, #0x1
+ 1b8:	0b0401ef 	add	w15, w15, w4
+ 1bc:	6b0e001f 	cmp	w0, w14
+ 1c0:	0b110210 	add	w16, w16, w17
+ 1c4:	54fffca1 	b.ne	158 <gemm_nn+0x18>
+ 1c8:	d65f03c0 	ret
+ 1cc:	d65f03c0 	ret
+
+00000000000001d0 <gemm_nn16>:
+        FLT *B, int ldb,
+        FLT *C, int ldc)
+{
+    int i,j,k;
+    #pragma omp parallel for
+    for(i = 0; i < M; ++i){
+ 1d0:	7100001f 	cmp	w0, #0x0
+}*/
+void gemm_nn16(int M, int N, int K, FLT ALPHA, 
+        FLT *A, int lda, 
+        FLT *B, int ldb,
+        FLT *C, int ldc)
+{
+ 1d4:	b94003f1 	ldr	w17, [sp]
+    int i,j,k;
+    #pragma omp parallel for
+    for(i = 0; i < M; ++i){
+ 1d8:	5400050d 	b.le	278 <gemm_nn16+0xa8>
+ 1dc:	52800010 	mov	w16, #0x0                   	// #0
+ 1e0:	5280000f 	mov	w15, #0x0                   	// #0
+ 1e4:	5280000e 	mov	w14, #0x0                   	// #0
+        for(k = 0; k < K; ++k){
+ 1e8:	7100005f 	cmp	w2, #0x0
+ 1ec:	540003ad 	b.le	260 <gemm_nn16+0x90>
+ 1f0:	1ee24004 	fcvt	s4, h0
+ 1f4:	8b2fc46d 	add	x13, x3, w15, sxtw #1
+ 1f8:	8b30c4e9 	add	x9, x7, w16, sxtw #1
+ 1fc:	5280000c 	mov	w12, #0x0                   	// #0
+ 200:	d280000b 	mov	x11, #0x0                   	// #0
+            register FLT A_PART = ALPHA*A[i*lda+k];
+ 204:	7c6b79a3 	ldr	h3, [x13,x11,lsl #1]
+            for(j = 0; j < N; ++j){
+ 208:	7100003f 	cmp	w1, #0x0
+{
+    int i,j,k;
+    #pragma omp parallel for
+    for(i = 0; i < M; ++i){
+        for(k = 0; k < K; ++k){
+            register FLT A_PART = ALPHA*A[i*lda+k];
+ 20c:	1ee24063 	fcvt	s3, h3
+ 210:	1e240863 	fmul	s3, s3, s4
+ 214:	1e23c063 	fcvt	h3, s3
+            for(j = 0; j < N; ++j){
+ 218:	540001cd 	b.le	250 <gemm_nn16+0x80>
+ 21c:	1ee24063 	fcvt	s3, h3
+ 220:	8b2cc4aa 	add	x10, x5, w12, sxtw #1
+ 224:	d2800008 	mov	x8, #0x0                   	// #0
+                C[i*ldc+j] += A_PART*B[k*ldb+j];
+ 228:	7c687941 	ldr	h1, [x10,x8,lsl #1]
+ 22c:	7c687922 	ldr	h2, [x9,x8,lsl #1]
+ 230:	1ee24021 	fcvt	s1, h1
+ 234:	1ee24042 	fcvt	s2, h2
+ 238:	1f030821 	fmadd	s1, s1, s3, s2
+ 23c:	1e23c021 	fcvt	h1, s1
+ 240:	7c287921 	str	h1, [x9,x8,lsl #1]
+ 244:	91000508 	add	x8, x8, #0x1
+    int i,j,k;
+    #pragma omp parallel for
+    for(i = 0; i < M; ++i){
+        for(k = 0; k < K; ++k){
+            register FLT A_PART = ALPHA*A[i*lda+k];
+            for(j = 0; j < N; ++j){
+ 248:	6b08003f 	cmp	w1, w8
+ 24c:	54fffeec 	b.gt	228 <gemm_nn16+0x58>
+ 250:	9100056b 	add	x11, x11, #0x1
+ 254:	0b06018c 	add	w12, w12, w6
+        FLT *C, int ldc)
+{
+    int i,j,k;
+    #pragma omp parallel for
+    for(i = 0; i < M; ++i){
+        for(k = 0; k < K; ++k){
+ 258:	6b0b005f 	cmp	w2, w11
+ 25c:	54fffd4c 	b.gt	204 <gemm_nn16+0x34>
+        FLT *B, int ldb,
+        FLT *C, int ldc)
+{
+    int i,j,k;
+    #pragma omp parallel for
+    for(i = 0; i < M; ++i){
+ 260:	110005ce 	add	w14, w14, #0x1
+ 264:	0b0401ef 	add	w15, w15, w4
+ 268:	6b0e001f 	cmp	w0, w14
+ 26c:	0b110210 	add	w16, w16, w17
+ 270:	54fffbc1 	b.ne	1e8 <gemm_nn16+0x18>
+ 274:	d65f03c0 	ret
+ 278:	d65f03c0 	ret
+ 27c:	d503201f 	nop
+
+0000000000000280 <saveresgemm>:
+            }
+        }
+    }
+}
+void saveresgemm( char * filename,FLT *data, int len)
+{
+ 280:	a9bc7bfd 	stp	x29, x30, [sp,#-64]!
+	FILE *fp = fopen(filename ,"w+");
+ 284:	90000003 	adrp	x3, 0 <gemm_bin>
+            }
+        }
+    }
+}
+void saveresgemm( char * filename,FLT *data, int len)
+{
+ 288:	910003fd 	mov	x29, sp
+ 28c:	f9001bf7 	str	x23, [sp,#48]
+ 290:	aa0103f7 	mov	x23, x1
+	FILE *fp = fopen(filename ,"w+");
+ 294:	91000061 	add	x1, x3, #0x0
+            }
+        }
+    }
+}
+void saveresgemm( char * filename,FLT *data, int len)
+{
+ 298:	a90153f3 	stp	x19, x20, [sp,#16]
+ 29c:	a9025bf5 	stp	x21, x22, [sp,#32]
+ 2a0:	2a0203f4 	mov	w20, w2
+	FILE *fp = fopen(filename ,"w+");
+ 2a4:	94000000 	bl	0 <fopen>
+ 2a8:	aa0003f6 	mov	x22, x0
+	int num;
+	for(num=0;num<len;num++){
+ 2ac:	7100029f 	cmp	w20, #0x0
+ 2b0:	540001ed 	b.le	2ec <saveresgemm+0x6c>
+ 2b4:	51000694 	sub	w20, w20, #0x1
+ 2b8:	90000015 	adrp	x21, 0 <gemm_bin>
+ 2bc:	91000694 	add	x20, x20, #0x1
+
+# ifdef __va_arg_pack
+__fortify_function int
+fprintf (FILE *__restrict __stream, const char *__restrict __fmt, ...)
+{
+  return __fprintf_chk (__stream, __USE_FORTIFY_LEVEL - 1, __fmt,
+ 2c0:	910002b5 	add	x21, x21, #0x0
+ 2c4:	d2800013 	mov	x19, #0x0                   	// #0
+ 2c8:	7c737ae0 	ldr	h0, [x23,x19,lsl #1]
+ 2cc:	aa1503e2 	mov	x2, x21
+ 2d0:	aa1603e0 	mov	x0, x22
+ 2d4:	52800021 	mov	w1, #0x1                   	// #1
+ 2d8:	91000673 	add	x19, x19, #0x1
+ 2dc:	1ee2c000 	fcvt	d0, h0
+ 2e0:	94000000 	bl	0 <__fprintf_chk>
+ 2e4:	eb14027f 	cmp	x19, x20
+ 2e8:	54ffff01 	b.ne	2c8 <saveresgemm+0x48>
+		fprintf(fp,"%f ",(float)data[num]);	
+	}
+	fclose(fp);
+ 2ec:	aa1603e0 	mov	x0, x22
+
+
+}
+ 2f0:	f9401bf7 	ldr	x23, [sp,#48]
+ 2f4:	a94153f3 	ldp	x19, x20, [sp,#16]
+ 2f8:	a9425bf5 	ldp	x21, x22, [sp,#32]
+ 2fc:	a8c47bfd 	ldp	x29, x30, [sp],#64
+	FILE *fp = fopen(filename ,"w+");
+	int num;
+	for(num=0;num<len;num++){
+		fprintf(fp,"%f ",(float)data[num]);	
+	}
+	fclose(fp);
+ 300:	14000000 	b	0 <fclose>
+ 304:	d503201f 	nop
+
+0000000000000308 <gemm_nt>:
+        float *C, int ldc)
+{
+
+    int i,j,k;
+    #pragma omp parallel for
+    for(i = 0; i < M; ++i){
+ 308:	7100001f 	cmp	w0, #0x0
+
+void gemm_nt(int M, int N, int K, float ALPHA, 
+        float *A, int lda, 
+        float *B, int ldb,
+        float *C, int ldc)
+{
+ 30c:	b94003f1 	ldr	w17, [sp]
+
+    int i,j,k;
+    #pragma omp parallel for
+    for(i = 0; i < M; ++i){
+ 310:	5400058d 	b.le	3c0 <gemm_nt+0xb8>
+ 314:	52800010 	mov	w16, #0x0                   	// #0
+ 318:	5280000f 	mov	w15, #0x0                   	// #0
+ 31c:	5280000e 	mov	w14, #0x0                   	// #0
+        for(j = 0; j < N; ++j){
+ 320:	7100003f 	cmp	w1, #0x0
+ 324:	5400030d 	b.le	384 <gemm_nt+0x7c>
+ 328:	8b30c86a 	add	x10, x3, w16, sxtw #2
+ 32c:	8b2fc8ed 	add	x13, x7, w15, sxtw #2
+ 330:	5280000c 	mov	w12, #0x0                   	// #0
+ 334:	d280000b 	mov	x11, #0x0                   	// #0
+            register float sum = 0;
+            for(k = 0; k < K; ++k){
+ 338:	7100005f 	cmp	w2, #0x0
+ 33c:	5400030d 	b.le	39c <gemm_nt+0x94>
+ 340:	1e2703e2 	fmov	s2, wzr
+ 344:	8b2cc8a9 	add	x9, x5, w12, sxtw #2
+ 348:	d2800008 	mov	x8, #0x0                   	// #0
+                sum += ALPHA*A[i*lda+k]*B[j*ldb + k];
+ 34c:	bc687941 	ldr	s1, [x10,x8,lsl #2]
+ 350:	bc687923 	ldr	s3, [x9,x8,lsl #2]
+ 354:	91000508 	add	x8, x8, #0x1
+    int i,j,k;
+    #pragma omp parallel for
+    for(i = 0; i < M; ++i){
+        for(j = 0; j < N; ++j){
+            register float sum = 0;
+            for(k = 0; k < K; ++k){
+ 358:	6b08005f 	cmp	w2, w8
+                sum += ALPHA*A[i*lda+k]*B[j*ldb + k];
+ 35c:	1e210801 	fmul	s1, s0, s1
+ 360:	1f030822 	fmadd	s2, s1, s3, s2
+    int i,j,k;
+    #pragma omp parallel for
+    for(i = 0; i < M; ++i){
+        for(j = 0; j < N; ++j){
+            register float sum = 0;
+            for(k = 0; k < K; ++k){
+ 364:	54ffff4c 	b.gt	34c <gemm_nt+0x44>
+                sum += ALPHA*A[i*lda+k]*B[j*ldb + k];
+            }
+            C[i*ldc+j] += sum;
+ 368:	bc6b79a1 	ldr	s1, [x13,x11,lsl #2]
+ 36c:	0b06018c 	add	w12, w12, w6
+ 370:	1e222822 	fadd	s2, s1, s2
+ 374:	bc2b79a2 	str	s2, [x13,x11,lsl #2]
+ 378:	9100056b 	add	x11, x11, #0x1
+{
+
+    int i,j,k;
+    #pragma omp parallel for
+    for(i = 0; i < M; ++i){
+        for(j = 0; j < N; ++j){
+ 37c:	6b0b003f 	cmp	w1, w11
+ 380:	54fffdcc 	b.gt	338 <gemm_nt+0x30>
+        float *C, int ldc)
+{
+
+    int i,j,k;
+    #pragma omp parallel for
+    for(i = 0; i < M; ++i){
+ 384:	110005ce 	add	w14, w14, #0x1
+ 388:	0b1101ef 	add	w15, w15, w17
+ 38c:	6b0e001f 	cmp	w0, w14
+ 390:	0b040210 	add	w16, w16, w4
+ 394:	54fffc61 	b.ne	320 <gemm_nt+0x18>
+ 398:	d65f03c0 	ret
+        for(j = 0; j < N; ++j){
+            register float sum = 0;
+            for(k = 0; k < K; ++k){
+ 39c:	1e2703e2 	fmov	s2, wzr
+                sum += ALPHA*A[i*lda+k]*B[j*ldb + k];
+            }
+            C[i*ldc+j] += sum;
+ 3a0:	bc6b79a1 	ldr	s1, [x13,x11,lsl #2]
+ 3a4:	0b06018c 	add	w12, w12, w6
+ 3a8:	1e222822 	fadd	s2, s1, s2
+ 3ac:	bc2b79a2 	str	s2, [x13,x11,lsl #2]
+ 3b0:	9100056b 	add	x11, x11, #0x1
+{
+
+    int i,j,k;
+    #pragma omp parallel for
+    for(i = 0; i < M; ++i){
+        for(j = 0; j < N; ++j){
+ 3b4:	6b0b003f 	cmp	w1, w11
+ 3b8:	54fffc0c 	b.gt	338 <gemm_nt+0x30>
+ 3bc:	17fffff2 	b	384 <gemm_nt+0x7c>
+ 3c0:	d65f03c0 	ret
+ 3c4:	d503201f 	nop
+
+00000000000003c8 <gemm_nt16>:
+        FLT *C, int ldc)
+{
+    int i,j,k;
+    FLT sum = 0;
+	
+    for(i = 0; i < M; ++i){
+ 3c8:	7100001f 	cmp	w0, #0x0
+clock_t aa,bb;
+void gemm_nt16(int M, int N, int K, FLT ALPHA, 
+        FLT *A, int lda, 
+        FLT *B, int ldb,
+        FLT *C, int ldc)
+{
+ 3cc:	b94003f1 	ldr	w17, [sp]
+    int i,j,k;
+    FLT sum = 0;
+	
+    for(i = 0; i < M; ++i){
+ 3d0:	540005ad 	b.le	484 <gemm_nt16+0xbc>
+ 3d4:	52800010 	mov	w16, #0x0                   	// #0
+ 3d8:	5280000f 	mov	w15, #0x0                   	// #0
+ 3dc:	5280000e 	mov	w14, #0x0                   	// #0
+        for(j = 0; j < N; ++j){
+ 3e0:	7100003f 	cmp	w1, #0x0
+ 3e4:	5400040d 	b.le	464 <gemm_nt16+0x9c>
+ 3e8:	8b30c46a 	add	x10, x3, w16, sxtw #1
+ 3ec:	8b2fc4ed 	add	x13, x7, w15, sxtw #1
+ 3f0:	5280000c 	mov	w12, #0x0                   	// #0
+ 3f4:	d280000b 	mov	x11, #0x0                   	// #0
+              sum = 0;
+            for(k = 0; k < K; ++k){
+ 3f8:	7100005f 	cmp	w2, #0x0
+ 3fc:	5400040d 	b.le	47c <gemm_nt16+0xb4>
+ 400:	4e021fe2 	mov	v2.h[0], wzr
+ 404:	1ee24004 	fcvt	s4, h0
+ 408:	8b2cc4a9 	add	x9, x5, w12, sxtw #1
+ 40c:	d2800008 	mov	x8, #0x0                   	// #0
+                sum += ALPHA*A[i*lda+k]*B[j*ldb + k];
+ 410:	7c687941 	ldr	h1, [x10,x8,lsl #1]
+ 414:	1ee24042 	fcvt	s2, h2
+ 418:	7c687923 	ldr	h3, [x9,x8,lsl #1]
+ 41c:	91000508 	add	x8, x8, #0x1
+    FLT sum = 0;
+	
+    for(i = 0; i < M; ++i){
+        for(j = 0; j < N; ++j){
+              sum = 0;
+            for(k = 0; k < K; ++k){
+ 420:	6b08005f 	cmp	w2, w8
+                sum += ALPHA*A[i*lda+k]*B[j*ldb + k];
+ 424:	1ee24021 	fcvt	s1, h1
+ 428:	1ee24063 	fcvt	s3, h3
+ 42c:	1e240821 	fmul	s1, s1, s4
+ 430:	1f030821 	fmadd	s1, s1, s3, s2
+ 434:	1e23c022 	fcvt	h2, s1
+    FLT sum = 0;
+	
+    for(i = 0; i < M; ++i){
+        for(j = 0; j < N; ++j){
+              sum = 0;
+            for(k = 0; k < K; ++k){
+ 438:	54fffecc 	b.gt	410 <gemm_nt16+0x48>
+                sum += ALPHA*A[i*lda+k]*B[j*ldb + k];
+            }
+            C[i*ldc+j] += sum;
+ 43c:	7c6b79a3 	ldr	h3, [x13,x11,lsl #1]
+ 440:	1ee24041 	fcvt	s1, h2
+ 444:	0b06018c 	add	w12, w12, w6
+ 448:	1ee24062 	fcvt	s2, h3
+ 44c:	1e212842 	fadd	s2, s2, s1
+ 450:	1e23c042 	fcvt	h2, s2
+ 454:	7c2b79a2 	str	h2, [x13,x11,lsl #1]
+ 458:	9100056b 	add	x11, x11, #0x1
+{
+    int i,j,k;
+    FLT sum = 0;
+	
+    for(i = 0; i < M; ++i){
+        for(j = 0; j < N; ++j){
+ 45c:	6b0b003f 	cmp	w1, w11
+ 460:	54fffccc 	b.gt	3f8 <gemm_nt16+0x30>
+        FLT *C, int ldc)
+{
+    int i,j,k;
+    FLT sum = 0;
+	
+    for(i = 0; i < M; ++i){
+ 464:	110005ce 	add	w14, w14, #0x1
+ 468:	0b1101ef 	add	w15, w15, w17
+ 46c:	6b0e001f 	cmp	w0, w14
+ 470:	0b040210 	add	w16, w16, w4
+ 474:	54fffb61 	b.ne	3e0 <gemm_nt16+0x18>
+ 478:	d65f03c0 	ret
+        for(j = 0; j < N; ++j){
+              sum = 0;
+            for(k = 0; k < K; ++k){
+ 47c:	4e021fe2 	mov	v2.h[0], wzr
+ 480:	17ffffef 	b	43c <gemm_nt16+0x74>
+ 484:	d65f03c0 	ret
+
+0000000000000488 <gemm_tn>:
+        float *B, int ldb,
+        float *C, int ldc)
+{
+    int i,j,k;
+    #pragma omp parallel for
+    for(i = 0; i < M; ++i){
+ 488:	7100001f 	cmp	w0, #0x0
+
+void gemm_tn(int M, int N, int K, float ALPHA, 
+        float *A, int lda, 
+        float *B, int ldb,
+        float *C, int ldc)
+{
+ 48c:	b94003ef 	ldr	w15, [sp]
+    int i,j,k;
+    #pragma omp parallel for
+    for(i = 0; i < M; ++i){
+ 490:	5400046d 	b.le	51c <gemm_tn+0x94>
+ 494:	5100040e 	sub	w14, w0, #0x1
+ 498:	aa0303ec 	mov	x12, x3
+ 49c:	910005ce 	add	x14, x14, #0x1
+ 4a0:	5280000d 	mov	w13, #0x0                   	// #0
+ 4a4:	8b0e086e 	add	x14, x3, x14, lsl #2
+        for(k = 0; k < K; ++k){
+ 4a8:	7100005f 	cmp	w2, #0x0
+ 4ac:	540002ed 	b.le	508 <gemm_tn+0x80>
+ 4b0:	8b2dc8e3 	add	x3, x7, w13, sxtw #2
+ 4b4:	aa0c03eb 	mov	x11, x12
+ 4b8:	5280000a 	mov	w10, #0x0                   	// #0
+ 4bc:	52800009 	mov	w9, #0x0                   	// #0
+            register float A_PART = ALPHA*A[k*lda+i];
+ 4c0:	bd400163 	ldr	s3, [x11]
+            for(j = 0; j < N; ++j){
+ 4c4:	7100003f 	cmp	w1, #0x0
+ 4c8:	8b2ac8a8 	add	x8, x5, w10, sxtw #2
+ 4cc:	d2800000 	mov	x0, #0x0                   	// #0
+{
+    int i,j,k;
+    #pragma omp parallel for
+    for(i = 0; i < M; ++i){
+        for(k = 0; k < K; ++k){
+            register float A_PART = ALPHA*A[k*lda+i];
+ 4d0:	1e230803 	fmul	s3, s0, s3
+            for(j = 0; j < N; ++j){
+ 4d4:	5400010d 	b.le	4f4 <gemm_tn+0x6c>
+                C[i*ldc+j] += A_PART*B[k*ldb+j];
+ 4d8:	bc607901 	ldr	s1, [x8,x0,lsl #2]
+ 4dc:	bc607862 	ldr	s2, [x3,x0,lsl #2]
+ 4e0:	1f010861 	fmadd	s1, s3, s1, s2
+ 4e4:	bc207861 	str	s1, [x3,x0,lsl #2]
+ 4e8:	91000400 	add	x0, x0, #0x1
+    int i,j,k;
+    #pragma omp parallel for
+    for(i = 0; i < M; ++i){
+        for(k = 0; k < K; ++k){
+            register float A_PART = ALPHA*A[k*lda+i];
+            for(j = 0; j < N; ++j){
+ 4ec:	6b00003f 	cmp	w1, w0
+ 4f0:	54ffff4c 	b.gt	4d8 <gemm_tn+0x50>
+        float *C, int ldc)
+{
+    int i,j,k;
+    #pragma omp parallel for
+    for(i = 0; i < M; ++i){
+        for(k = 0; k < K; ++k){
+ 4f4:	11000529 	add	w9, w9, #0x1
+ 4f8:	8b24c96b 	add	x11, x11, w4, sxtw #2
+ 4fc:	6b09005f 	cmp	w2, w9
+ 500:	0b06014a 	add	w10, w10, w6
+ 504:	54fffde1 	b.ne	4c0 <gemm_tn+0x38>
+ 508:	9100118c 	add	x12, x12, #0x4
+ 50c:	0b0f01ad 	add	w13, w13, w15
+        float *B, int ldb,
+        float *C, int ldc)
+{
+    int i,j,k;
+    #pragma omp parallel for
+    for(i = 0; i < M; ++i){
+ 510:	eb0c01df 	cmp	x14, x12
+ 514:	54fffca1 	b.ne	4a8 <gemm_tn+0x20>
+ 518:	d65f03c0 	ret
+ 51c:	d65f03c0 	ret
+
+0000000000000520 <gemm_tn16>:
+        FLT *B, int ldb,
+        FLT *C, int ldc)
+{
+    int i,j,k;
+    #pragma omp parallel for
+    for(i = 0; i < M; ++i){
+ 520:	7100001f 	cmp	w0, #0x0
+}
+void gemm_tn16(int M, int N, int K, FLT ALPHA, 
+        FLT *A, int lda, 
+        FLT *B, int ldb,
+        FLT *C, int ldc)
+{
+ 524:	b94003ef 	ldr	w15, [sp]
+    int i,j,k;
+    #pragma omp parallel for
+    for(i = 0; i < M; ++i){
+ 528:	5400054d 	b.le	5d0 <gemm_tn16+0xb0>
+ 52c:	5100040e 	sub	w14, w0, #0x1
+ 530:	aa0303ec 	mov	x12, x3
+ 534:	910005ce 	add	x14, x14, #0x1
+ 538:	5280000d 	mov	w13, #0x0                   	// #0
+ 53c:	8b0e046e 	add	x14, x3, x14, lsl #1
+        for(k = 0; k < K; ++k){
+ 540:	7100005f 	cmp	w2, #0x0
+ 544:	540003cd 	b.le	5bc <gemm_tn16+0x9c>
+ 548:	1ee24004 	fcvt	s4, h0
+ 54c:	8b2dc4e3 	add	x3, x7, w13, sxtw #1
+ 550:	aa0c03ea 	mov	x10, x12
+ 554:	5280000b 	mov	w11, #0x0                   	// #0
+ 558:	52800009 	mov	w9, #0x0                   	// #0
+            register FLT A_PART = ALPHA*A[k*lda+i];
+ 55c:	7d400143 	ldr	h3, [x10]
+            for(j = 0; j < N; ++j){
+ 560:	7100003f 	cmp	w1, #0x0
+{
+    int i,j,k;
+    #pragma omp parallel for
+    for(i = 0; i < M; ++i){
+        for(k = 0; k < K; ++k){
+            register FLT A_PART = ALPHA*A[k*lda+i];
+ 564:	1ee24063 	fcvt	s3, h3
+ 568:	1e240863 	fmul	s3, s3, s4
+ 56c:	1e23c063 	fcvt	h3, s3
+            for(j = 0; j < N; ++j){
+ 570:	540001cd 	b.le	5a8 <gemm_tn16+0x88>
+ 574:	1ee24063 	fcvt	s3, h3
+ 578:	8b2bc4a8 	add	x8, x5, w11, sxtw #1
+ 57c:	d2800000 	mov	x0, #0x0                   	// #0
+                C[i*ldc+j] += A_PART*B[k*ldb+j];
+ 580:	7c607901 	ldr	h1, [x8,x0,lsl #1]
+ 584:	7c607862 	ldr	h2, [x3,x0,lsl #1]
+ 588:	1ee24021 	fcvt	s1, h1
+ 58c:	1ee24042 	fcvt	s2, h2
+ 590:	1f030821 	fmadd	s1, s1, s3, s2
+ 594:	1e23c021 	fcvt	h1, s1
+ 598:	7c207861 	str	h1, [x3,x0,lsl #1]
+ 59c:	91000400 	add	x0, x0, #0x1
+    int i,j,k;
+    #pragma omp parallel for
+    for(i = 0; i < M; ++i){
+        for(k = 0; k < K; ++k){
+            register FLT A_PART = ALPHA*A[k*lda+i];
+            for(j = 0; j < N; ++j){
+ 5a0:	6b00003f 	cmp	w1, w0
+ 5a4:	54fffeec 	b.gt	580 <gemm_tn16+0x60>
+        FLT *C, int ldc)
+{
+    int i,j,k;
+    #pragma omp parallel for
+    for(i = 0; i < M; ++i){
+        for(k = 0; k < K; ++k){
+ 5a8:	11000529 	add	w9, w9, #0x1
+ 5ac:	8b24c54a 	add	x10, x10, w4, sxtw #1
+ 5b0:	6b09005f 	cmp	w2, w9
+ 5b4:	0b06016b 	add	w11, w11, w6
+ 5b8:	54fffd21 	b.ne	55c <gemm_tn16+0x3c>
+ 5bc:	9100098c 	add	x12, x12, #0x2
+ 5c0:	0b0f01ad 	add	w13, w13, w15
+        FLT *B, int ldb,
+        FLT *C, int ldc)
+{
+    int i,j,k;
+    #pragma omp parallel for
+    for(i = 0; i < M; ++i){
+ 5c4:	eb0e019f 	cmp	x12, x14
+ 5c8:	54fffbc1 	b.ne	540 <gemm_tn16+0x20>
+ 5cc:	d65f03c0 	ret
+ 5d0:	d65f03c0 	ret
+ 5d4:	d503201f 	nop
+
+00000000000005d8 <gemm_tt>:
+        float *B, int ldb,
+        float *C, int ldc)
+{
+    int i,j,k;
+    #pragma omp parallel for
+    for(i = 0; i < M; ++i){
+ 5d8:	7100001f 	cmp	w0, #0x0
+
+void gemm_tt(int M, int N, int K, float ALPHA, 
+        float *A, int lda, 
+        float *B, int ldb,
+        float *C, int ldc)
+{
+ 5dc:	b94003ef 	ldr	w15, [sp]
+    int i,j,k;
+    #pragma omp parallel for
+    for(i = 0; i < M; ++i){
+ 5e0:	540005cd 	b.le	698 <gemm_tt+0xc0>
+ 5e4:	5100040e 	sub	w14, w0, #0x1
+ 5e8:	aa0303ec 	mov	x12, x3
+ 5ec:	910005ce 	add	x14, x14, #0x1
+ 5f0:	5280000d 	mov	w13, #0x0                   	// #0
+ 5f4:	8b0e086e 	add	x14, x3, x14, lsl #2
+        for(j = 0; j < N; ++j){
+ 5f8:	7100003f 	cmp	w1, #0x0
+ 5fc:	5400032d 	b.le	660 <gemm_tt+0x88>
+ 600:	8b2dc8eb 	add	x11, x7, w13, sxtw #2
+ 604:	5280000a 	mov	w10, #0x0                   	// #0
+ 608:	d2800009 	mov	x9, #0x0                   	// #0
+            register float sum = 0;
+            for(k = 0; k < K; ++k){
+ 60c:	7100005f 	cmp	w2, #0x0
+ 610:	5400032d 	b.le	674 <gemm_tt+0x9c>
+ 614:	1e2703e2 	fmov	s2, wzr
+ 618:	8b2ac8a8 	add	x8, x5, w10, sxtw #2
+ 61c:	aa0c03e3 	mov	x3, x12
+ 620:	d2800000 	mov	x0, #0x0                   	// #0
+                sum += ALPHA*A[i+k*lda]*B[k+j*ldb];
+ 624:	bd400061 	ldr	s1, [x3]
+ 628:	8b24c863 	add	x3, x3, w4, sxtw #2
+ 62c:	bc607903 	ldr	s3, [x8,x0,lsl #2]
+ 630:	91000400 	add	x0, x0, #0x1
+    int i,j,k;
+    #pragma omp parallel for
+    for(i = 0; i < M; ++i){
+        for(j = 0; j < N; ++j){
+            register float sum = 0;
+            for(k = 0; k < K; ++k){
+ 634:	6b00005f 	cmp	w2, w0
+                sum += ALPHA*A[i+k*lda]*B[k+j*ldb];
+ 638:	1e210801 	fmul	s1, s0, s1
+ 63c:	1f030822 	fmadd	s2, s1, s3, s2
+    int i,j,k;
+    #pragma omp parallel for
+    for(i = 0; i < M; ++i){
+        for(j = 0; j < N; ++j){
+            register float sum = 0;
+            for(k = 0; k < K; ++k){
+ 640:	54ffff2c 	b.gt	624 <gemm_tt+0x4c>
+                sum += ALPHA*A[i+k*lda]*B[k+j*ldb];
+            }
+            C[i*ldc+j] += sum;
+ 644:	bc697961 	ldr	s1, [x11,x9,lsl #2]
+ 648:	0b06014a 	add	w10, w10, w6
+ 64c:	1e222822 	fadd	s2, s1, s2
+ 650:	bc297962 	str	s2, [x11,x9,lsl #2]
+ 654:	91000529 	add	x9, x9, #0x1
+        float *C, int ldc)
+{
+    int i,j,k;
+    #pragma omp parallel for
+    for(i = 0; i < M; ++i){
+        for(j = 0; j < N; ++j){
+ 658:	6b09003f 	cmp	w1, w9
+ 65c:	54fffd8c 	b.gt	60c <gemm_tt+0x34>
+ 660:	9100118c 	add	x12, x12, #0x4
+ 664:	0b0f01ad 	add	w13, w13, w15
+        float *B, int ldb,
+        float *C, int ldc)
+{
+    int i,j,k;
+    #pragma omp parallel for
+    for(i = 0; i < M; ++i){
+ 668:	eb0e019f 	cmp	x12, x14
+ 66c:	54fffc61 	b.ne	5f8 <gemm_tt+0x20>
+ 670:	d65f03c0 	ret
+        for(j = 0; j < N; ++j){
+            register float sum = 0;
+            for(k = 0; k < K; ++k){
+ 674:	1e2703e2 	fmov	s2, wzr
+                sum += ALPHA*A[i+k*lda]*B[k+j*ldb];
+            }
+            C[i*ldc+j] += sum;
+ 678:	bc697961 	ldr	s1, [x11,x9,lsl #2]
+ 67c:	0b06014a 	add	w10, w10, w6
+ 680:	1e222822 	fadd	s2, s1, s2
+ 684:	bc297962 	str	s2, [x11,x9,lsl #2]
+ 688:	91000529 	add	x9, x9, #0x1
+        float *C, int ldc)
+{
+    int i,j,k;
+    #pragma omp parallel for
+    for(i = 0; i < M; ++i){
+        for(j = 0; j < N; ++j){
+ 68c:	6b09003f 	cmp	w1, w9
+ 690:	54fffbec 	b.gt	60c <gemm_tt+0x34>
+ 694:	17fffff3 	b	660 <gemm_tt+0x88>
+ 698:	d65f03c0 	ret
+ 69c:	d503201f 	nop
+
+00000000000006a0 <gemm_tt16>:
+        FLT *B, int ldb,
+        FLT *C, int ldc)
+{
+    int i,j,k;
+    #pragma omp parallel for
+    for(i = 0; i < M; ++i){
+ 6a0:	7100001f 	cmp	w0, #0x0
+}
+void gemm_tt16(int M, int N, int K, FLT ALPHA, 
+        FLT *A, int lda, 
+        FLT *B, int ldb,
+        FLT *C, int ldc)
+{
+ 6a4:	b94003ef 	ldr	w15, [sp]
+    int i,j,k;
+    #pragma omp parallel for
+    for(i = 0; i < M; ++i){
+ 6a8:	540005ed 	b.le	764 <gemm_tt16+0xc4>
+ 6ac:	5100040e 	sub	w14, w0, #0x1
+ 6b0:	aa0303ec 	mov	x12, x3
+ 6b4:	910005ce 	add	x14, x14, #0x1
+ 6b8:	5280000d 	mov	w13, #0x0                   	// #0
+ 6bc:	8b0e046e 	add	x14, x3, x14, lsl #1
+        for(j = 0; j < N; ++j){
+ 6c0:	7100003f 	cmp	w1, #0x0
+ 6c4:	5400042d 	b.le	748 <gemm_tt16+0xa8>
+ 6c8:	8b2dc4eb 	add	x11, x7, w13, sxtw #1
+ 6cc:	5280000a 	mov	w10, #0x0                   	// #0
+ 6d0:	d2800009 	mov	x9, #0x0                   	// #0
+            register FLT sum = 0;
+            for(k = 0; k < K; ++k){
+ 6d4:	7100005f 	cmp	w2, #0x0
+ 6d8:	5400042d 	b.le	75c <gemm_tt16+0xbc>
+ 6dc:	4e021fe2 	mov	v2.h[0], wzr
+ 6e0:	1ee24004 	fcvt	s4, h0
+ 6e4:	8b2ac4a8 	add	x8, x5, w10, sxtw #1
+ 6e8:	aa0c03e3 	mov	x3, x12
+ 6ec:	d2800000 	mov	x0, #0x0                   	// #0
+                sum += ALPHA*A[i+k*lda]*B[k+j*ldb];
+ 6f0:	7d400061 	ldr	h1, [x3]
+ 6f4:	1ee24042 	fcvt	s2, h2
+ 6f8:	7c607903 	ldr	h3, [x8,x0,lsl #1]
+ 6fc:	91000400 	add	x0, x0, #0x1
+    int i,j,k;
+    #pragma omp parallel for
+    for(i = 0; i < M; ++i){
+        for(j = 0; j < N; ++j){
+            register FLT sum = 0;
+            for(k = 0; k < K; ++k){
+ 700:	6b00005f 	cmp	w2, w0
+ 704:	8b24c463 	add	x3, x3, w4, sxtw #1
+                sum += ALPHA*A[i+k*lda]*B[k+j*ldb];
+ 708:	1ee24021 	fcvt	s1, h1
+ 70c:	1ee24063 	fcvt	s3, h3
+ 710:	1e240821 	fmul	s1, s1, s4
+ 714:	1f030821 	fmadd	s1, s1, s3, s2
+ 718:	1e23c022 	fcvt	h2, s1
+    int i,j,k;
+    #pragma omp parallel for
+    for(i = 0; i < M; ++i){
+        for(j = 0; j < N; ++j){
+            register FLT sum = 0;
+            for(k = 0; k < K; ++k){
+ 71c:	54fffeac 	b.gt	6f0 <gemm_tt16+0x50>
+                sum += ALPHA*A[i+k*lda]*B[k+j*ldb];
+            }
+            C[i*ldc+j] += sum;
+ 720:	7c697963 	ldr	h3, [x11,x9,lsl #1]
+ 724:	1ee24041 	fcvt	s1, h2
+ 728:	0b06014a 	add	w10, w10, w6
+ 72c:	1ee24062 	fcvt	s2, h3
+ 730:	1e212842 	fadd	s2, s2, s1
+ 734:	1e23c042 	fcvt	h2, s2
+ 738:	7c297962 	str	h2, [x11,x9,lsl #1]
+ 73c:	91000529 	add	x9, x9, #0x1
+        FLT *C, int ldc)
+{
+    int i,j,k;
+    #pragma omp parallel for
+    for(i = 0; i < M; ++i){
+        for(j = 0; j < N; ++j){
+ 740:	6b09003f 	cmp	w1, w9
+ 744:	54fffc8c 	b.gt	6d4 <gemm_tt16+0x34>
+ 748:	9100098c 	add	x12, x12, #0x2
+ 74c:	0b0f01ad 	add	w13, w13, w15
+        FLT *B, int ldb,
+        FLT *C, int ldc)
+{
+    int i,j,k;
+    #pragma omp parallel for
+    for(i = 0; i < M; ++i){
+ 750:	eb0e019f 	cmp	x12, x14
+ 754:	54fffb61 	b.ne	6c0 <gemm_tt16+0x20>
+ 758:	d65f03c0 	ret
+        for(j = 0; j < N; ++j){
+            register FLT sum = 0;
+            for(k = 0; k < K; ++k){
+ 75c:	4e021fe2 	mov	v2.h[0], wzr
+ 760:	17fffff0 	b	720 <gemm_tt16+0x80>
+ 764:	d65f03c0 	ret
+
+0000000000000768 <gemm_cpu>:
+        float BETA,
+        float *C, int ldc)
+{
+    //printf("cpu: %d %d %d %d %d %f %d %d %f %d\n",TA, TB, M, N, K, ALPHA, lda, ldb, BETA, ldc);
+    int i, j;
+    for(i = 0; i < M; ++i){
+ 768:	7100005f 	cmp	w2, #0x0
+void gemm_cpu(int TA, int TB, int M, int N, int K, float ALPHA, 
+        float *A, int lda, 
+        float *B, int ldb,
+        float BETA,
+        float *C, int ldc)
+{
+ 76c:	2a0203ed 	mov	w13, w2
+ 770:	2a0303ea 	mov	w10, w3
+ 774:	2a0403e2 	mov	w2, w4
+ 778:	aa0503e3 	mov	x3, x5
+ 77c:	2a0603e4 	mov	w4, w6
+ 780:	aa0703e5 	mov	x5, x7
+    //printf("cpu: %d %d %d %d %d %f %d %d %f %d\n",TA, TB, M, N, K, ALPHA, lda, ldb, BETA, ldc);
+    int i, j;
+    for(i = 0; i < M; ++i){
+ 784:	5280000c 	mov	w12, #0x0                   	// #0
+ 788:	5280000b 	mov	w11, #0x0                   	// #0
+void gemm_cpu(int TA, int TB, int M, int N, int K, float ALPHA, 
+        float *A, int lda, 
+        float *B, int ldb,
+        float BETA,
+        float *C, int ldc)
+{
+ 78c:	b94003e6 	ldr	w6, [sp]
+ 790:	b94013ee 	ldr	w14, [sp,#16]
+ 794:	f94007e7 	ldr	x7, [sp,#8]
+    //printf("cpu: %d %d %d %d %d %f %d %d %f %d\n",TA, TB, M, N, K, ALPHA, lda, ldb, BETA, ldc);
+    int i, j;
+    for(i = 0; i < M; ++i){
+ 798:	540001ed 	b.le	7d4 <gemm_cpu+0x6c>
+        for(j = 0; j < N; ++j){
+ 79c:	7100015f 	cmp	w10, #0x0
+ 7a0:	5400012d 	b.le	7c4 <gemm_cpu+0x5c>
+ 7a4:	8b2cc8e9 	add	x9, x7, w12, sxtw #2
+ 7a8:	d2800008 	mov	x8, #0x0                   	// #0
+            C[i*ldc + j] *= BETA;
+ 7ac:	bc687922 	ldr	s2, [x9,x8,lsl #2]
+ 7b0:	1e210842 	fmul	s2, s2, s1
+ 7b4:	bc287922 	str	s2, [x9,x8,lsl #2]
+ 7b8:	91000508 	add	x8, x8, #0x1
+        float *C, int ldc)
+{
+    //printf("cpu: %d %d %d %d %d %f %d %d %f %d\n",TA, TB, M, N, K, ALPHA, lda, ldb, BETA, ldc);
+    int i, j;
+    for(i = 0; i < M; ++i){
+        for(j = 0; j < N; ++j){
+ 7bc:	6b08015f 	cmp	w10, w8
+ 7c0:	54ffff6c 	b.gt	7ac <gemm_cpu+0x44>
+        float BETA,
+        float *C, int ldc)
+{
+    //printf("cpu: %d %d %d %d %d %f %d %d %f %d\n",TA, TB, M, N, K, ALPHA, lda, ldb, BETA, ldc);
+    int i, j;
+    for(i = 0; i < M; ++i){
+ 7c4:	1100056b 	add	w11, w11, #0x1
+ 7c8:	0b0e018c 	add	w12, w12, w14
+ 7cc:	6b0b01bf 	cmp	w13, w11
+ 7d0:	54fffe61 	b.ne	79c <gemm_cpu+0x34>
+        for(j = 0; j < N; ++j){
+            C[i*ldc + j] *= BETA;
+        }
+    }
+    if(!TA && !TB)
+ 7d4:	2a010008 	orr	w8, w0, w1
+ 7d8:	34000188 	cbz	w8, 808 <gemm_cpu+0xa0>
+        gemm_nn(M, N, K, ALPHA,A,lda, B, ldb,C,ldc);
+    else if(TA && !TB)
+ 7dc:	7100001f 	cmp	w0, #0x0
+ 7e0:	7a401820 	ccmp	w1, #0x0, #0x0, ne
+ 7e4:	540001a0 	b.eq	818 <gemm_cpu+0xb0>
+        gemm_tn(M, N, K, ALPHA,A,lda, B, ldb,C,ldc);
+    else if(!TA && TB)
+ 7e8:	7100001f 	cmp	w0, #0x0
+        gemm_nt(M, N, K, ALPHA,A,lda, B, ldb,C,ldc);
+ 7ec:	b90003ee 	str	w14, [sp]
+    }
+    if(!TA && !TB)
+        gemm_nn(M, N, K, ALPHA,A,lda, B, ldb,C,ldc);
+    else if(TA && !TB)
+        gemm_tn(M, N, K, ALPHA,A,lda, B, ldb,C,ldc);
+    else if(!TA && TB)
+ 7f0:	7a400824 	ccmp	w1, #0x0, #0x4, eq
+        gemm_nt(M, N, K, ALPHA,A,lda, B, ldb,C,ldc);
+ 7f4:	2a0d03e0 	mov	w0, w13
+ 7f8:	2a0a03e1 	mov	w1, w10
+    }
+    if(!TA && !TB)
+        gemm_nn(M, N, K, ALPHA,A,lda, B, ldb,C,ldc);
+    else if(TA && !TB)
+        gemm_tn(M, N, K, ALPHA,A,lda, B, ldb,C,ldc);
+    else if(!TA && TB)
+ 7fc:	54000041 	b.ne	804 <gemm_cpu+0x9c>
+        gemm_nt(M, N, K, ALPHA,A,lda, B, ldb,C,ldc);
+    else
+        gemm_tt(M, N, K, ALPHA,A,lda, B, ldb,C,ldc);
+ 800:	14000000 	b	5d8 <gemm_tt>
+    if(!TA && !TB)
+        gemm_nn(M, N, K, ALPHA,A,lda, B, ldb,C,ldc);
+    else if(TA && !TB)
+        gemm_tn(M, N, K, ALPHA,A,lda, B, ldb,C,ldc);
+    else if(!TA && TB)
+        gemm_nt(M, N, K, ALPHA,A,lda, B, ldb,C,ldc);
+ 804:	14000000 	b	308 <gemm_nt>
+        for(j = 0; j < N; ++j){
+            C[i*ldc + j] *= BETA;
+        }
+    }
+    if(!TA && !TB)
+        gemm_nn(M, N, K, ALPHA,A,lda, B, ldb,C,ldc);
+ 808:	2a0a03e1 	mov	w1, w10
+ 80c:	2a0d03e0 	mov	w0, w13
+ 810:	b90003ee 	str	w14, [sp]
+ 814:	14000000 	b	140 <gemm_nn>
+    else if(TA && !TB)
+        gemm_tn(M, N, K, ALPHA,A,lda, B, ldb,C,ldc);
+ 818:	2a0a03e1 	mov	w1, w10
+ 81c:	2a0d03e0 	mov	w0, w13
+ 820:	b90003ee 	str	w14, [sp]
+ 824:	14000000 	b	488 <gemm_tn>
+
+0000000000000828 <time_random_matrix>:
+    }
+    return m;
+}
+
+void time_random_matrix(int TA, int TB, int m, int k, int n)
+{
+ 828:	d10283ff 	sub	sp, sp, #0xa0
+ 82c:	a9027bfd 	stp	x29, x30, [sp,#32]
+ 830:	910083fd 	add	x29, sp, #0x20
+ 834:	a90353f3 	stp	x19, x20, [sp,#48]
+ 838:	2a0303f4 	mov	w20, w3
+ 83c:	a9045bf5 	stp	x21, x22, [sp,#64]
+ 840:	2a0403f3 	mov	w19, w4
+ 844:	a90563f7 	stp	x23, x24, [sp,#80]
+ 848:	2a0003f6 	mov	w22, w0
+ 84c:	a9066bf9 	stp	x25, x26, [sp,#96]
+ 850:	2a0103f7 	mov	w23, w1
+ 854:	a90773fb 	stp	x27, x28, [sp,#112]
+ 858:	2a0203f5 	mov	w21, w2
+ 85c:	fd0043e8 	str	d8, [sp,#128]
+    float *a;
+    if(!TA) a = random_matrix(m,k);
+ 860:	35000940 	cbnz	w0, 988 <time_random_matrix+0x160>
+ 864:	2a0303e1 	mov	w1, w3
+ 868:	2a0203e0 	mov	w0, w2
+    else a = random_matrix(k,m);
+    int lda = (!TA)?k:m;
+ 86c:	b9007fa3 	str	w3, [x29,#124]
+}
+
+void time_random_matrix(int TA, int TB, int m, int k, int n)
+{
+    float *a;
+    if(!TA) a = random_matrix(m,k);
+ 870:	94000000 	bl	d0 <random_matrix>
+ 874:	aa0003fa 	mov	x26, x0
+    else a = random_matrix(k,m);
+    int lda = (!TA)?k:m;
+    float *b;
+    if(!TB) b = random_matrix(k,n);
+ 878:	350007d7 	cbnz	w23, 970 <time_random_matrix+0x148>
+ 87c:	2a1303e1 	mov	w1, w19
+ 880:	2a1403e0 	mov	w0, w20
+    else b = random_matrix(n,k);
+    int ldb = (!TB)?n:k;
+ 884:	2a1303fc 	mov	w28, w19
+    float *a;
+    if(!TA) a = random_matrix(m,k);
+    else a = random_matrix(k,m);
+    int lda = (!TA)?k:m;
+    float *b;
+    if(!TB) b = random_matrix(k,n);
+ 888:	94000000 	bl	d0 <random_matrix>
+ 88c:	aa0003f9 	mov	x25, x0
+    else b = random_matrix(n,k);
+    int ldb = (!TB)?n:k;
+
+    float *c = random_matrix(m,n);
+ 890:	2a1303e1 	mov	w1, w19
+    int i;
+    clock_t start = clock(), end;
+    for(i = 0; i<10; ++i){
+        gemm_cpu(TA,TB,m,n,k,1,a,lda,b,ldb,1,c,n);
+ 894:	1e2e1008 	fmov	s8, #1.000000000000000000e+00
+    float *b;
+    if(!TB) b = random_matrix(k,n);
+    else b = random_matrix(n,k);
+    int ldb = (!TB)?n:k;
+
+    float *c = random_matrix(m,n);
+ 898:	2a1503e0 	mov	w0, w21
+    int i;
+    clock_t start = clock(), end;
+ 89c:	5280015b 	mov	w27, #0xa                   	// #10
+    float *b;
+    if(!TB) b = random_matrix(k,n);
+    else b = random_matrix(n,k);
+    int ldb = (!TB)?n:k;
+
+    float *c = random_matrix(m,n);
+ 8a0:	94000000 	bl	d0 <random_matrix>
+ 8a4:	aa0003f8 	mov	x24, x0
+    int i;
+    clock_t start = clock(), end;
+ 8a8:	94000000 	bl	0 <clock>
+ 8ac:	f9003ba0 	str	x0, [x29,#112]
+    for(i = 0; i<10; ++i){
+        gemm_cpu(TA,TB,m,n,k,1,a,lda,b,ldb,1,c,n);
+ 8b0:	1e204101 	fmov	s1, s8
+ 8b4:	b9407fa6 	ldr	w6, [x29,#124]
+ 8b8:	aa1903e7 	mov	x7, x25
+ 8bc:	aa1a03e5 	mov	x5, x26
+ 8c0:	1e2e1000 	fmov	s0, #1.000000000000000000e+00
+ 8c4:	2a1403e4 	mov	w4, w20
+ 8c8:	2a1303e3 	mov	w3, w19
+ 8cc:	2a1503e2 	mov	w2, w21
+ 8d0:	2a1703e1 	mov	w1, w23
+ 8d4:	2a1603e0 	mov	w0, w22
+ 8d8:	b90003fc 	str	w28, [sp]
+ 8dc:	f90007f8 	str	x24, [sp,#8]
+ 8e0:	b90013f3 	str	w19, [sp,#16]
+ 8e4:	94000000 	bl	768 <gemm_cpu>
+    int ldb = (!TB)?n:k;
+
+    float *c = random_matrix(m,n);
+    int i;
+    clock_t start = clock(), end;
+    for(i = 0; i<10; ++i){
+ 8e8:	7100077b 	subs	w27, w27, #0x1
+ 8ec:	54fffe21 	b.ne	8b0 <time_random_matrix+0x88>
+        gemm_cpu(TA,TB,m,n,k,1,a,lda,b,ldb,1,c,n);
+    }
+    end = clock();
+ 8f0:	94000000 	bl	0 <clock>
+}
+
+__fortify_function int
+printf (const char *__restrict __fmt, ...)
+{
+  return __printf_chk (__USE_FORTIFY_LEVEL - 1, __fmt, __va_arg_pack ());
+ 8f4:	f9403ba1 	ldr	x1, [x29,#112]
+ 8f8:	2a1703e7 	mov	w7, w23
+ 8fc:	1c000521 	ldr	s1, 9a0 <time_random_matrix+0x178>
+ 900:	2a1603e6 	mov	w6, w22
+ 904:	cb010000 	sub	x0, x0, x1
+ 908:	90000001 	adrp	x1, 0 <gemm_bin>
+ 90c:	9e220000 	scvtf	s0, x0
+ 910:	2a1303e5 	mov	w5, w19
+ 914:	2a1403e4 	mov	w4, w20
+ 918:	2a1403e3 	mov	w3, w20
+ 91c:	2a1503e2 	mov	w2, w21
+ 920:	91000021 	add	x1, x1, #0x0
+ 924:	52800020 	mov	w0, #0x1                   	// #1
+ 928:	1e211800 	fdiv	s0, s0, s1
+ 92c:	1e22c000 	fcvt	d0, s0
+ 930:	94000000 	bl	0 <__printf_chk>
+    printf("Matrix Multiplication %dx%d * %dx%d, TA=%d, TB=%d: %lf ms\n",m,k,k,n, TA, TB, (float)(end-start)/CLOCKS_PER_SEC);
+    free(a);
+ 934:	aa1a03e0 	mov	x0, x26
+ 938:	94000000 	bl	0 <free>
+    free(b);
+ 93c:	aa1903e0 	mov	x0, x25
+ 940:	94000000 	bl	0 <free>
+    free(c);
+}
+ 944:	910003bf 	mov	sp, x29
+    }
+    end = clock();
+    printf("Matrix Multiplication %dx%d * %dx%d, TA=%d, TB=%d: %lf ms\n",m,k,k,n, TA, TB, (float)(end-start)/CLOCKS_PER_SEC);
+    free(a);
+    free(b);
+    free(c);
+ 948:	aa1803e0 	mov	x0, x24
+}
+ 94c:	fd4033e8 	ldr	d8, [sp,#96]
+ 950:	a94153f3 	ldp	x19, x20, [sp,#16]
+ 954:	a9425bf5 	ldp	x21, x22, [sp,#32]
+ 958:	a94363f7 	ldp	x23, x24, [sp,#48]
+ 95c:	a9446bf9 	ldp	x25, x26, [sp,#64]
+ 960:	a94573fb 	ldp	x27, x28, [sp,#80]
+ 964:	a8c87bfd 	ldp	x29, x30, [sp],#128
+    }
+    end = clock();
+    printf("Matrix Multiplication %dx%d * %dx%d, TA=%d, TB=%d: %lf ms\n",m,k,k,n, TA, TB, (float)(end-start)/CLOCKS_PER_SEC);
+    free(a);
+    free(b);
+    free(c);
+ 968:	14000000 	b	0 <free>
+ 96c:	d503201f 	nop
+    if(!TA) a = random_matrix(m,k);
+    else a = random_matrix(k,m);
+    int lda = (!TA)?k:m;
+    float *b;
+    if(!TB) b = random_matrix(k,n);
+    else b = random_matrix(n,k);
+ 970:	2a1403e1 	mov	w1, w20
+ 974:	2a1303e0 	mov	w0, w19
+    int ldb = (!TB)?n:k;
+ 978:	2a1403fc 	mov	w28, w20
+    if(!TA) a = random_matrix(m,k);
+    else a = random_matrix(k,m);
+    int lda = (!TA)?k:m;
+    float *b;
+    if(!TB) b = random_matrix(k,n);
+    else b = random_matrix(n,k);
+ 97c:	94000000 	bl	d0 <random_matrix>
+ 980:	aa0003f9 	mov	x25, x0
+ 984:	17ffffc3 	b	890 <time_random_matrix+0x68>
+
+void time_random_matrix(int TA, int TB, int m, int k, int n)
+{
+    float *a;
+    if(!TA) a = random_matrix(m,k);
+    else a = random_matrix(k,m);
+ 988:	2a0203e1 	mov	w1, w2
+ 98c:	2a0303e0 	mov	w0, w3
+    int lda = (!TA)?k:m;
+ 990:	b9007fa2 	str	w2, [x29,#124]
+
+void time_random_matrix(int TA, int TB, int m, int k, int n)
+{
+    float *a;
+    if(!TA) a = random_matrix(m,k);
+    else a = random_matrix(k,m);
+ 994:	94000000 	bl	d0 <random_matrix>
+ 998:	aa0003fa 	mov	x26, x0
+ 99c:	17ffffb7 	b	878 <time_random_matrix+0x50>
+ 9a0:	49742400 	.word	0x49742400
+ 9a4:	d503201f 	nop
+
+00000000000009a8 <gemm>:
+void gemm(int TA, int TB, int M, int N, int K, float ALPHA, 
+        float *A, int lda, 
+        float *B, int ldb,
+        float BETA,
+        float *C, int ldc)
+{
+ 9a8:	b94003e9 	ldr	w9, [sp]
+    gemm_cpu( TA,  TB,  M, N, K, ALPHA,A,lda, B, ldb,BETA,C,ldc);
+ 9ac:	b90003e9 	str	w9, [sp]
+ 9b0:	14000000 	b	768 <gemm_cpu>
+ 9b4:	d503201f 	nop
+
+00000000000009b8 <gemm_cpu16>:
+        FLT *B, int ldb,
+        FLT BETA,
+        FLT *C, int ldc)
+{
+    int i, j;
+    for(i = 0; i < M; ++i){
+ 9b8:	7100005f 	cmp	w2, #0x0
+void gemm_cpu16(int TA, int TB, int M, int N, int K, FLT ALPHA, 
+        FLT *A, int lda, 
+        FLT *B, int ldb,
+        FLT BETA,
+        FLT *C, int ldc)
+{
+ 9bc:	2a0203ed 	mov	w13, w2
+ 9c0:	2a0303ea 	mov	w10, w3
+ 9c4:	2a0403e2 	mov	w2, w4
+ 9c8:	aa0503e3 	mov	x3, x5
+ 9cc:	2a0603e4 	mov	w4, w6
+ 9d0:	aa0703e5 	mov	x5, x7
+    int i, j;
+    for(i = 0; i < M; ++i){
+ 9d4:	5280000c 	mov	w12, #0x0                   	// #0
+ 9d8:	5280000b 	mov	w11, #0x0                   	// #0
+void gemm_cpu16(int TA, int TB, int M, int N, int K, FLT ALPHA, 
+        FLT *A, int lda, 
+        FLT *B, int ldb,
+        FLT BETA,
+        FLT *C, int ldc)
+{
+ 9dc:	b94003e6 	ldr	w6, [sp]
+ 9e0:	b94013ee 	ldr	w14, [sp,#16]
+ 9e4:	f94007e7 	ldr	x7, [sp,#8]
+    int i, j;
+    for(i = 0; i < M; ++i){
+ 9e8:	5400024d 	b.le	a30 <gemm_cpu16+0x78>
+        for(j = 0; j < N; ++j){
+ 9ec:	7100015f 	cmp	w10, #0x0
+ 9f0:	5400018d 	b.le	a20 <gemm_cpu16+0x68>
+ 9f4:	1ee24023 	fcvt	s3, h1
+ 9f8:	8b2cc4e9 	add	x9, x7, w12, sxtw #1
+ 9fc:	d2800008 	mov	x8, #0x0                   	// #0
+            C[i*ldc + j] *= BETA;
+ a00:	7c687922 	ldr	h2, [x9,x8,lsl #1]
+ a04:	1ee24042 	fcvt	s2, h2
+ a08:	1e230842 	fmul	s2, s2, s3
+ a0c:	1e23c042 	fcvt	h2, s2
+ a10:	7c287922 	str	h2, [x9,x8,lsl #1]
+ a14:	91000508 	add	x8, x8, #0x1
+        FLT BETA,
+        FLT *C, int ldc)
+{
+    int i, j;
+    for(i = 0; i < M; ++i){
+        for(j = 0; j < N; ++j){
+ a18:	6b08015f 	cmp	w10, w8
+ a1c:	54ffff2c 	b.gt	a00 <gemm_cpu16+0x48>
+        FLT *B, int ldb,
+        FLT BETA,
+        FLT *C, int ldc)
+{
+    int i, j;
+    for(i = 0; i < M; ++i){
+ a20:	1100056b 	add	w11, w11, #0x1
+ a24:	0b0e018c 	add	w12, w12, w14
+ a28:	6b0b01bf 	cmp	w13, w11
+ a2c:	54fffe01 	b.ne	9ec <gemm_cpu16+0x34>
+        for(j = 0; j < N; ++j){
+            C[i*ldc + j] *= BETA;
+        }
+    }
+    if(!TA && !TB){
+ a30:	2a010008 	orr	w8, w0, w1
+ a34:	34000188 	cbz	w8, a64 <gemm_cpu16+0xac>
+        gemm_nn16(M, N, K, ALPHA,A,lda, B, ldb,C,ldc);}
+    else if(TA && !TB){
+ a38:	7100001f 	cmp	w0, #0x0
+ a3c:	7a401820 	ccmp	w1, #0x0, #0x0, ne
+ a40:	540001a0 	b.eq	a74 <gemm_cpu16+0xbc>
+        gemm_tn16(M, N, K, ALPHA,A,lda, B, ldb,C,ldc);}
+    else if(!TA && TB){
+ a44:	7100001f 	cmp	w0, #0x0
+        gemm_nt16(M, N, K, ALPHA,A,lda, B, ldb,C,ldc);}
+ a48:	b90003ee 	str	w14, [sp]
+    }
+    if(!TA && !TB){
+        gemm_nn16(M, N, K, ALPHA,A,lda, B, ldb,C,ldc);}
+    else if(TA && !TB){
+        gemm_tn16(M, N, K, ALPHA,A,lda, B, ldb,C,ldc);}
+    else if(!TA && TB){
+ a4c:	7a400824 	ccmp	w1, #0x0, #0x4, eq
+        gemm_nt16(M, N, K, ALPHA,A,lda, B, ldb,C,ldc);}
+ a50:	2a0d03e0 	mov	w0, w13
+ a54:	2a0a03e1 	mov	w1, w10
+    }
+    if(!TA && !TB){
+        gemm_nn16(M, N, K, ALPHA,A,lda, B, ldb,C,ldc);}
+    else if(TA && !TB){
+        gemm_tn16(M, N, K, ALPHA,A,lda, B, ldb,C,ldc);}
+    else if(!TA && TB){
+ a58:	54000041 	b.ne	a60 <gemm_cpu16+0xa8>
+        gemm_nt16(M, N, K, ALPHA,A,lda, B, ldb,C,ldc);}
+    else{
+        gemm_tt16(M, N, K, ALPHA,A,lda, B, ldb,C,ldc);}
+ a5c:	14000000 	b	6a0 <gemm_tt16>
+    if(!TA && !TB){
+        gemm_nn16(M, N, K, ALPHA,A,lda, B, ldb,C,ldc);}
+    else if(TA && !TB){
+        gemm_tn16(M, N, K, ALPHA,A,lda, B, ldb,C,ldc);}
+    else if(!TA && TB){
+        gemm_nt16(M, N, K, ALPHA,A,lda, B, ldb,C,ldc);}
+ a60:	14000000 	b	3c8 <gemm_nt16>
+        for(j = 0; j < N; ++j){
+            C[i*ldc + j] *= BETA;
+        }
+    }
+    if(!TA && !TB){
+        gemm_nn16(M, N, K, ALPHA,A,lda, B, ldb,C,ldc);}
+ a64:	2a0a03e1 	mov	w1, w10
+ a68:	2a0d03e0 	mov	w0, w13
+ a6c:	b90003ee 	str	w14, [sp]
+ a70:	14000000 	b	1d0 <gemm_nn16>
+    else if(TA && !TB){
+        gemm_tn16(M, N, K, ALPHA,A,lda, B, ldb,C,ldc);}
+ a74:	2a0a03e1 	mov	w1, w10
+ a78:	2a0d03e0 	mov	w0, w13
+ a7c:	b90003ee 	str	w14, [sp]
+ a80:	14000000 	b	520 <gemm_tn16>
+ a84:	d503201f 	nop
+
+0000000000000a88 <gemm16>:
+void gemm16(int TA, int TB, int M, int N, int K, FLT ALPHA, 
+        FLT *A, int lda, 
+        FLT *B, int ldb,
+     	FLT BETA,
+        FLT *C, int ldc)
+{
+ a88:	b94003e9 	ldr	w9, [sp]
+    gemm_cpu16( TA,  TB,  M, N, K, ALPHA,A,lda, B, ldb,BETA,C,ldc);
+ a8c:	b90003e9 	str	w9, [sp]
+ a90:	14000000 	b	9b8 <gemm_cpu16>
