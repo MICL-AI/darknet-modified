@@ -557,6 +557,31 @@ crop_layer parse_crop(list *options, size_params params)
     return l;
 }
 
+crop_layer16 parse_crop16(list *options, size_params16 params)
+{
+    int crop_height = option_find_int(options, "crop_height", 1);
+    int crop_width = option_find_int(options, "crop_width", 1);
+    int flip = option_find_int(options, "flip", 0);
+    float angle = option_find_float(options, "angle", 0);
+    float saturation = option_find_float(options, "saturation", 1);
+    float exposure = option_find_float(options, "exposure", 1);
+
+    int batch, h, w, c;
+    h = params.h;
+    w = params.w;
+    c = params.c;
+    batch = params.batch;
+    if (!(h && w && c))
+        error("Layer before crop layer must output image.");
+
+    int noadjust = option_find_int_quiet(options, "noadjust", 0);
+
+    crop_layer16 l = make_crop_layer16(batch, h, w, c, crop_height, crop_width, flip, angle, saturation, exposure);
+    l.shift = option_find_float(options, "shift", 0);
+    l.noadjust = noadjust;
+    return l;
+}
+
 layer parse_reorg(list *options, size_params params)
 {
     int stride = option_find_int(options, "stride", 1);
@@ -1364,6 +1389,10 @@ network16 *parse_network_cfg16(char *filename)
             l.output = net->layers[count - 1].output;
             l.delta = net->layers[count - 1].delta;
         }
+        else if (lt == CROP)
+        {
+            l = parse_crop16(options, params);
+        }
         else
         {
             fprintf(stderr, "Type not recognized: %s\n", s->type);
@@ -1680,6 +1709,8 @@ void load_connected_weights16(layer16 l, FILE *fp, int transpose)
     printf("load connected weights\n");
     float *f1024 = (float *)calloc(l.outputs, sizeof(float));
     float *f1024_1024 = (float *)calloc(l.outputs * l.inputs, sizeof(float));
+    if (!f1024_1024)
+        printf("calloc failed %d * %d \n", l.outputs, l.inputs);
     int i;
     fread(f1024, sizeof(float), l.outputs, fp); //l.biases
     for (i = 0; i < l.outputs; i++)
@@ -1691,7 +1722,8 @@ void load_connected_weights16(layer16 l, FILE *fp, int transpose)
     for (i = 0; i < l.inputs * l.outputs; i++)
     {
         l.weights[i] = (FLT)f1024_1024[i];
-    }
+        //printf("weights:%f ",l.weights[i]);
+    } //printf("\n");
     if (l.transpose)
     {
         //printf("transpose connected layer\n");
@@ -1906,6 +1938,21 @@ void load_convolutional_weights(layer l, FILE *fp)
     for (int j = 0; j < l.n; j++)
         ; // printf("bias[%d]:%f",j,l.biases[j]);printf("\n");
     printf("\n biases[%d]:%f\n", l.n - 1, l.biases[l.n - 1]);
+
+    if (0)
+    {
+        int i;
+        for (i = 0; i < l.n; i++)
+        {
+            printf("bias[%d]:%d ", i, double_to_fp16(l.biases[i]));
+            if (i % 6 == 5)
+                printf("\n");
+        }
+        printf("\n");
+
+        exit(0);
+    }
+
     if (l.batch_normalize && (!l.dontloadscales))
     {
         printf("batch_normalize\n");

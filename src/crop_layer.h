@@ -6,15 +6,18 @@
 #include "network.h"
 
 typedef layer crop_layer;
+typedef layer16 crop_layer16;
 
 image get_crop_image(crop_layer l);
 crop_layer make_crop_layer(int batch, int h, int w, int c, int crop_height, int crop_width, int flip, float angle, float saturation, float exposure);
 void forward_crop_layer(const crop_layer l, network net);
 void resize_crop_layer(layer *l, int w, int h);
 
+crop_layer16 make_crop_layer16(int batch, int h, int w, int c, int crop_height, int crop_width, int flip, float angle, float saturation, float exposure);
+void forward_crop_layer16(const crop_layer16 l, network16 net);
+
 #ifdef GPU
 void forward_crop_layer_gpu(crop_layer l, network net);
 #endif
 
 #endif
-
