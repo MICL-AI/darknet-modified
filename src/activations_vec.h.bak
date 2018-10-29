@@ -1,0 +1,205 @@
+#ifndef ACTIVATIONS_VEC_H
+#define ACTIVATIONS_VEC_H
+
+#include "darknet.h"
+#include "cuda.h"
+#include "math.h"
+#include <vec.h>
+void activate_array16vec(FLT *x, const int n, const ACTIVATION a);
+
+static inline FLT* leaky_activate16vec(FLT* x, int len){
+	int i;
+	for(i=0;i<len;i++)
+		x[i]=x[i]>0 ? x[i]: .1*x[i];
+	return x;
+
+}
+static inline FLT* relu_activate16vec(FLT* A ,int len){
+	mod_times = calc_mod_and_times(len,0);
+	int i=0, len_calculated=0;
+
+	if(mod_times.times_[6]!=0){
+		union f_64 *vecA,vec_zeros ;
+		vec_zeros.v= __builtin_gptx_fix_len_dupv64hfhf(0);
+		
+		for(i=0;i<mod_times.times_[6];i++){//2
+			vecA = (union f_64*)&A[ len_calculated ];			
+			vecA->v=__builtin_gptx_smaxv64hf(vecA->v,vec_zeros.v);
+
+			len_calculated +=64;// each time plus 64
+		}
+	}
+	if(mod_times.times_[5]!=0){
+		union f_32 *vecA, vec_zeros ;
+		vec_zeros.v = __builtin_gptx_fix_len_dupv32hfhf(0);
+		vecA = (union f_32*)&A[len_calculated ];
+		vecA->v=__builtin_gptx_smaxv32hf(vecA->v,vec_zeros.v);
+
+		len_calculated +=32;	
+	}
+	if(mod_times.times_[4]!=0){
+		union f_16 *vecA, vec_zeros ;
+		vec_zeros.v = __builtin_gptx_fix_len_dupv16hfhf(0);
+		vecA = (union f_16*)&A[len_calculated ];
+		vecA->v=__builtin_gptx_smaxv16hf(vecA->v,vec_zeros.v);
+
+		len_calculated +=16;
+	}
+	if(mod_times.times_[3]!=0){
+		union f_8 *vecA, vec_zeros ;
+		vec_zeros.v = __builtin_gptx_fix_len_dupv8hfhf(0);
+		vecA = (union f_8*)&A[len_calculated ];
+		vecA->v=__builtin_gptx_smaxv8hf(vecA->v,vec_zeros.v);
+
+		len_calculated += 8;
+	}
+	if(mod_times.times_[2]!=0){
+		union f_4 *vecA, vec_zeros ;
+		vec_zeros.v = __builtin_gptx_fix_len_dupv4hfhf(0);
+		vecA = (union f_4*)&A[len_calculated ];
+		vecA->v=__builtin_gptx_smaxv4hf(vecA->v,vec_zeros.v);
+
+		len_calculated += 4;
+	}
+	if(mod_times.times_[1]!=0){
+
+		if(A[len_calculated]<0 )
+			A[len_calculated]=0;
+		if(A[len_calculated+1]<0 )
+			A[len_calculated+1]=0;
+		 
+		len_calculated += 2;
+	}
+	if(mod_times.mod_==1){
+		if(A[len_calculated]<0 )
+			A[len_calculated]=0;
+
+	}
+
+	return A;
+	
+	
+}
+static inline FLT* linear_activate16vec(FLT* x){
+	return x;
+}
+static inline FLT* tanh_activate16vec(FLT* x, int n){
+
+	int i;
+	set_Max_threshold(x,n,5);
+	mul_or_add_scalarbrd_vec(n,x,2,x,0);//0:mul  x->2x
+	for(i=0;i<n;i++){
+		x[i]=((float)exp(x[i])-1)/(float)(exp(x[i])+1);
+	}
+	return x;
+}
+static inline FLT* logistic_activate16vec(FLT* x, int n){
+	mul_or_add_scalarbrd_vec(n,x,-1,x,0);//mul
+	int i;
+	for(i=0;i<n;i++)
+		x[i]=exp(x[i]);
+	mul_or_add_scalarbrd_vec(n,x,1,x,1);//add
+	for(i=0;i<n;i++)
+		x[i]=1./(float)(x[i]);
+	return x;
+}
+static inline FLT loggy_activate16vec(FLT x){return 2./(float)(1. + exp(-x)) - 1;}
+static inline FLT elu_activate16vec(FLT x){return (x >= 0)*x + (x < 0)*(exp(x)-1);}
+static inline FLT relie_activate16vec(FLT x){return (x>0) ? x : .01*x;}
+static inline FLT ramp_activate16vec(FLT x){return x*(x>0)+.1*x;}
+static inline FLT plse_activate16vec(FLT x)
+{
+    if(x < -4) return .01 * (x + 4);
+    if(x > 4)  return .01 * (x - 4) + 1;
+    return .125*x + .5;
+}
+static inline FLT stair_activate16vec(FLT x)
+{
+    int n = floor(x);
+    if (n%2 == 0) return floor(0.5*x);
+    else return (x - n) + floor(0.5*x);
+}
+static inline FLT hardtan_activate16vec(FLT x)
+{
+    if (x < -1) return -1;
+    if (x > 1) return 1;
+    return x;
+}
+
+static inline FLT lhtan_activate16vec(FLT x)
+{
+    if(x < 0) return .001*x;
+    if(x > 1) return .001*(x-1) + 1;
+    return x;
+}
+
+FLT activate16vec(FLT x, int len ,ACTIVATION a)
+{
+    switch(a){
+        case LINEAR:
+            return x;//linear_activate16vec(x);
+        case LOGISTIC:
+            return x;//logistic_activate16vec(x);
+        case LOGGY:
+            return loggy_activate16vec(x);
+        case RELU:
+	    return x;//relu_activate16vec(x);
+        case ELU: 
+            return elu_activate16vec(x);
+        case RELIE:
+            return relie_activate16vec(x);
+        case RAMP:
+            return ramp_activate16vec(x);
+        case LEAKY:
+            return x;//leaky_activate16vec(x);
+        case TANH:
+            return x;//tanh_activate16vec(x);
+        case PLSE:
+            return plse_activate16vec(x);
+        case STAIR:
+            return stair_activate16vec(x);
+        case HARDTAN:
+            return hardtan_activate16vec(x);
+        case LHTAN:
+            return lhtan_activate16vec(x);
+    }
+    return 0;
+
+}
+ void  activate_array16vec(FLT * x ,const int  n , const ACTIVATION a )
+{
+	int i;
+	//printf("a = %d \n",a);
+	
+	if(a==0){
+		x=logistic_activate16vec(x ,n);	
+	}	
+	else if(a==1){
+		x=relu_activate16vec(x ,n);	
+	}
+	else if(a==3){//printf("activate_array16vec %d linear\n", a);
+		x = linear_activate16vec(x);
+	}
+	else if(a==5){//printf("activate_array16vec %d tanh\n", a);
+		x = tanh_activate16vec(x ,n);		
+	}
+	else if(a==7){//printf("activate_array16vec %d tanh\n", a);
+		x = leaky_activate16vec(x ,n);		
+	}
+	
+	else{printf("activate_array16vec : unfinished\n ");
+		for(i = 0; i < n; ++i){
+			x[i] = activate16vec(x[i], n,a);
+
+		}
+	}
+	//x=activate16vec(x, a);
+
+}
+
+
+
+
+
+#endif
+
