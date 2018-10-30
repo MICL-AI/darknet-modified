@@ -473,12 +473,21 @@ void validate_classifier_single16(char *datacfg, char *filename, char *weightfil
         }
 
         image im;
-        if (gemmtype == 8 || gemmtype == 85)
+        //TL: load by net not gemm
+        if (strstr(filename, "mobile") || strstr(weightfile, "mobile"))
             im = load_image_color_mobilenet(paths[i], 0, 0);
-        else if (gemmtype == 9 || gemmtype == 95)
+        else if (strstr(filename, "squeeze") || strstr(weightfile, "squeeze"))
             im = load_image_color_squeezenet(paths[i], 0, 0);
         else
             im = load_image_color(paths[i], 0, 0);
+
+        // if (gemmtype == 8 || gemmtype == 85)
+        //     im = load_image_color_mobilenet(paths[i], 0, 0);
+        // else if (gemmtype == 9 || gemmtype == 95)
+        //     im = load_image_color_squeezenet(paths[i], 0, 0);
+        // else
+        //     im = load_image_color(paths[i], 0, 0);
+        //
         if (!im.data)
         {
             fails++;
@@ -615,7 +624,13 @@ void validate_classifier_single(char *datacfg, char *filename, char *weightfile,
             im = load_image_color_squeezenet(paths[i], 0, 0);
         else
             im = load_image_color(paths[i], 0, 0);
-
+        // if (gemmtype == 8 || gemmtype == 85)
+        //     im = load_image_color_mobilenet(paths[i], 0, 0);
+        // else if (gemmtype == 9 || gemmtype == 95)
+        //     im = load_image_color_squeezenet(paths[i], 0, 0);
+        // else
+        //     im = load_image_color(paths[i], 0, 0);
+        //
         if (!im.data)
         {
             fails++;
@@ -852,7 +867,16 @@ void predict_classifier16(char *datacfg, char *cfgfile, char *weightfile, char *
             strtok(input, "\n");
         }
         printf("load image\n");
-        image im = load_image_color(input, 0, 0);
+        //TL: 1030 different ways loading
+        image im;
+        if (strstr(cfgfile, "mobile") || strstr(weightfile, "mobile"))
+            im = load_image_color_mobilenet(input, 0, 0);
+        else if (strstr(cfgfile, "squeeze") || strstr(weightfile, "squeeze"))
+            im = load_image_color_squeezenet(input, 0, 0);
+        else
+            im = load_image_color(input, 0, 0);
+        //TL
+        //image im = load_image_color(input, 0, 0);
         printf("im\n");
         image r = letterbox_image(im, net->w, net->h);
         if (!im.data)
@@ -931,7 +955,16 @@ void predict_classifier(char *datacfg, char *cfgfile, char *weightfile, char *fi
                 return;
             strtok(input, "\n");
         }
-        image im = load_image_color(input, 0, 0);
+        //TL: 1030 different ways loading
+        image im;
+        if (strstr(cfgfile, "mobile") || strstr(weightfile, "mobile"))
+            im = load_image_color_mobilenet(input, 0, 0);
+        else if (strstr(cfgfile, "squeeze") || strstr(weightfile, "squeeze"))
+            im = load_image_color_squeezenet(input, 0, 0);
+        else
+            im = load_image_color(input, 0, 0);
+        //TL
+        //image im = load_image_color(input, 0, 0);
         image r = letterbox_image(im, net->w, net->h);
         //resize_network(net, r.w, r.h);
         printf("%d %d\n", r.w, r.h);
