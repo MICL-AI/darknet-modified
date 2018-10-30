@@ -1706,28 +1706,24 @@ void load_connected_weights16(layer16 l, FILE *fp, int transpose)
 {
 
     //float f1024[4096],f1024_1024[4096*4096];
-    printf("load connected weights\n");
-    float *f1024 = (float *)calloc(l.outputs, sizeof(float));
-    float *f1024_1024 = (float *)calloc(l.outputs * l.inputs, sizeof(float));
-    if (!f1024_1024)
-        printf("calloc failed %d * %d \n", l.outputs, l.inputs);
-    int i;
-    fread(f1024, sizeof(float), l.outputs, fp); //l.biases
-    for (i = 0; i < l.outputs; i++)
+    printf("WHEREAMI: load connected weights16\n");
+
+    float *param_tmp = (float *)calloc(l.outputs, sizeof(float));
+    float *weights_tmp = (float *)calloc(l.outputs * l.inputs, sizeof(float));
+
+    //bias convertion from float32 to des.
+    fread(param_tmp, sizeof(float), l.outputs, fp);
+    for (int i = 0; i < l.outputs; i++)
     {
-        l.biases[i] = (FLT)f1024[i];
+        l.biases[i] = (FLT)param_tmp[i];
     }
-
-    fread(f1024_1024, sizeof(float), l.outputs * l.inputs, fp); //l.weights
     //weights convertion from float32 to des.
-    for (i = 0; i < l.inputs * l.outputs; i++)
+    fread(weights_tmp, sizeof(float), l.outputs * l.inputs, fp);
+    for (int i = 0; i < l.inputs * l.outputs; i++)
     {
-        l.weights[i] = (FLT)f1024_1024[i];
-        //printf("weights:%f ",l.weights[i]);
+        l.weights[i] = (FLT)weights_tmp[i];
+        //printf("weights:%f ",l_temp.weights[i]);
     } //printf("\n");
-    fread(l.biases, sizeof(float), l.outputs, fp);
-
-    fread(l.weights, sizeof(float), l.outputs * l.inputs, fp);
     if (transpose)
     {
         printf("NOTE: in load_connected_weights16 TRANSPOSE \n");
@@ -1735,33 +1731,34 @@ void load_connected_weights16(layer16 l, FILE *fp, int transpose)
     }
     if (l.transpose)
     {
-        printf("NOTE: in load_connected_weights16 llll....TRANSPOSE \n");
+        printf("NOTE: in load_connected_weights16 .....<l.transpose>\n");
         //printf("transpose connected layer\n");
         transpose_matrix16(l.weights, l.outputs, l.inputs);
     }
 
     if (l.batch_normalize && (!l.dontloadscales))
     {
-        fread(f1024, sizeof(float), l.outputs, fp);
-        for (i = 0; i < l.outputs; i++)
+        printf("WHEREAMI: load connected weights16 ......... if (l.batch_normalize && (!l.dontloadscales))\n");
+        fread(param_tmp, sizeof(float), l.outputs, fp);
+        for (int i = 0; i < l.outputs; i++)
         {
-            l.scales[i] = (FLT)f1024[i];
+            l.scales[i] = (FLT)param_tmp[i];
         }
 
-        fread(f1024, sizeof(float), l.outputs, fp);
-        for (i = 0; i < l.outputs; i++)
+        fread(param_tmp, sizeof(float), l.outputs, fp);
+        for (int i = 0; i < l.outputs; i++)
         {
-            l.rolling_mean[i] = (FLT)f1024[i];
+            l.rolling_mean[i] = (FLT)param_tmp[i];
         }
 
-        fread(f1024, sizeof(float), l.outputs, fp);
-        for (i = 0; i < l.outputs; i++)
+        fread(param_tmp, sizeof(float), l.outputs, fp);
+        for (int i = 0; i < l.outputs; i++)
         {
-            l.rolling_variance[i] = (FLT)f1024[i];
+            l.rolling_variance[i] = (FLT)param_tmp[i];
         }
-        // fread(l.scales, sizeof(float), l.outputs, fp);
-        // fread(l.rolling_mean, sizeof(float), l.outputs, fp);
-        // fread(l.rolling_variance, sizeof(float), l.outputs, fp);
+        // fread(l_temp.scales, sizeof(float), l_temp.outputs, fp);
+        // fread(l_temp.rolling_mean, sizeof(float), l_temp.outputs, fp);
+        // fread(l_temp.rolling_variance, sizeof(float), l_temp.outputs, fp);
     }
 }
 
