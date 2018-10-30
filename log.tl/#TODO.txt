@@ -7,8 +7,7 @@ TODO:
 - 2. Squeezenet label err
 - 3. Squeezenet --> valid16 err others right
 FIXME:
-* 4. vgg16 --> predict16/valid16 err
-* 5. alex predict/predict16 err
+ 
 
 - 6. mobilenet predict/16 wrong label, valid right
 + 7. mobilenet/squeezenet predict label err

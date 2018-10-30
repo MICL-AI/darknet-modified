@@ -252,12 +252,26 @@ void forward_network(network *netp)
         { //printf("l.delta\n");
             fill_cpu(l.outputs * l.batch, 0, l.delta, 1);
         }
-        printf("net l.forward:%ld\n", l.forward);
+        //printf("net l.forward:%ld\n", l.forward);
         if (!l.forward)
         {
             printf("l NULL\n"); // l.forward=forward_maxpool_layer;
         }
         l.forward(l, net);
+        //printf("\t\t\t\t\t\tnet transpose flag :%d\n", l.transpose);
+        if (0)
+        {
+            int p;
+            for (p = 0; p < 1000; p++)
+            {
+                if (p % 16 == 0)
+                    printf("output[%d]:", p);
+                printf("%f ", l.output[p]);
+                if (p % 16 == 15)
+                    printf("\n");
+            }
+            printf("\n NOTE: NEXT LAYER \n");
+        }
         //printf("out->input\n");
         net.input = l.output;
         if (l.truth)
@@ -300,16 +314,18 @@ void forward_network16(network16 *netp)
         {
             fill_cpu16(l.outputs * l.batch, 0, l.delta, 1);
         }
-        printf("net l.forward:%ld\n", l.forward);
+        //printf("net l.forward:%ld\n", l.forward);
         if (!l.forward)
         {
-            printf("l NULL\n"); // l.forward=forward_maxpool_layer;
+            printf("l.forward NULL\n"); // l.forward=forward_maxpool_layer;
         }
         l.forward(l, net);
+        //printf("\t\t\t\t\t\tnet transpose flag :%d\n", l.transpose);
+        
         if (0)
         {
             int p;
-            for (p = 0; p < l.outputs; p++)
+            for (p = 0; p < 1000; p++)
             {
                 if (p % 16 == 0)
                     printf("output[%d]:", p);
@@ -317,7 +333,7 @@ void forward_network16(network16 *netp)
                 if (p % 16 == 15)
                     printf("\n");
             }
-            printf("\n\n");
+            printf("\n NOTE: NEXT LAYER \n");
         }
         net.input = l.output;
     }

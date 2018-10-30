@@ -2021,7 +2021,7 @@ void load_convolutional_weights(layer l, FILE *fp)
         uA.f = l.weights[i];
         // printf("BEFORE,WEIGHTS[%d]:%f \n", i, l.weights[i]);
         //cut 20 mantissa
-        uA.ui = (uA.ui >> (23 - mantissa)) << (23 - mantissa);
+        //uA.ui = (uA.ui >> (23 - mantissa)) << (23 - mantissa);
         l.weights[i] = uA.f;
         // printf("AFTER,WEIGHTS[%d]:%f \n", i, l.weights[i]);
         //Find max/min in weights per layer
@@ -2029,7 +2029,7 @@ void load_convolutional_weights(layer l, FILE *fp)
         l.wei_min = l.wei_min < l.weights[i] ? l.wei_min : l.weights[i];
         // printf("MAX:[%f]\tMIN:[%f]", l.wei_max, l.wei_min);
     }
-    printf("MAX:[%f]\tMIN:[%f]\n", l.wei_max, l.wei_min);
+    //printf("MAX:[%f]\tMIN:[%f]\n", l.wei_max, l.wei_min);
 
     // printf("AFTER,weight[%d]:%f,weight[%d]:%f\n", num - 2, l.weights[num - 2], num - 1, l.weights[num - 1]);
 

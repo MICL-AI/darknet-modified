@@ -203,7 +203,7 @@ convolutional_layer16 make_convolutional_layer16(int batch, int h, int w, int c,
     l.pad = padding;
     l.batch_normalize = batch_normalize;
 
-    l.weights = (FLT *)calloc(c/groups*n*size*size, sizeof(FLT));if(!l.weights) {printf("weights calloc failed\n");exit(1);}
+    l.weights = (FLT *)calloc(c/groups*n*size*size, sizeof(FLT));if(!l.weights) {printf("in make_convolutional_layer16 weights calloc failed\n");exit(1);}
     l.biases = (FLT *)calloc(n, sizeof(FLT));
     l.bn_bias = (FLT *)calloc(n, sizeof(FLT));
     l.nweights = c/groups*n*size*size;
@@ -219,8 +219,11 @@ convolutional_layer16 make_convolutional_layer16(int batch, int h, int w, int c,
     l.inputs = l.w * l.h * l.c;
 
     l.output = (FLT *)calloc(l.batch*l.outputs, sizeof(FLT));
+    if(!l.output) {printf("in make_convolutional_layer16 output calloc failed\n");exit(1);}
+    
+    //TODO: find out if delta calloc failed caused connected weights err by jliu 181030
     l.delta  = calloc(l.batch*l.outputs, sizeof(FLT));//liuj
-
+    if(!l.delta) {printf("in make_convolutional_layer16 delta calloc failed\n");exit(1);}
     l.forward = forward_convolutional_layer16;
 
     if(batch_normalize){

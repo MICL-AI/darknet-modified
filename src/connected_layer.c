@@ -47,6 +47,7 @@ layer make_connected_layer(int batch, int inputs, int outputs, ACTIVATION activa
     l.bias_updates = calloc(outputs, sizeof(float));
 
     l.weights = calloc(outputs * inputs, sizeof(float));
+    printf("\nin make_connected_layer after calloc %f mem l.weights[33]=%f\n", (float)(outputs * inputs * sizeof(float)), l.weights[33]);
     l.biases = calloc(outputs, sizeof(float));
 
     l.forward = forward_connected_layer;
@@ -168,6 +169,7 @@ layer16 make_connected_layer16(int batch, int inputs, int outputs, ACTIVATION ac
     l.output = calloc(batch * outputs, sizeof(FLT));
     l.delta = calloc(batch * outputs, sizeof(FLT));
     l.weights = calloc(outputs * inputs, sizeof(FLT));
+    printf("\nin make_connected_layer16 after calloc %f mem l.weights[33]=%f\n", (float)(outputs * inputs * sizeof(FLT)), l.weights[33]);
     l.biases = calloc(outputs, sizeof(FLT));
 
     l.forward = forward_connected_layer16;
@@ -276,7 +278,7 @@ void forward_connected_layer(layer l, network net)
     float *a = net.input;
     float *b = l.weights;
     float *c = l.output;
-
+    printf("in forward_connected_layer weights b[33]=%x,\t b[34]=%x", b[33], b[34]);
     if (net.flag_vec == 0)
     {
         //printf("gemmtype:%d,transpose flg:%d\n",net.gemm_type,l.transpose);
@@ -325,6 +327,7 @@ void forward_connected_layer16(layer16 l, network16 net)
     int n = l.outputs;
     FLT *a = net.input;
     FLT *b = l.weights;
+    printf("in forward_connected_layer16 weights b[33]=%x,\t b[34]=%x", b[33], b[34]);
     FLT *c = l.output;
     if (net.flag_vec == 0)
     {
