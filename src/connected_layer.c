@@ -278,10 +278,10 @@ void forward_connected_layer(layer l, network net)
     float *a = net.input;
     float *b = l.weights;
     float *c = l.output;
-    printf("in forward_connected_layer weights b[33]=%x,\t b[34]=%x", b[33], b[34]);
+    printf("in forward_connected_layer weights b[33]=%x, b[34]=%x\n", b[33], b[34]);
     if (net.flag_vec == 0)
     {
-        //printf("gemmtype:%d,transpose flg:%d\n",net.gemm_type,l.transpose);
+        printf("in forward_connected_layer gemmtype:%d,transpose flg:%d\n",net.gemm_type,l.transpose);
         if (l.transpose == 1)
             gemm(0, 0, m, n, k, 1, a, k, b, n, 1, c, n);
         else
@@ -327,11 +327,11 @@ void forward_connected_layer16(layer16 l, network16 net)
     int n = l.outputs;
     FLT *a = net.input;
     FLT *b = l.weights;
-    printf("in forward_connected_layer16 weights b[33]=%x,\t b[34]=%x", b[33], b[34]);
     FLT *c = l.output;
+    printf("\nin forward_connected_layer16 weights b[33]=%x, b[34]=%x\n", b[33], b[34]);
     if (net.flag_vec == 0)
     {
-        //printf("gemmtype:%d,transpose flg:%d\n",net.gemm_type,l.transpose);
+        printf("in forward_connected_layer16 gemmtype:%d,transpose flg:%d\n",net.gemm_type,l.transpose);
         if (l.transpose == 1)
         {
             //printf("transpose\n");

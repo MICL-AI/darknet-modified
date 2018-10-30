@@ -373,7 +373,7 @@ void gemm_nt(int M, int N, int K, float ALPHA,
 {
 
     int i, j, k;
-    printf("\nMARK:using gemm_nt A[33]=%f\n\tB[33]=%f,%x\tC[33]=%f", A[33], B[33], B[33], C[33]);
+    printf("\nMARK:using gemm_nt\nB[32]=%f\tB[33]=%lf,%x\tB[34]=%f", B[32], B[33], B[33], B[34]);
     
 #pragma omp parallel for
     for (i = 0; i < M; ++i)
@@ -397,13 +397,12 @@ void gemm_nt16(int M, int N, int K, FLT ALPHA,
                FLT *C, int ldc)
 {
     int i, j, k;
-    FLT sum = 0;
-        printf("\nMARK:using gemm_nt16 A[33]=%f\n\tB[33]=%f,%x\tC[33]=%f", A[33], B[33], B[33], C[33]);
+        printf("\nMARK:using gemm_nt16\nB[32]=%f\tB[33]=%lf,%x\tB[34]=%f", B[32], B[33], B[33], B[34]);
     for (i = 0; i < M; ++i)
     {
         for (j = 0; j < N; ++j)
         {
-            sum = 0;
+            FLT sum = 0;
             for (k = 0; k < K; ++k)
             {
                 sum += ALPHA * A[i * lda + k] * B[j * ldb + k];

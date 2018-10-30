@@ -1719,13 +1719,23 @@ void load_connected_weights16(layer16 l, FILE *fp, int transpose)
     }
 
     fread(f1024_1024, sizeof(float), l.outputs * l.inputs, fp); //l.weights
+    //weights convertion from float32 to des.
     for (i = 0; i < l.inputs * l.outputs; i++)
     {
         l.weights[i] = (FLT)f1024_1024[i];
         //printf("weights:%f ",l.weights[i]);
     } //printf("\n");
+    fread(l.biases, sizeof(float), l.outputs, fp);
+
+    fread(l.weights, sizeof(float), l.outputs * l.inputs, fp);
+    if (transpose)
+    {
+        printf("NOTE: in load_connected_weights16 TRANSPOSE \n");
+        transpose_matrix16(l.weights, l.inputs, l.outputs);
+    }
     if (l.transpose)
     {
+        printf("NOTE: in load_connected_weights16 llll....TRANSPOSE \n");
         //printf("transpose connected layer\n");
         transpose_matrix16(l.weights, l.outputs, l.inputs);
     }
@@ -1749,6 +1759,9 @@ void load_connected_weights16(layer16 l, FILE *fp, int transpose)
         {
             l.rolling_variance[i] = (FLT)f1024[i];
         }
+        // fread(l.scales, sizeof(float), l.outputs, fp);
+        // fread(l.rolling_mean, sizeof(float), l.outputs, fp);
+        // fread(l.rolling_variance, sizeof(float), l.outputs, fp);
     }
 }
 
@@ -1774,10 +1787,14 @@ void load_connected_weights(layer l, FILE *fp, int transpose)
 
     if (transpose)
     {
+        printf("NOTE: in load_connected_weights TRANSPOSE \n");
+
         transpose_matrix(l.weights, l.inputs, l.outputs);
     }
     if (l.transpose)
     {
+        printf("NOTE: in load_connected_weights llll....TRANSPOSE \n");
+
         transpose_matrix(l.weights, l.outputs, l.inputs);
     }
 
