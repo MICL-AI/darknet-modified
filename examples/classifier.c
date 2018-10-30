@@ -877,14 +877,14 @@ void predict_classifier16(char *datacfg, char *cfgfile, char *weightfile, char *
             im = load_image_color(input, 0, 0);
         //TL
         //image im = load_image_color(input, 0, 0);
-        printf("im\n");
+        printf("image loaded up\n");
         image r = letterbox_image(im, net->w, net->h);
         if (!im.data)
         {
             printf("image load failed:\n");
         }
         //resize_network(net, r.w, r.h);
-        printf("%d %d\n", r.w, r.h);
+        printf("image size %d x %d\n", r.w, r.h);
 
         //float *X = r.data;
         FLT *X = calloc(300000, sizeof(FLT));
@@ -898,7 +898,7 @@ void predict_classifier16(char *datacfg, char *cfgfile, char *weightfile, char *
         for (i = 0; i < r.w * r.h * r.c; i++)
             X[i] = (FLT)r.data[i];
 
-        printf("%f  %f\n", X[0], X[r.w * r.h * r.c - 1]);
+        printf("converted to FLT data X[0]:%f\tX[last]:%f\n", X[0], X[r.w * r.h * r.c - 1]);
 
         time = clock();
         FLT *predictions = network_predict16(net, X);
