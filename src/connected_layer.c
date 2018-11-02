@@ -280,7 +280,7 @@ void forward_connected_layer(layer l, network net)
     float *c = l.output;
     printf("NOTE:in forward_connected_layer weights b[33]=%f, b[34]=%f\n", b[33], b[34]);
     
-    printf("\nNOTE:in forward_connected_layer16 weights l.biases[33]=%f, l.biases[34]=%f\n", l.biases[33], l.biases[34]);
+    printf("\nNOTE:in forward_connected_layer weights l.biases[33]=%f, l.biases[34]=%f\n", l.biases[33], l.biases[34]);
     if (net.flag_vec == 0)
     {
         printf("in forward_connected_layer gemmtype:%d,transpose flg:%d\n",net.gemm_type,l.transpose);
