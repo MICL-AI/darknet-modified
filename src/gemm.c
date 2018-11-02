@@ -126,10 +126,10 @@ void gemm(int TA, int TB, int M, int N, int K, float ALPHA,
     for (int i = 0; i < 100; i++)
         printf("A[%d]=%f\t", i, A[i]);
     puts("");
-        for (int i = 0; i < 100; i++)
+    for (int i = 0; i < 100; i++)
         printf("B[%d]=%f\t", i, B[i]);
     puts("");
-        for (int i = 0; i < 100; i++)
+    for (int i = 0; i < 100; i++)
         printf("C[%d]=%f\t", i, C[i]);
     puts("");
 #endif
@@ -151,8 +151,6 @@ void gemm_nn(int M, int N, int K, float ALPHA,
             register float A_PART = ALPHA * A[i * lda + k];
             for (j = 0; j < N; ++j)
             {
-                if (B[k * ldb + j] != B[k * ldb + j])
-                    B[k + ldb + j] = 0;
                 C[i * ldc + j] += A_PART * B[k * ldb + j];
                 //printf("C[%d]:%f",i*ldc+j,C[i*ldc+j]);
             } //printf("C[%d]:%f",i*ldc+j-1,C[i*ldc+j-1]); printf("\n");

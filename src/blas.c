@@ -188,7 +188,7 @@ void normalize_cpu16(FLT *x, FLT *mean, FLT *variance, int batch, int filters, i
         for(f = 0; f < filters; ++f){
             for(i = 0; i < spatial; ++i){
                 int index = b*filters*spatial + f*spatial + i;
-                x[index] =(x[index] - mean[f]) /(float)(sqrt(variance[f]) + .000001f);
+                x[index] =(x[index] - mean[f]) /(float)(sqrt(variance[f]) + .000011f);
             }
         }
     }
@@ -200,7 +200,7 @@ void normalize_cpu(float *x, float *mean, float *variance, int batch, int filter
         for(f = 0; f < filters; ++f){
             for(i = 0; i < spatial; ++i){
                 int index = b*filters*spatial + f*spatial + i;
-                x[index] = (x[index] - mean[f])/(sqrt(variance[f]) + .000001f);
+                x[index] = (x[index] - mean[f])/(float)(sqrt((variance[f]) + .000011f)); //epsilon should be in sqrt? TL: 181102
             }
         }
     }

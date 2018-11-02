@@ -1982,6 +1982,10 @@ void load_convolutional_weights(layer l, FILE *fp)
             ;   //l.rolling_variance[i] = 1/(sqrt(l.rolling_variance[i]) + .000001f);  //liuj0825 changed  for normalize_cpu
                 //printf("variance[%d]:%f\n",i,l.rolling_variance[i]);  // x[index] = (x[index] - mean[f])*(sqrt(variance[f]
         }
+        // for (int i = 0; i < l.n; i++)
+        //     if (l.rolling_variance[i] < 0)
+        //         printf("VARIANCE[%d]=%f\t", i, l.rolling_variance[i]);
+
         /* for(int i=0;i<l.n;i++){
           l.bn_scale[i] = l.scales[i] / (sqrt(l.rolling_variance[i] )+ .000001f);
           l.bn_bias[i] = l.biases[i] - l.scales[i] * l.rolling_mean[i] /(sqrt(l.rolling_variance[i]) + .000001f);
