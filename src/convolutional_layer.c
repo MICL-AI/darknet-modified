@@ -715,7 +715,7 @@ void forward_convolutional_layer(convolutional_layer l, network net)
         }
     }
     //printf("!!!out gemm\n");
-    if(l.batch_normalize){ printf("normailize\n");
+    if(l.batch_normalize){ //printf("normailize\n");
         forward_batchnorm_layer(l, net);
     } else {  //printf("add bias\n");
         add_bias(l.output, l.biases, l.batch, l.n, l.out_h*l.out_w);

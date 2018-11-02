@@ -1770,9 +1770,9 @@ void load_connected_weights(layer l, FILE *fp, int transpose)
     fread(l.weights, sizeof(float), l.outputs * l.inputs, fp);
     
     printf("WHEREAMI:loaded_conn_weights, sum = %d\n", l.outputs * l.inputs);
-    for (int i = 0; i < 100; i++)
-        printf("con_w[%d]=%f\t", i, l.weights[i]);
-    puts("");
+    // for (int i = 0; i < 100; i++)
+    //     printf("con_w[%d]=%f\t", i, l.weights[i]);
+    // puts("");
     //     //TL 1017 adding convert from float to int, then back to float
     // for (int i = 0; i < l.outputs * l.inputs; i++)
     // {
@@ -2028,9 +2028,9 @@ void load_convolutional_weights(layer l, FILE *fp)
 
     // printf("BEFORE, weight[%d]:%f,weight[%d]:%f\n", num - 2, l.weights[num - 2], num - 1, l.weights[num - 1]);
     printf("loaded_conv_weights, sum = %d\n", num);
-    for (int i = 0; i < 100; i++)
-        printf("cov_w[%d]=%f\t", i, l.weights[i]);
-    puts("");
+    // for (int i = 0; i < 100; i++)
+    //     printf("cov_w[%d]=%f\t", i, l.weights[i]);
+    // puts("");
     //MARK: TL: 1024 cutting mantissa
     // for (int i = 0; i < num; i++)
     // {
