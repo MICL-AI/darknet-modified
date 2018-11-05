@@ -289,8 +289,8 @@ void forward_connected_layer(layer l, network net)
         if (l.batch_normalize)
             forward_batchnorm_layer(l, net);
         else
-            add_bias16(l.output, l.biases, l.batch, l.outputs, 1);
-        activate_array16(l.output, l.outputs * l.batch, l.activation);
+            add_bias(l.output, l.biases, l.batch, l.outputs, 1);
+        activate_array(l.output, l.outputs * l.batch, l.activation);
     }
 
     else
@@ -304,17 +304,6 @@ void forward_connected_layer(layer l, network net)
 	    }
 	    activate_array16vec(l.output, l.outputs*l.batch, l.activation);*/
     }
-
-    if (l.batch_normalize)
-    {
-        forward_batchnorm_layer(l, net);
-    }
-    else
-    {
-        add_bias(l.output, l.biases, l.batch, l.outputs, 1);
-    }
-
-    activate_array(l.output, l.outputs * l.batch, l.activation);
 
     g_conn++;
 }

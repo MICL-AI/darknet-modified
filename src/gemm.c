@@ -138,8 +138,6 @@ void gemm_nn(int M, int N, int K, float ALPHA,
             register float A_PART = ALPHA * A[i * lda + k];
             for (j = 0; j < N; ++j)
             {
-                if (B[k * ldb + j] != B[k * ldb + j])
-                    B[k + ldb + j] = 0;
                 C[i * ldc + j] += A_PART * B[k * ldb + j];
                 //printf("C[%d]:%f",i*ldc+j,C[i*ldc+j]);
             } //printf("C[%d]:%f",i*ldc+j-1,C[i*ldc+j-1]); printf("\n");
