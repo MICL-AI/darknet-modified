@@ -3,7 +3,9 @@ A Darknet branch modified to FP16 excution.
 No weights file uploaded.  
 Run with `` rm -f log.tl/log && make && ./darknet TL predict tiny >> log.tllog ``  
 in which predict could be valid/predic16/valid16 and nets could be whoever with both ``cfg`` and ``weights`` files.  
-Original args still available.  
+
+Original args still available.
+
 
 Now they are:
 - alexnet
@@ -13,7 +15,24 @@ Now they are:
 - tiny
 - vgg16
 
-# squeezenet-source
+## My Modification
+
+- argvs to simplify the execution
+
+- fixed the mobilenet -O0 NaN bug with `variance[f] = (variance[f] < 0) ? 0 : variance[f];`
+
+- jliu added a entire F16 datapath, I tested and debuged net above
+
+- move all weights file in ./weights and all cfg file in ./cfg
+
+- specialized path for mobilenet/squeezenet whos converted form caffe (uses caffe lables)
+
+
+
+
+## REF
+
+### squeezenet-source
 convert from https://github.com/DeepScale/SqueezeNet/tree/master/SqueezeNet_v1.1
 
 validating on ImageNet 
