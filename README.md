@@ -1,13 +1,12 @@
 # darknet-modified  
 A Darknet branch modified to FP16 excution.  
 No weights file uploaded.  
-Run with `` rm -f log.tl/log && make && ./darknet TL predict tiny >> log.tllog ``  
-in which predict could be valid/predic16/valid16 and nets could be whoever with both ``cfg`` and ``weights`` files.  
+Run with `\./darknet TL predict tiny`  
+in which predict could be valid/predic16/valid16 and nets could be whoever with both `cfg` and `weights` files.  
 
 Original args still available.
 
-
-Now they are:
+Now the nets are:
 - alexnet
 - mobilenet
 - resnet50
