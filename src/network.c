@@ -245,9 +245,10 @@ void forward_network(network *netp)
     network net = *netp;
     int i;
     for (i = 0; i < net.n; ++i)
-    { //net.n
+    { //net.nj
         net.index = i;
         layer l = net.layers[i];
+        printf("WHEREAMI:\t[fowrd_network]\tNo.%d\n", i);
         if (l.delta)
         { //printf("l.delta\n");
             fill_cpu(l.outputs * l.batch, 0, l.delta, 1);
@@ -259,16 +260,11 @@ void forward_network(network *netp)
         }
         l.forward(l, net);
         //printf("\t\t\t\t\t\tnet transpose flag :%d\n", l.transpose);
-        if (0)
+        if (1)
         {
-            int p;
-            for (p = 0; p < 1000; p++)
+            for (int i = 0; i < 100; i++)
             {
-                if (p % 16 == 0)
-                    printf("output[%d]:", p);
-                printf("%f ", l.output[p]);
-                if (p % 16 == 15)
-                    printf("\n");
+                printf("l.output[%d]=%f\t", i, l.output[i]);
             }
             printf("\n NOTE: NEXT LAYER \n");
         }
@@ -309,7 +305,7 @@ void forward_network16(network16 *netp)
     {
         //net.index = i;
         layer16 l = net.layers[i];
-        //printf("fowrd_network16 layNo.%d \n",i/*i,*(double *)net.layers[i].delta,(float)l.delta[0]*/);
+        printf("WHEREAMI:\t[fowrd_network16]\tNo.%d\n", i);
         if (l.delta)
         {
             fill_cpu16(l.outputs * l.batch, 0, l.delta, 1);
@@ -321,19 +317,14 @@ void forward_network16(network16 *netp)
         }
         l.forward(l, net);
         //printf("\t\t\t\t\t\tnet transpose flag :%d\n", l.transpose);
-        
-        if (0)
+
+        if (1)
         {
-            int p;
-            for (p = 0; p < 1000; p++)
+            for (int i = 0; i < 100; i++)
             {
-                if (p % 16 == 0)
-                    printf("output[%d]:", p);
-                printf("%f ", l.output[p]);
-                if (p % 16 == 15)
-                    printf("\n");
+                printf("l.output[%d]=%f\t", i, l.output[i]);
             }
-            printf("\n NOTE: NEXT LAYER \n");
+            printf("\n NOTE: NEXT LAYER\n");
         }
         net.input = l.output;
     }

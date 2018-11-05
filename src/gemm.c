@@ -120,6 +120,19 @@ void gemm(int TA, int TB, int M, int N, int K, float ALPHA,
           float BETA,
           float *C, int ldc)
 {
+#ifdef DEBUG_P_GEMM
+    puts("WHEREAMI:\t[gemm]");
+    puts("0-99 gemm_inputs:");
+    for (int i = 0; i < 100; i++)
+        printf("A[%d]=%f\t", i, A[i]);
+    puts("");
+    for (int i = 0; i < 100; i++)
+        printf("B[%d]=%f\t", i, B[i]);
+    puts("");
+    for (int i = 0; i < 100; i++)
+        printf("C[%d]=%f\t", i, C[i]);
+    puts("");
+#endif
     gemm_cpu(TA, TB, M, N, K, ALPHA, A, lda, B, ldb, BETA, C, ldc);
 }
 
@@ -128,7 +141,7 @@ void gemm_nn(int M, int N, int K, float ALPHA,
              float *B, int ldb,
              float *C, int ldc)
 {
-
+    // puts("WHEREAMI:\t[gemm_nn]");
     int i, j, k;
 #pragma omp parallel for
     for (i = 0; i < M; ++i)
@@ -371,8 +384,8 @@ void gemm_nt(int M, int N, int K, float ALPHA,
 {
 
     int i, j, k;
-    printf("\nMARK:using gemm_nt\nB[32]=%f\tB[33]=%lf,%x\tB[34]=%f", B[32], B[33], B[33], B[34]);
-    
+    printf("\nMARK:using gemm_nt\nB[32]=%f\tB[33]=%f\tB[34]=%f", B[32], B[33], B[34]);
+
 #pragma omp parallel for
     for (i = 0; i < M; ++i)
     {
@@ -395,7 +408,7 @@ void gemm_nt16(int M, int N, int K, FLT ALPHA,
                FLT *C, int ldc)
 {
     int i, j, k;
-        printf("\nMARK:using gemm_nt16\nB[32]=%f\tB[33]=%lf,%x\tB[34]=%f", B[32], B[33], B[33], B[34]);
+    printf("\nMARK:using gemm_nt16\nB[32]=%f\tB[33]=%f\tB[34]=%f", B[32], B[33], B[34]);
     for (i = 0; i < M; ++i)
     {
         for (j = 0; j < N; ++j)

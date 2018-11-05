@@ -30,6 +30,7 @@ CC=gcc
 NVCC=nvcc 
 AR=ar
 ARFLAGS=rcs
+# OPTS=-Ofast
 OPTS=-Ofast
 LDFLAGS= -lm -lpthread  
 COMMON= -Iinclude/ -Isrc/

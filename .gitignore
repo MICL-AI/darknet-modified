@@ -54,3 +54,6 @@ dkms.conf
 #Self added
 *.weights
 inet.val.list
+log*
+log16
+darknet
