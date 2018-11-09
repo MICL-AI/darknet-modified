@@ -485,7 +485,7 @@ void softmax(float *input, int n, float temp, int stride, float *output)
         output[i * stride] = e;
     }
 
-    printf("##############sum:%f\n", (float)sum);
+    // printf("##############sum:%f\n", (float)sum);
     for (i = 0; i < n; ++i)
     {
         output[i * stride] /= sum;
@@ -523,19 +523,19 @@ void softmax16(FLT *input, int n, FLT temp, int stride, FLT *output)
     }
 
     FLT largest = -60000;
-    printf("softmax16 largest:%f,temp:%f\n", largest, temp);
+    // printf("softmax16 largest:%f,temp:%f\n", largest, temp);
     for (i = 0; i < n; ++i)
     {
         if (input[i * stride] > largest)
             largest = input[i * stride];
         //printf("intput[%d*%d]:%f",i,stride,input[i*stride]);
     }
-    printf("input[0]:%f,input[%d]:%f,intput[%d*%d]:%f", input[0], (i - 1) * stride / 2, input[(i - 1) * stride / 2], i, stride, input[(i - 1) * stride]);
-    printf("\n largest:%f\n", largest);
+    // printf("input[0]:%f,input[%d]:%f,intput[%d*%d]:%f", input[0], (i - 1) * stride / 2, input[(i - 1) * stride / 2], i, stride, input[(i - 1) * stride]);
+    // printf("\n largest:%f\n", largest);
     if (!temp)
         temp = 1; //liuj20180718
     temp = (FLT)(1.0f / (float)temp);
-    printf("!!!!!!!temp:%f\n", (float)temp);
+    // printf("!!!!!!!temp:%f\n", (float)temp);
 
     for (i = 0; i < n; ++i)
     {
@@ -544,16 +544,16 @@ void softmax16(FLT *input, int n, FLT temp, int stride, FLT *output)
         output[i * stride] = e;
         //if(output[i*stride]) printf("output[%d*%d]:%f",i,stride,(float)output[i*stride]);
     }
-    printf("\n sum:%f\n", (float)sum);
+    // printf("\n sum:%f\n", (float)sum);
 
     sum = (FLT)(1.0f / (float)sum);
-    printf("##############sum:%f\n", (float)sum);
+    // printf("##############sum:%f\n", (float)sum);
     for (i = 0; i < n; ++i)
     {
         output[i * stride] *= sum;
         // if(output[i*stride]) printf("output[%d*%d]:%f ",i,stride,(float)output[i*stride]);
     }
-    printf("\n output:%f\n", (float)output[(i - 1) * stride]);
+    // printf("\n output:%f\n", (float)output[(i - 1) * stride]);
 }
 
 /*void softmax_vec16(FLT *input, int n, FLT temp, int stride, FLT *output)

@@ -239,7 +239,7 @@ struct layer{
     float * bn_scale;//liuj0918
     float * scale_updates;
 
-    float con_max, con_min; //TL 1017 fin max/min in fcl/conv
+    float con_max, con_min; //TL 1017 fin max/min in conn/conv
     float wei_max, wei_min;
     
     float * weights;

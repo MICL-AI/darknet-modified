@@ -1706,7 +1706,7 @@ void load_connected_weights16(layer16 l, FILE *fp, int transpose)
 {
 
     //float f1024[4096],f1024_1024[4096*4096];
-    printf("WHEREAMI:\t[loaded_conn_weights_16]\tsum = %d\n", l.outputs * l.inputs);
+    //printf("WHEREAMI:\t[loaded_conn_weights_16]\tsum = %d\n", l.outputs * l.inputs);
 
     float *param_tmp = (float *)calloc(l.outputs, sizeof(float));
     float *weights_tmp = (float *)calloc(l.outputs * l.inputs, sizeof(float));
@@ -1726,18 +1726,18 @@ void load_connected_weights16(layer16 l, FILE *fp, int transpose)
     } //printf("\n");
     if (transpose)
     {
-        printf("NOTE:\t[load_connected_weights_16]\tTRANSPOSE \n");
+        // printf("NOTE:\t[load_connected_weights_16]\tTRANSPOSE \n");
         transpose_matrix16(l.weights, l.inputs, l.outputs);
     }
     if (l.transpose)
     {
-        printf("NOTE:\t[load_connected_weights_16]\tl.transpose = 1\n");
+        // printf("NOTE:\t[load_connected_weights_16]\tl.transpose = 1\n");
         transpose_matrix16(l.weights, l.outputs, l.inputs);
     }
 
     if (l.batch_normalize && (!l.dontloadscales))
     {
-        printf("NOTE:\t[load_connected_weights_16]\t(l.batch_normalize && (!l.dontloadscales))\n");
+        // printf("NOTE:\t[load_connected_weights_16]\t(l.batch_normalize && (!l.dontloadscales))\n");
         fread(param_tmp, sizeof(float), l.outputs, fp);
         for (int i = 0; i < l.outputs; i++)
         {
@@ -1768,7 +1768,7 @@ void load_connected_weights(layer l, FILE *fp, int transpose)
 
     fread(l.weights, sizeof(float), l.outputs * l.inputs, fp);
 
-    printf("WHEREAMI:\t[loaded_conn_weights]\tsum = %d\n", l.outputs * l.inputs);
+    //printf("WHEREAMI:\t[loaded_conn_weights]\tsum = %d\n", l.outputs * l.inputs);
     // for (int i = 0; i < 100; i++)
     //     printf("con_w[%d]=%f\t", i, l.weights[i]);
     // puts("");
@@ -1787,13 +1787,13 @@ void load_connected_weights(layer l, FILE *fp, int transpose)
 
     if (transpose)
     {
-        printf("NOTE:\t[load_connected_weights]\tTRANSPOSE \n");
+        // printf("NOTE:\t[load_connected_weights]\tTRANSPOSE \n");
 
         transpose_matrix(l.weights, l.inputs, l.outputs);
     }
     if (l.transpose)
     {
-        printf("NOTE:\t[load_connected_weights]\tl.transpose = 1\n");
+        // printf("NOTE:\t[load_connected_weights]\tl.transpose = 1\n");
 
         transpose_matrix(l.weights, l.outputs, l.inputs);
     }
@@ -1802,7 +1802,7 @@ void load_connected_weights(layer l, FILE *fp, int transpose)
     //printf("Weights: %f mean %f variance\n", mean_array(l.weights, l.outputs*l.inputs), variance_array(l.weights, l.outputs*l.inputs));
     if (l.batch_normalize && (!l.dontloadscales))
     {
-        printf("NOTE:\t[load_connected_weights]\t(l.batch_normalize && (!l.dontloadscales))\n");
+        // printf("NOTE:\t[load_connected_weights]\t(l.batch_normalize && (!l.dontloadscales))\n");
         fread(l.scales, sizeof(float), l.outputs, fp);
         fread(l.rolling_mean, sizeof(float), l.outputs, fp);
         fread(l.rolling_variance, sizeof(float), l.outputs, fp);
@@ -1882,7 +1882,7 @@ void load_convolutional_weights16(layer16 l, FILE *fp)
         //return;
     }
     int num = l.nweights; //printf("nweights:%d\n",num);
-    printf("WHEREAMI:\t[load_convolutional_weights_16]\tload conv biases:%d\n", l.n);
+    //printf("WHEREAMI:\t[load_convolutional_weights_16]\tload conv biases:%d\n", l.n);
     float *f_tmp = calloc(l.n, sizeof(float));
     if (!f_tmp)
     {
@@ -1953,7 +1953,7 @@ void load_convolutional_weights(layer l, FILE *fp)
         //return;
     }
     int num = l.nweights;
-    printf("WHEREAMI:\t[load_convolutional_weights]\tload conv biases:%d\n", l.n);
+    //printf("WHEREAMI:\t[load_convolutional_weights]\tload conv biases:%d\n", l.n);
     fread(l.biases, sizeof(float), l.n, fp);
     // for (int j = 0; j < l.n; j++)
     //     printf("bias[%d]:%f",j,l.biases[j]);printf("\n");

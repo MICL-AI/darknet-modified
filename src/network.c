@@ -248,7 +248,7 @@ void forward_network(network *netp)
     { //net.nj
         net.index = i;
         layer l = net.layers[i];
-        printf("WHEREAMI:\t[fowrd_network]\tNo.%d\n", i);
+        //printf("WHEREAMI:\t[fowrd_network]\tNo.%d\n", i);
         if (l.delta)
         { //printf("l.delta\n");
             fill_cpu(l.outputs * l.batch, 0, l.delta, 1);
@@ -260,7 +260,7 @@ void forward_network(network *netp)
         }
         l.forward(l, net);
         //printf("\t\t\t\t\t\tnet transpose flag :%d\n", l.transpose);
-        if (1)
+        if (0)
         {
             for (int i = 0; i < 100; i++)
             {
@@ -305,7 +305,7 @@ void forward_network16(network16 *netp)
     {
         //net.index = i;
         layer16 l = net.layers[i];
-        printf("WHEREAMI:\t[fowrd_network16]\tNo.%d\n", i);
+        //printf("WHEREAMI:\t[fowrd_network16]\tNo.%d\n", i);
         if (l.delta)
         {
             fill_cpu16(l.outputs * l.batch, 0, l.delta, 1);
@@ -318,7 +318,7 @@ void forward_network16(network16 *netp)
         l.forward(l, net);
         //printf("\t\t\t\t\t\tnet transpose flag :%d\n", l.transpose);
 
-        if (1)
+        if (0)
         {
             for (int i = 0; i < 100; i++)
             {
@@ -691,7 +691,7 @@ float *network_predict(network *net, float *input)
     net->truth = 0;
     net->train = 0;
     net->delta = 0;
-    printf("net->input[0]%f,net->input[1]:%f,net->input[2]:%f\n", (float)net->input[0], (float)net->input[1], (float)net->input[2]);
+    // printf("net->input[0]%f,net->input[1]:%f,net->input[2]:%f\n", (float)net->input[0], (float)net->input[1], (float)net->input[2]);
     forward_network(net);
 
     float *out = net->output;

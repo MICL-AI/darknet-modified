@@ -886,7 +886,7 @@ void run_char_rnn(int argc, char **argv)
     else if(0==strcmp(argv[2], "valid")) valid_char_rnn(cfg, weights, seed);
     else if(0==strcmp(argv[2], "validtactic")) valid_tactic_rnn(cfg, weights, seed);
     else if(0==strcmp(argv[2], "vec")) vec_char_rnn(cfg, weights, seed);
-    else if(0==strcmp(argv[2], "generateori")) test_char_rnn(cfg, weights, len, seed, temp_fp16, rseed, tokens);
+    else if(0==strcmp(argv[2], "generate")) test_char_rnn(cfg, weights, len, seed, temp_fp16, rseed, tokens);
     else if(0==strcmp(argv[2], "generate16")) test_char_rnn16(cfg, weights, len, seed, temp_fp16, rseed, tokens);
     else if(0==strcmp(argv[2], "generateCJ")) {
         clock_t a,b;

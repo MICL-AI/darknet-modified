@@ -52,7 +52,7 @@ cost_layer16 make_cost_layer16(int batch, int inputs, COST_TYPE cost_type, FLT s
 
     l.forward = forward_cost_layer16;
     //l.backward = backward_cost_layer;
-    printf("cost inputs:%d,batch:%d,l.delta:%f,delta[0]:%f\n",inputs,batch,*(double *)l.delta,(float)l.delta[0]);
+    // printf("cost inputs:%d,batch:%d,l.delta:%f,delta[0]:%f\n",inputs,batch,*(double *)l.delta,(float)l.delta[0]);
     return l;
 }
 

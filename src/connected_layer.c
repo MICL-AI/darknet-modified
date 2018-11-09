@@ -30,7 +30,7 @@ layer make_connected_layer(int batch, int inputs, int outputs, ACTIVATION activa
     l.inputs = inputs;
     l.outputs = outputs;
     l.batch = batch;
-    printf("batch:%d\n", l.batch);
+    // printf("boatch:%d\n", l.batch);
     l.batch_normalize = batch_normalize;
     l.h = 1;
     l.w = 1;
@@ -246,7 +246,7 @@ char filename[64];
 
 void forward_connected_layer(layer l, network net)
 {
-    printf("batch:%d,inputs:%d,outputs:%d\n", l.batch, l.inputs, l.outputs);
+    // printf("batch:%d,inputs:%d,outputs:%d\n", l.batch, l.inputs, l.outputs);
     if (0)
     {
         printf("file write\n");
@@ -278,12 +278,12 @@ void forward_connected_layer(layer l, network net)
     float *a = net.input;
     float *b = l.weights;
     float *c = l.output;
-    printf("NOTE:in forward_connected_layer weights b[33]=%f, b[34]=%f\n", b[33], b[34]);
+    // printf("NOTE:in forward_connected_layer weights b[33]=%f, b[34]=%f\n", b[33], b[34]);
     
-    printf("\nNOTE:in forward_connected_layer weights l.biases[33]=%f, l.biases[34]=%f\n", l.biases[33], l.biases[34]);
+    // printf("\nNOTE:in forward_connected_layer weights l.biases[33]=%f, l.biases[34]=%f\n", l.biases[33], l.biases[34]);
     if (net.flag_vec == 0)
     {
-        printf("in forward_connected_layer gemmtype:%d,transpose flg:%d\n",net.gemm_type,l.transpose);
+        // printf("in forward_connected_layer gemmtype:%d,transpose flg:%d\n",net.gemm_type,l.transpose);
         if (l.transpose == 1)
             gemm(0, 0, m, n, k, 1, a, k, b, n, 1, c, n);
         else
