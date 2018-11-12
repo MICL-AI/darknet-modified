@@ -14,7 +14,7 @@ typedef struct position
 } pos;
 
 typedef struct element
-{
+{//elements with values and positions
     val_t val;
     pos p;
 } ele;
@@ -30,17 +30,22 @@ typedef struct sparse_matrix
 
 
 //functions
-/*ele trans vec*/
+
+/* ele trans vec */
 val_t* ele2vec(ele *e, count_t num_row, count_t num_col);
 ele* vec2ele(val_t *vec, count_t num_row, count_t num_col);
 
-/*compression*/
-spa_mat compress(ele *e, count_t num_row, count_t num_col);
-ele* decompress(spa_mat *m, size_t num_row, size_t num_col);
+/* compression */
+spa_mat ele2csr(ele *e, count_t num_row, count_t num_col, count_t num_ele);
+ele* csr2ele(spa_mat *m);
 
-/*print*/
-void print_compress_sparse(spa_mat *m);
-void print_elements(ele *e, size_t num_row, size_t num_col);
-void print_vec(val_t *a, size_t num_row, size_t num_col);
+/* print */
+void print_csr(spa_mat *m);
+void print_ele(ele *e, count_t num_row, count_t num_col);
+void print_vec(val_t *a, count_t num_row, count_t num_col);
+
+/* combination */
+val_t *csr2vec(spa_mat *m);
+spa_mat vec2csr(val_t *a, count_t num_row, count_t num_col);
 
 #endif

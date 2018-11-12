@@ -31,6 +31,8 @@
 #include "softmax_layer.h"
 #include "lstm_layer.h"
 #include "utils.h"
+//TL added 181109
+#include "sparse.h"
 
 typedef struct
 {
@@ -1766,7 +1768,20 @@ void load_connected_weights(layer l, FILE *fp, int transpose)
 
     fread(l.biases, sizeof(float), l.outputs, fp);
 
-    fread(l.weights, sizeof(float), l.outputs * l.inputs, fp);
+    //fread(l.weights, sizeof(float), l.outputs * l.inputs, fp);
+    
+    float *wei = calloc(l.outputs * l.inputs,sizeof(float));
+    fread(wei, sizeof(float), l.outputs * l.inputs, fp);
+    // ele *e = vec2ele(wei, l.outputs, l.inputs);
+    // spa_mat spmt = ele2csr(e, l.outputs, l.inputs);
+    
+    spa_mat spmt = vec2csr(wei, l.outputs, l.inputs);
+    l.weights = csr2vec(&spmt);
+
+    // ele *e = vec2ele(wei, l.outputs, l.inputs);
+    // //print_elements(e, l.outputs, l.inputs);
+    // spa_mat spmt = compress(e, l.outputs, l.inputs);
+    // print_compress_sparse(&spmt);
 
     //printf("WHEREAMI:\t[loaded_conn_weights]\tsum = %d\n", l.outputs * l.inputs);
     // for (int i = 0; i < 100; i++)
@@ -2027,6 +2042,7 @@ void load_convolutional_weights(layer l, FILE *fp)
         }
     }
     fread(l.weights, sizeof(float), num, fp);
+    
 
     // printf("BEFORE, weight[%d]:%f,weight[%d]:%f\n", num - 2, l.weights[num - 2], num - 1, l.weights[num - 1]);
     printf("loaded_conv_weights, sum = %d\n", num);

@@ -5,6 +5,7 @@
 #include <string.h>
 #include <pthread.h>
 #include <TL.h>
+#include "sparse.h"
 #define SECRET_NUM -1234
 extern int gpu_index;
 #include <FP16.h>
