@@ -26,8 +26,7 @@ Now the nets are:
 
 - specialized path for mobilenet/squeezenet whos converted form caffe (uses caffe lables)
 
-
-
+- now added a compressed sparse row storage method in connected layers
 
 ## REF
 
