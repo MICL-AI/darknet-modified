@@ -51,11 +51,11 @@ ele *vec2ele(val_t *vec, count_t num_row, count_t num_col)
     {
         for (count_t j = 0; j < num_col; j++)
         {
-            if (vec[i * num_row + j])
+            if (vec[i * num_col + j])
             {
                 col(e[k]) = j;
                 row(e[k]) = i;
-                val(e[k]) = vec[i * num_row + j];
+                val(e[k]) = vec[i * num_col + j];
                 k += 1;
             }
         }
@@ -79,6 +79,7 @@ val_t *ele2vec(ele *e, count_t num_row, count_t num_col)
     {
         if (val(e[k]))
         {
+            // vec[num_row * row(e[k]) + col(e[k])] = val(e[k]);
             vec[num_col * row(e[k]) + col(e[k])] = val(e[k]);
             k++;
         }
@@ -98,7 +99,6 @@ spa_mat ele2csr(ele *e, count_t num_row, count_t num_col, count_t num_ele)
 {
     count_t ofst = 0;
     count_t last_nzd = 0;
-    printf("--------%d----------", num_ele);
     spa_mat spmt = {};
 
     /*spmt init*/
@@ -144,17 +144,15 @@ ele *csr2ele(spa_mat *m)
 {
     count_t row = 0, k = 0;
     ele *e = calloc(m->num_row * m->num_col, sizeof(ele));
-    for (count_t j = 0; j < m->num_row; j++)
+    for (count_t j = 0; j < m->num_nzd; j++)
     {
-        if (offset(*m)[row + 1] < offset(*m)[(*m).num_row + 1])
-            for (count_t i = 0; i < offset(*m)[row + 1] - offset(*m)[row]; i++)
-            {
-                val(e[k]) = smval(m)[i + offset(*m)[row]];
-                col(e[k]) = index(*m)[i + offset(*m)[row]];
-                row(e[k]) = row;
-                k += 1;
-            }
-        row += 1;
+        row = j < offset(*m)[row + 1] ? row : row + 1;
+        // k = j == offset(*m)[k] ? k : k + 1;
+        {
+            val(e[j]) = val(*m)[j];
+            col(e[j]) = index(*m)[j];
+            row(e[j]) = row;
+        }
     }
     return e;
 }
@@ -169,7 +167,7 @@ void print_csr(spa_mat *m)
     printf("\nvalue =");
     for (unsigned long i = 0; i < m->num_nzd; i++)
     {
-        printf(" %f", smval(m)[i]);
+        printf(" %f", val(*m)[i]);
     }
     printf("\n");
 
@@ -196,7 +194,7 @@ void print_csr(spa_mat *m)
 */
 void print_ele(ele *e, count_t num_row, count_t num_col)
 {
-    for (count_t i = 0; i < 9; i++)
+    for (count_t i = 0; i < 12; i++)
     {
         printf("element %d, val = %f, pos = %d,%d\n", i, val(e[i]), row(e[i]), col(e[i]));
     }
@@ -235,60 +233,72 @@ spa_mat vec2csr(val_t *a, count_t num_row, count_t num_col)
     return ele2csr(e, num_row, num_col, k);
 }
 
-// int main(int argc, char const *argv[])
-// {
-//     float a[] = {
-//         1, 7, 0, 0, 0, 0,
-//         0, 2, 8, 0, 0, 5,
-//         5, 0, 3, 9, 0, 6,
-//         0, 6, 0, 4, 0, 0,
-//         0, 0, 0, 0, 1, 1,
-//         1, 0, 1, 0, 0, 0};
-//     float b[] = {
-//         1, 7, 0, 0,
-//         0, 2, 8, 0,
-//         5, 0, 3, 9,
-//         0, 6, 0, 4};
-//     // number of ele
-//     count_t num_row = 6, num_col = 6;
-//     //count_t num_row = 4, num_col = 4;
+// #define DBG_SPAR
 
-//     // ele *ele_test = calloc(num_row * num_col, sizeof(ele));
+#ifdef DBG_SPAR
+int main(int argc, char const *argv[])
+{
+    float a[] = {
+        1, 7, 0, 0, 0, 0,
+        0, 2, 8, 0, 0, 5,
+        5, 0, 3, 9, 0, 6,
+        0, 6, 0, 4, 0, 0,
+        0, 0, 0, 0, 1, 1,
+        1, 0, 1, 0, 0, 0};
+    float b[] = {
+        1, 7, 0, 0,
+        0, 2, 8, 0,
+        5, 0, 3, 9,
+        0, 6, 0, 4};
+    // number of ele
+    count_t num_row = 6, num_col = 6;
+    //count_t num_row = 4, num_col = 4;
 
-//     //ele,index -> num of ele; offset -> number of row
-//     spa_mat spmat = vec2csr(a, 6, 6);
-//     print_csr(&spmat);
+    // ele *ele_test = calloc(num_row * num_col, sizeof(ele));
 
-//     // float *c = calloc(num_col * num_row, sizeof(val_t));
+    //ele,index -> num of ele; offset -> number of row
+    print_vec(a, 2, 6);
+    puts("\n---------------------------------");
+    ele *e = vec2ele(a, 2, 6);
+    print_ele(e, 2, 6);
+    float *c = ele2vec(e, 2, 6);
+    puts("\n---------------------------------");
+    print_vec(c, 2, 6);
+    puts("\n---------------------------------");
+    spa_mat spmat = vec2csr(a, 2, 6);
+    print_csr(&spmat);
 
-//     puts("---------------");
-//     print_vec(csr2vec(&spmat), 6, 6);
-//     // puts("\noriginal sparse");
-//     // print_vec(b, num_row, num_col);
+    // float *c = calloc(num_col * num_row, sizeof(val_t));
 
-//     // puts("\nafter vec2ele");
-//     // ele *ele_test = vec2ele(a, num_row, num_col);
-//     // print_ele(ele_test, num_row, num_col);
-//     // spa_mat spmat_test = ele2csr(ele_test, num_row, num_col);
+    puts("---------------");
+    print_vec(csr2vec(&spmat), 2, 6);
+    // puts("\noriginal sparse");
+    // print_vec(b, num_row, num_col);
 
-//     // puts("\nafter ele2vec");
-//     // print_vec(ele2vec(ele_test, num_row, num_col), num_row, num_col);
+    // puts("\nafter vec2ele");
+    // ele *ele_test = vec2ele(a, num_row, num_col);
+    // print_ele(ele_test, num_row, num_col);
+    // spa_mat spmat_test = ele2csr(ele_test, num_row, num_col);
 
-//     // free(ele_test);
+    // puts("\nafter ele2vec");
+    // print_vec(ele2vec(ele_test, num_row, num_col), num_row, num_col);
 
-//     // puts("\nafter compress");
-//     // print_csr(&spmat_test);
+    // free(ele_test);
 
-//     // puts("\nafter decompress");
-//     // ele *ele_decomp = csr2ele(&spmat_test);
-//     // print_ele(ele_decomp, num_row, num_col);
+    // puts("\nafter compress");
+    // print_csr(&spmat_test);
 
-//     // float *c = ele2vec(ele_decomp, num_row, num_col);
-//     // puts("\nafter ele2vec");
-//     // print_vec(c, num_row, num_col);
+    // puts("\nafter decompress");
+    // ele *ele_decomp = csr2ele(&spmat_test);
+    // print_ele(ele_decomp, num_row, num_col);
 
-//     // float *d = csr2vec(&spmat_test);
-//     // print_vec(d, num_row, num_col);
+    // float *c = ele2vec(ele_decomp, num_row, num_col);
+    // puts("\nafter ele2vec");
+    // print_vec(c, num_row, num_col);
 
-//     return 0;
-// }
+    // float *d = csr2vec(&spmat_test);
+    // print_vec(d, num_row, num_col);
+
+    return 0;
+}
+#endif

@@ -11,42 +11,40 @@ extern int gpu_index;
 #include <FP16.h>
 //#include <vec.h>
 
-
-
-
-
 #ifdef GPU
-    #define BLOCK 512
+#define BLOCK 512
 
-    #include "cuda_runtime.h"
-    #include "curand.h"
-    #include "cublas_v2.h"
+#include "cuda_runtime.h"
+#include "curand.h"
+#include "cublas_v2.h"
 
-    #ifdef CUDNN
-    #include "cudnn.h"
-    #endif
+#ifdef CUDNN
+#include "cudnn.h"
+#endif
 #endif
 
 #ifndef __cplusplus
-    #ifdef OPENCV
-    #include "opencv2/highgui/highgui_c.h"
-    #include "opencv2/imgproc/imgproc_c.h"
-    #include "opencv2/core/version.hpp"
-    #if CV_MAJOR_VERSION == 3
-    #include "opencv2/videoio/videoio_c.h"
-    #include "opencv2/imgcodecs/imgcodecs_c.h"
-    #endif
-    #endif
+#ifdef OPENCV
+#include "opencv2/highgui/highgui_c.h"
+#include "opencv2/imgproc/imgproc_c.h"
+#include "opencv2/core/version.hpp"
+#if CV_MAJOR_VERSION == 3
+#include "opencv2/videoio/videoio_c.h"
+#include "opencv2/imgcodecs/imgcodecs_c.h"
+#endif
+#endif
 #endif
 
-typedef struct{
+typedef struct
+{
     int classes;
     char **names;
 } metadata;
 
 metadata get_metadata(char *file);
 
-typedef struct{
+typedef struct
+{
     int *leaf;
     int n;
     int *parent;
@@ -59,15 +57,33 @@ typedef struct{
     int *group_offset;
 } tree;
 
-typedef enum{
-    LOGISTIC, RELU, RELIE, LINEAR, RAMP, TANH, PLSE, LEAKY, ELU, LOGGY, STAIR, HARDTAN, LHTAN
+typedef enum
+{
+    LOGISTIC,
+    RELU,
+    RELIE,
+    LINEAR,
+    RAMP,
+    TANH,
+    PLSE,
+    LEAKY,
+    ELU,
+    LOGGY,
+    STAIR,
+    HARDTAN,
+    LHTAN
 } ACTIVATION;
 
-typedef enum{
-    MULT, ADD, SUB, DIV
+typedef enum
+{
+    MULT,
+    ADD,
+    SUB,
+    DIV
 } BINARY_ACTIVATION;
 
-typedef enum {
+typedef enum
+{
     CONVOLUTIONAL,
     DECONVOLUTIONAL,
     CONNECTED,
@@ -97,11 +113,17 @@ typedef enum {
     BLANK
 } LAYER_TYPE;
 
-typedef enum{
-    SSE, MASKED, L1, SEG, SMOOTH
+typedef enum
+{
+    SSE,
+    MASKED,
+    L1,
+    SEG,
+    SMOOTH
 } COST_TYPE;
 
-typedef struct{
+typedef struct
+{
     int batch;
     float learning_rate;
     float momentum;
@@ -123,17 +145,17 @@ typedef struct layer layer;
 struct layer16;
 typedef struct layer16 layer16;
 
-
-struct layer{
+struct layer
+{
     LAYER_TYPE type;
     ACTIVATION activation;
     COST_TYPE cost_type;
-    void (*forward)   (struct layer, struct network);
-    void (*backward)  (struct layer, struct network);
-    void (*update)    (struct layer, update_args);
-    void (*forward_gpu)   (struct layer, struct network);
-    void (*backward_gpu)  (struct layer, struct network);
-    void (*update_gpu)    (struct layer, update_args);
+    void (*forward)(struct layer, struct network);
+    void (*backward)(struct layer, struct network);
+    void (*update)(struct layer, update_args);
+    void (*forward_gpu)(struct layer, struct network);
+    void (*backward_gpu)(struct layer, struct network);
+    void (*update_gpu)(struct layer, update_args);
     int batch_normalize;
     int shortcut;
     int batch;
@@ -146,7 +168,7 @@ struct layer{
     int nbiases;
     int extra;
     int truths;
-    int h,w,c;
+    int h, w, c;
     int out_h, out_w, out_c;
     int n;
     int max_boxes;
@@ -212,72 +234,71 @@ struct layer{
     float probability;
     float scale;
 
-    char  * cweights;
-    int   * indexes;
-    int   * input_layers;
-    int   * input_sizes;
-    int   * map;
-    float * rand;
-    float * cost;
-    float * state;
-    float * prev_state;
-    float * forgot_state;
-    float * forgot_delta;
-    float * state_delta;
-    float * combine_cpu;
-    float * combine_delta_cpu;
+    char *cweights;
+    int *indexes;
+    int *input_layers;
+    int *input_sizes;
+    int *map;
+    float *rand;
+    float *cost;
+    float *state;
+    float *prev_state;
+    float *forgot_state;
+    float *forgot_delta;
+    float *state_delta;
+    float *combine_cpu;
+    float *combine_delta_cpu;
 
-    float * concat;
-    float * concat_delta;
+    float *concat;
+    float *concat_delta;
 
-    float * binary_weights;
+    float *binary_weights;
 
-    float * biases; 
-    float * bn_bias;//liuj0918
-    float * bias_updates;
+    float *biases;
+    float *bn_bias; //liuj0918
+    float *bias_updates;
 
-    float * scales;
-    float * bn_scale;//liuj0918
-    float * scale_updates;
+    float *scales;
+    float *bn_scale; //liuj0918
+    float *scale_updates;
 
-    float con_max, con_min; //TL 1017 fin max/min in conn/conv
+    spa_mat spmt;           //sparse storage TL 181113
+    float con_max, con_min; //TL 181017 fin max/min in conn/conv
     float wei_max, wei_min;
-    
-    float * weights;
-    int * weights8; //TL 1017
-    float * weight_updates;
 
-    float * delta;
-    float * output;
-    float * squared;
-    float * norms;
+    float *weights;
+    float *weight_updates;
 
-    float * spatial_mean;
-    float * mean;
-    float * variance;
+    float *delta;
+    float *output;
+    float *squared;
+    float *norms;
 
-    float * mean_delta;
-    float * variance_delta;
+    float *spatial_mean;
+    float *mean;
+    float *variance;
 
-    float * rolling_mean;
-    float * rolling_variance;
+    float *mean_delta;
+    float *variance_delta;
 
-    float * x;
-    float * x_norm;
+    float *rolling_mean;
+    float *rolling_variance;
 
-    float * m;
-    float * v;
-    
-    float * bias_m;
-    float * bias_v;
-    float * scale_m;
-    float * scale_v;
+    float *x;
+    float *x_norm;
 
+    float *m;
+    float *v;
+
+    float *bias_m;
+    float *bias_v;
+    float *scale_m;
+    float *scale_v;
 
     float *z_cpu;
     float *r_cpu;
     float *h_cpu;
-    float * prev_state_cpu;
+    float *prev_state_cpu;
 
     float *temp_cpu;
     float *temp2_cpu;
@@ -292,9 +313,9 @@ struct layer{
     float *g_cpu;
     float *o_cpu;
     float *c_cpu;
-    float *dc_cpu; 
+    float *dc_cpu;
 
-    float * binary_input;
+    float *binary_input;
 
     struct layer *input_layer;
     struct layer *self_layer;
@@ -319,7 +340,7 @@ struct layer{
 
     struct layer *input_h_layer;
     struct layer *state_h_layer;
-	
+
     struct layer *wz;
     struct layer *uz;
     struct layer *wr;
@@ -334,7 +355,7 @@ struct layer{
     struct layer *wi;
     struct layer *ug;
     struct layer *wg;
-    struct layer *wc;//LSTMCJ
+    struct layer *wc; //LSTMCJ
     tree *softmax_tree;
 
     size_t workspace_size;
@@ -359,7 +380,7 @@ struct layer{
     float *g_gpu;
     float *o_gpu;
     float *c_gpu;
-    float *dc_gpu; 
+    float *dc_gpu;
 
     float *m_gpu;
     float *v_gpu;
@@ -368,52 +389,52 @@ struct layer{
     float *bias_v_gpu;
     float *scale_v_gpu;
 
-    float * combine_gpu;
-    float * combine_delta_gpu;
+    float *combine_gpu;
+    float *combine_delta_gpu;
 
-    float * prev_state_gpu;
-    float * forgot_state_gpu;
-    float * forgot_delta_gpu;
-    float * state_gpu;
-    float * state_delta_gpu;
-    float * gate_gpu;
-    float * gate_delta_gpu;
-    float * save_gpu;
-    float * save_delta_gpu;
-    float * concat_gpu;
-    float * concat_delta_gpu;
+    float *prev_state_gpu;
+    float *forgot_state_gpu;
+    float *forgot_delta_gpu;
+    float *state_gpu;
+    float *state_delta_gpu;
+    float *gate_gpu;
+    float *gate_delta_gpu;
+    float *save_gpu;
+    float *save_delta_gpu;
+    float *concat_gpu;
+    float *concat_delta_gpu;
 
-    float * binary_input_gpu;
-    float * binary_weights_gpu;
+    float *binary_input_gpu;
+    float *binary_weights_gpu;
 
-    float * mean_gpu;
-    float * variance_gpu;
+    float *mean_gpu;
+    float *variance_gpu;
 
-    float * rolling_mean_gpu;
-    float * rolling_variance_gpu;
+    float *rolling_mean_gpu;
+    float *rolling_variance_gpu;
 
-    float * variance_delta_gpu;
-    float * mean_delta_gpu;
+    float *variance_delta_gpu;
+    float *mean_delta_gpu;
 
-    float * x_gpu;
-    float * x_norm_gpu;
-    float * weights_gpu;
-    float * weight_updates_gpu;
-    float * weight_change_gpu;
+    float *x_gpu;
+    float *x_norm_gpu;
+    float *weights_gpu;
+    float *weight_updates_gpu;
+    float *weight_change_gpu;
 
-    float * biases_gpu;
-    float * bias_updates_gpu;
-    float * bias_change_gpu;
+    float *biases_gpu;
+    float *bias_updates_gpu;
+    float *bias_change_gpu;
 
-    float * scales_gpu;
-    float * scale_updates_gpu;
-    float * scale_change_gpu;
+    float *scales_gpu;
+    float *scale_updates_gpu;
+    float *scale_change_gpu;
 
-    float * output_gpu;
-    float * delta_gpu;
-    float * rand_gpu;
-    float * squared_gpu;
-    float * norms_gpu;
+    float *output_gpu;
+    float *delta_gpu;
+    float *rand_gpu;
+    float *squared_gpu;
+    float *norms_gpu;
 #ifdef CUDNN
     cudnnTensorDescriptor_t srcTensorDesc, dstTensorDesc;
     cudnnTensorDescriptor_t dsrcTensorDesc, ddstTensorDesc;
@@ -427,11 +448,12 @@ struct layer{
 #endif
 #endif
 };
-struct layer16{
+struct layer16
+{
     LAYER_TYPE type;
     ACTIVATION activation;
     COST_TYPE cost_type;
-    void (*forward)   (struct layer16, struct network16);
+    void (*forward)(struct layer16, struct network16);
     int batch_normalize;
     int shortcut;
     int batch;
@@ -444,7 +466,7 @@ struct layer16{
     //int nbiases;
     //int extra;
     //int truths;
-    int h,w,c;
+    int h, w, c;
     int out_h, out_w, out_c;
     int n;
     //int max_boxes;
@@ -504,45 +526,45 @@ struct layer16{
     int onlyforward;
     int stopbackward;
     int dontload;
-    int dontloadscales;//use
+    int dontloadscales; //use
 
     FLT temperature;
     float probability;
     float scale;
 
-//  char  * cweights;//layer16
-    int   * indexes;
-    int   * input_layers;
-    int   * input_sizes;
-    int   * map;
-    float * rand;
-    FLT * cost;
-    FLT   * state;
-/*    float * prev_state;
+    //  char  * cweights;//layer16
+    int *indexes;
+    int *input_layers;
+    int *input_sizes;
+    int *map;
+    float *rand;
+    FLT *cost;
+    FLT *state;
+    /*    float * prev_state;
     float * forgot_state;
     float * forgot_delta;
     float * state_delta;
     float * combine_cpu;
     float * combine_delta_cpu;
 */
-   //float * concat;
-   //float * concat_delta;
+    //float * concat;
+    //float * concat_delta;
 
-  // float * binary_weights;
+    // float * binary_weights;
 
-    FLT * biases; 
-    FLT * bn_bias;
-  //float * bias_updates;
+    FLT *biases;
+    FLT *bn_bias;
+    //float * bias_updates;
 
-    FLT * scales;
-    FLT * bn_scale;
+    FLT *scales;
+    FLT *bn_scale;
     //FLT * scale_updates;
 
-    FLT * weights;
-  //float * weight_updates;
+    FLT *weights;
+    //float * weight_updates;
 
-    FLT * delta;
-    FLT * output;
+    FLT *delta;
+    FLT *output;
     //float * squared;
     //float * norms;
 
@@ -553,15 +575,14 @@ struct layer16{
     //FLT * mean_delta;
     //FLT * variance_delta;
 
-    FLT * rolling_mean;
-    FLT * rolling_variance;
-    FLT * rolling_varianceMultiscales; 
+    FLT *rolling_mean;
+    FLT *rolling_variance;
+    FLT *rolling_varianceMultiscales;
 
+    FLT *x;
+    FLT *x_norm;
 
-    FLT * x;
-    FLT * x_norm;
-
-   /* FLT * m;
+    /* FLT * m;
     FLT * v;    
     FLT * bias_m;
     FLT * bias_v;
@@ -580,7 +601,7 @@ struct layer16{
     struct layer16 *input_layer;
     struct layer16 *self_layer;
     struct layer16 *output_layer;
-/*
+    /*
     struct layer16 *reset_layer;
     struct layer16 *update_layer;
     struct layer16 *state_layer;
@@ -603,7 +624,7 @@ struct layer16{
     tree *softmax_tree;
 */
     size_t workspace_size;
-//lstm
+    //lstm
     FLT *temp_cpu;
     FLT *temp2_cpu;
     FLT *temp3_cpu;
@@ -634,11 +655,19 @@ struct layer16{
 
 void free_layer(layer);
 
-typedef enum {
-    CONSTANT, STEP, EXP, POLY, STEPS, SIG, RANDOM
+typedef enum
+{
+    CONSTANT,
+    STEP,
+    EXP,
+    POLY,
+    STEPS,
+    SIG,
+    RANDOM
 } learning_rate_policy;
 
-typedef struct network{
+typedef struct network
+{
     int transpose;
     int flag_vec;
     int gemm_type;
@@ -662,7 +691,7 @@ typedef struct network{
     int step;
     int max_batches;
     float *scales;
-    int   *steps;
+    int *steps;
     int num_steps;
     int burn_in;
 
@@ -708,10 +737,8 @@ typedef struct network{
 
 } network;
 
-
-
-
-typedef struct network16{
+typedef struct network16
+{
     int flag_vec;
     int gemm_type;
     int transpose;
@@ -721,17 +748,17 @@ typedef struct network16{
     size_t *seen;
     layer16 *layers;
     FLT *output;
-    int subdivisions; 
+    int subdivisions;
     int adam;
     int inputs;
-    int truths; 
+    int truths;
     tree *hierarchy;
     int h, w, c;
     int time_steps;
     int outputs;
-    
+
     FLT *workspace;
-    
+
     FLT *input;
     FLT *truth;
     FLT *delta;
@@ -742,8 +769,8 @@ typedef struct network16{
     FLT *h_cpu;
 } network16;
 
-
-typedef struct {
+typedef struct
+{
     int w;
     int h;
     float scale;
@@ -753,24 +780,27 @@ typedef struct {
     float aspect;
 } augment_args;
 
-typedef struct {
+typedef struct
+{
     int w;
     int h;
     int c;
     float *data;
 } image;
 
-typedef struct{
+typedef struct
+{
     float x, y, w, h;
 } box;
 
-typedef struct matrix{
+typedef struct matrix
+{
     int rows, cols;
     float **vals;
 } matrix;
 
-
-typedef struct{
+typedef struct
+{
     int w, h;
     matrix X;
     matrix y;
@@ -779,11 +809,29 @@ typedef struct{
     box **boxes;
 } data;
 
-typedef enum {
-    CLASSIFICATION_DATA, DETECTION_DATA, CAPTCHA_DATA, REGION_DATA, IMAGE_DATA, COMPARE_DATA, WRITING_DATA, SWAG_DATA, TAG_DATA, OLD_CLASSIFICATION_DATA, STUDY_DATA, DET_DATA, SUPER_DATA, LETTERBOX_DATA, REGRESSION_DATA, SEGMENTATION_DATA, INSTANCE_DATA
+typedef enum
+{
+    CLASSIFICATION_DATA,
+    DETECTION_DATA,
+    CAPTCHA_DATA,
+    REGION_DATA,
+    IMAGE_DATA,
+    COMPARE_DATA,
+    WRITING_DATA,
+    SWAG_DATA,
+    TAG_DATA,
+    OLD_CLASSIFICATION_DATA,
+    STUDY_DATA,
+    DET_DATA,
+    SUPER_DATA,
+    LETTERBOX_DATA,
+    REGRESSION_DATA,
+    SEGMENTATION_DATA,
+    INSTANCE_DATA
 } data_type;
 
-typedef struct load_args{
+typedef struct load_args
+{
     int threads;
     char **paths;
     char *path;
@@ -816,9 +864,10 @@ typedef struct load_args{
     tree *hierarchy;
 } load_args;
 
-typedef struct{
+typedef struct
+{
     int id;
-    float x,y,w,h;
+    float x, y, w, h;
     float left, right, top, bottom;
 } box_label;
 network16 *load_network16(char *cfg, char *weights, int clear);
@@ -828,13 +877,15 @@ load_args get_base_args(network *net);
 
 void free_data(data d);
 
-typedef struct node{
+typedef struct node
+{
     void *val;
     struct node *next;
     struct node *prev;
 } node;
 
-typedef struct list{
+typedef struct list
+{
     int size;
     node *front;
     node *back;
@@ -842,7 +893,7 @@ typedef struct list{
 
 layer16 get_network_output_layer16(network16 *net);
 void axpy_cpu16(int N, FLT ALPHA, FLT *X, int INCX, FLT *Y, int INCY);
-FLT* axpy_cpu16_(int N, FLT ALPHA, FLT *X, int INCX, FLT *Y, int INCY);
+FLT *axpy_cpu16_(int N, FLT ALPHA, FLT *X, int INCX, FLT *Y, int INCY);
 
 void copy_cpu16(int N, FLT *X, int INCX, FLT *Y, int INCY);
 void scal_cpu16(int N, FLT ALPHA, FLT *X, int INCX);
@@ -852,8 +903,8 @@ network16 *parse_network_cfg_CJ16(char *filename);
 
 void load_weights16(network16 *net, char *filename);
 
-FLT * network_predict16(network16 *net, FLT *input);
-FLT * network_predictCJ16(network16 *net, FLT *input);
+FLT *network_predict16(network16 *net, FLT *input);
+FLT *network_predictCJ16(network16 *net, FLT *input);
 
 void forward_network16(network16 *net);
 void forward_networkCJ16(network16 *net);
@@ -875,7 +926,6 @@ void forward_network(network *net);
 void backward_network(network *net);
 void update_network(network *net);
 
-
 void axpy_cpu(int N, float ALPHA, float *X, int INCX, float *Y, int INCY);
 void copy_cpu(int N, float *X, int INCX, float *Y, int INCY);
 void scal_cpu(int N, float ALPHA, float *X, int INCX);
@@ -884,10 +934,10 @@ void softmax(float *input, int n, float temp, int stride, float *output);
 
 int best_3d_shift_r(image a, image b, int min, int max);
 #ifdef GPU
-void axpy_gpu(int N, float ALPHA, float * X, int INCX, float * Y, int INCY);
-void fill_gpu(int N, float ALPHA, float * X, int INCX);
-void scal_gpu(int N, float ALPHA, float * X, int INCX);
-void copy_gpu(int N, float * X, int INCX, float * Y, int INCY);
+void axpy_gpu(int N, float ALPHA, float *X, int INCX, float *Y, int INCY);
+void fill_gpu(int N, float ALPHA, float *X, int INCX);
+void scal_gpu(int N, float ALPHA, float *X, int INCX);
+void copy_gpu(int N, float *X, int INCX, float *Y, int INCY);
 
 void cuda_set_device(int n);
 void cuda_free(float *x_gpu);
@@ -1026,7 +1076,7 @@ void change_leaves(tree *t, char *leaf_list);
 
 int find_int_arg(int argc, char **argv, char *arg, int def);
 float find_float_arg(int argc, char **argv, char *arg, float def);
-int find_arg(int argc, char* argv[], char *arg);
+int find_arg(int argc, char *argv[], char *arg);
 char *find_char_arg(int argc, char **argv, char *arg, char *def);
 char *basecfg(char *cfgfile);
 void find_replace(char *str, char *orig, char *rep, char *output);

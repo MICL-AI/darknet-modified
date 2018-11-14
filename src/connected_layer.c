@@ -38,7 +38,7 @@ layer make_connected_layer(int batch, int inputs, int outputs, ACTIVATION activa
     l.out_h = 1;
     l.out_w = 1;
     l.out_c = outputs;
-    printf("\n connected inputs:%d,outputs:%d\n", inputs, outputs);
+    // printf("\n connected inputs:%d,outputs:%d\n", inputs, outputs);
 
     l.output = calloc(batch * outputs, sizeof(float));
     l.delta = calloc(batch * outputs, sizeof(float));
@@ -47,7 +47,7 @@ layer make_connected_layer(int batch, int inputs, int outputs, ACTIVATION activa
     l.bias_updates = calloc(outputs, sizeof(float));
 
     l.weights = calloc(outputs * inputs, sizeof(float));
-    printf("\nin make_connected_layer after calloc %f mem l.weights[33]=%f\n", (float)(outputs * inputs * sizeof(float)), l.weights[33]);
+    // printf("\nin make_connected_layer after calloc %f mem l.weights[33]=%f\n", (float)(outputs * inputs * sizeof(float)), l.weights[33]);
     l.biases = calloc(outputs, sizeof(float));
 
     l.forward = forward_connected_layer;
@@ -277,9 +277,10 @@ void forward_connected_layer(layer l, network net)
     int n = l.outputs;
     float *a = net.input;
     float *b = l.weights;
+
+
+
     float *c = l.output;
-    // printf("NOTE:in forward_connected_layer weights b[33]=%f, b[34]=%f\n", b[33], b[34]);
-    
     // printf("\nNOTE:in forward_connected_layer weights l.biases[33]=%f, l.biases[34]=%f\n", l.biases[33], l.biases[34]);
     if (net.flag_vec == 0)
     {

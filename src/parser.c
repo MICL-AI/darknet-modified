@@ -361,7 +361,7 @@ layer parse_connected(list *options, size_params params)
     ACTIVATION activation = get_activation(activation_s);
     int batch_normalize = option_find_int_quiet(options, "batch_normalize", 0);
     int weights_transpose = option_find_int_quiet(options, "transpose", 0);
-    printf("connect transposeflg:%d\n", weights_transpose);
+    // printf("connect transposeflg:%d\n", weights_transpose);
 
     layer l = make_connected_layer(params.batch, params.inputs, output, activation, batch_normalize, params.net->adam);
     l.transpose = weights_transpose;
@@ -1768,47 +1768,30 @@ void load_connected_weights(layer l, FILE *fp, int transpose)
 
     fread(l.biases, sizeof(float), l.outputs, fp);
 
-    //fread(l.weights, sizeof(float), l.outputs * l.inputs, fp);
-    
-    float *wei = calloc(l.outputs * l.inputs,sizeof(float));
+    float *wei = calloc(l.outputs * l.inputs, sizeof(float));
+#ifndef NO_CSR
     fread(wei, sizeof(float), l.outputs * l.inputs, fp);
-    // ele *e = vec2ele(wei, l.outputs, l.inputs);
-    // spa_mat spmt = ele2csr(e, l.outputs, l.inputs);
-    
-    spa_mat spmt = vec2csr(wei, l.outputs, l.inputs);
-    l.weights = csr2vec(&spmt);
-
-    // ele *e = vec2ele(wei, l.outputs, l.inputs);
-    // //print_elements(e, l.outputs, l.inputs);
-    // spa_mat spmt = compress(e, l.outputs, l.inputs);
-    // print_compress_sparse(&spmt);
-
-    //printf("WHEREAMI:\t[loaded_conn_weights]\tsum = %d\n", l.outputs * l.inputs);
-    // for (int i = 0; i < 100; i++)
-    //     printf("con_w[%d]=%f\t", i, l.weights[i]);
-    // puts("");
-    //     //TL 1017 adding convert from float to int, then back to float
-    // for (int i = 0; i < l.outputs * l.inputs; i++)
-    // {
-
-    //     l.con_max = l.wei_max > l.weights[i] ? l.con_max : l.weights[i];
-    //     l.con_min = l.wei_min < l.weights[i] ? l.con_min : l.weights[i];
-    //     printf("MAX:[%f]\tMIN:[%f]", l.con_max, l.con_min);
-    //     // l.weights8 = calloc(num, sizeof(int));
-    //     // l.weights8[i] = (int)(l.weights[i] * base); printf("int8:%d\t",l.weights8[i]);
-    //     // l.weights[i] = l.weights8[i] / base;
-    // }
-    // //
+    l.spmt = vec2csr(wei, l.outputs, l.inputs);
+    memcpy(l.weights, csr2vec(&l.spmt), sizeof(float) * (l.outputs * l.inputs));
+#else
+    fread(l.weights, sizeof(float), l.outputs * l.inputs, fp);
+#endif
+    //TL 1017 adding convert from float to int, then back to float
+    for (int i = 0; i < l.outputs * l.inputs; i++)
+    {
+        l.con_max = l.wei_max > l.weights[i] ? l.con_max : l.weights[i];
+        l.con_min = l.wei_min < l.weights[i] ? l.con_min : l.weights[i];
+    }
 
     if (transpose)
     {
-        // printf("NOTE:\t[load_connected_weights]\tTRANSPOSE \n");
+        printf("NOTE:\t[load_connected_weights]\tTRANSPOSE \n");
 
         transpose_matrix(l.weights, l.inputs, l.outputs);
     }
     if (l.transpose)
     {
-        // printf("NOTE:\t[load_connected_weights]\tl.transpose = 1\n");
+        printf("NOTE:\t[load_connected_weights]\tl.transpose = 1\n");
 
         transpose_matrix(l.weights, l.outputs, l.inputs);
     }
@@ -2042,7 +2025,6 @@ void load_convolutional_weights(layer l, FILE *fp)
         }
     }
     fread(l.weights, sizeof(float), num, fp);
-    
 
     // printf("BEFORE, weight[%d]:%f,weight[%d]:%f\n", num - 2, l.weights[num - 2], num - 1, l.weights[num - 1]);
     printf("loaded_conv_weights, sum = %d\n", num);
