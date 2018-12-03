@@ -227,7 +227,7 @@ void normalize_cpu16(FLT *x, FLT *mean, FLT *variance, int batch, int filters, i
             for (i = 0; i < spatial; ++i)
             {
                 int index = b * filters * spatial + f * spatial + i;
-                variance[f] = (variance[f] < 0) ? 0 : variance[f]; //fix mobile net existed -10e5 variance.
+                variance[f] = (variance[f] < 0) ? 0 : variance[f]; // mobile net existed -10e5 variance.
                 x[index] = (x[index] - mean[f]) / (float)(sqrt(variance[f] + .000001f));
             }
         }

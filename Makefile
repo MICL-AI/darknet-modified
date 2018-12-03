@@ -1,4 +1,4 @@
-GPU=0
+GPU=1
 CUDNN=0
 OPENCV=0
 OPENMP=0
@@ -27,7 +27,7 @@ CC=gcc
 
 
 
-NVCC=nvcc 
+NVCC=nvcc -D_FORCE_INLINES
 AR=ar
 ARFLAGS=rcs
 # OPTS=-Ofast

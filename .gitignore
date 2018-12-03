@@ -57,3 +57,7 @@ inet.val.list
 log*
 log16
 darknet
+data/cifar
+*.swp
+*.bkup
+*.backup

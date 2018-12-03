@@ -454,6 +454,9 @@ struct layer16
     ACTIVATION activation;
     COST_TYPE cost_type;
     void (*forward)(struct layer16, struct network16);
+    void (*forward_gpu)(struct layer, struct network);
+    void (*backward_gpu)(struct layer, struct network);
+    void (*update_gpu)(struct layer, update_args);
     int batch_normalize;
     int shortcut;
     int batch;
@@ -651,6 +654,95 @@ struct layer16
 
     struct layer16 *wc;
     struct layer16 *wy;
+
+
+#ifdef GPU
+    int *indexes_gpu;
+
+    float *z_gpu;
+    float *r_gpu;
+    float *h_gpu;
+
+    float *temp_gpu;
+    float *temp2_gpu;
+    float *temp3_gpu;
+
+    float *dh_gpu;
+    float *hh_gpu;
+    float *prev_cell_gpu;
+    float *cell_gpu;
+    float *f_gpu;
+    float *i_gpu;
+    float *g_gpu;
+    float *o_gpu;
+    float *c_gpu;
+    float *dc_gpu;
+
+    float *m_gpu;
+    float *v_gpu;
+    float *bias_m_gpu;
+    float *scale_m_gpu;
+    float *bias_v_gpu;
+    float *scale_v_gpu;
+
+    float *combine_gpu;
+    float *combine_delta_gpu;
+
+    float *prev_state_gpu;
+    float *forgot_state_gpu;
+    float *forgot_delta_gpu;
+    float *state_gpu;
+    float *state_delta_gpu;
+    float *gate_gpu;
+    float *gate_delta_gpu;
+    float *save_gpu;
+    float *save_delta_gpu;
+    float *concat_gpu;
+    float *concat_delta_gpu;
+
+    float *binary_input_gpu;
+    float *binary_weights_gpu;
+
+    float *mean_gpu;
+    float *variance_gpu;
+
+    float *rolling_mean_gpu;
+    float *rolling_variance_gpu;
+
+    float *variance_delta_gpu;
+    float *mean_delta_gpu;
+
+    float *x_gpu;
+    float *x_norm_gpu;
+    float *weights_gpu;
+    float *weight_updates_gpu;
+    float *weight_change_gpu;
+
+    float *biases_gpu;
+    float *bias_updates_gpu;
+    float *bias_change_gpu;
+
+    float *scales_gpu;
+    float *scale_updates_gpu;
+    float *scale_change_gpu;
+
+    float *output_gpu;
+    float *delta_gpu;
+    float *rand_gpu;
+    float *squared_gpu;
+    float *norms_gpu;
+#ifdef CUDNN
+    cudnnTensorDescriptor_t srcTensorDesc, dstTensorDesc;
+    cudnnTensorDescriptor_t dsrcTensorDesc, ddstTensorDesc;
+    cudnnTensorDescriptor_t normTensorDesc;
+    cudnnFilterDescriptor_t weightDesc;
+    cudnnFilterDescriptor_t dweightDesc;
+    cudnnConvolutionDescriptor_t convDesc;
+    cudnnConvolutionFwdAlgo_t fw_algo;
+    cudnnConvolutionBwdDataAlgo_t bd_algo;
+    cudnnConvolutionBwdFilterAlgo_t bf_algo;
+#endif
+#endif
 };
 
 void free_layer(layer);
