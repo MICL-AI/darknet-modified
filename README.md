@@ -28,6 +28,9 @@ Now the nets are:
 
 - now added a compressed sparse row storage method in connected layers
 
+## Notes
+
+- see this issue for -O0 compile of YOLOv3 https://github.com/pjreddie/darknet/issues/170#issuecomment-435501658
 ## REF
 
 ### squeezenet-source
