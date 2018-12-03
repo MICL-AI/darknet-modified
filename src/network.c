@@ -244,6 +244,7 @@ void forward_network(network *netp)
 #endif
     network net = *netp;
     int i;
+    printf("net.n:%d\n", net.n);
     for (i = 0; i < net.n; ++i)
     { //net.nj
         net.index = i;

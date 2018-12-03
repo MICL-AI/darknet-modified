@@ -2027,7 +2027,7 @@ void load_convolutional_weights(layer l, FILE *fp)
     fread(l.weights, sizeof(float), num, fp);
 
     // printf("BEFORE, weight[%d]:%f,weight[%d]:%f\n", num - 2, l.weights[num - 2], num - 1, l.weights[num - 1]);
-    printf("loaded_conv_weights, sum = %d\n", num);
+    // printf("loaded_conv_weights, sum = %d\n", num);
     // for (int i = 0; i < 100; i++)
     //     printf("cov_w[%d]=%f\t", i, l.weights[i]);
     // puts("");

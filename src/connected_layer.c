@@ -284,7 +284,7 @@ void forward_connected_layer(layer l, network net)
     // printf("\nNOTE:in forward_connected_layer weights l.biases[33]=%f, l.biases[34]=%f\n", l.biases[33], l.biases[34]);
     if (net.flag_vec == 0)
     {
-        // printf("in forward_connected_layer gemmtype:%d,transpose flg:%d\n",net.gemm_type,l.transpose);
+        printf("in forward_connected_layer gemmtype:%d,transpose flg:%d\n",net.gemm_type,l.transpose);
         if (l.transpose == 1)
             gemm(0, 0, m, n, k, 1, a, k, b, n, 1, c, n);
         else

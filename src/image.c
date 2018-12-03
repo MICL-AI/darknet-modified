@@ -1469,7 +1469,7 @@ image load_image_stb_mobilenet(char *filename, int channels)
     image im = make_image(w, h, c);
  
      //For MobileNet v2
-        printf("MMMMMMobilenet\n");
+        // printf("MMMMMMobilenet\n");
         for(k = 0; k < c; ++k){
         for(j = 0; j < h; ++j){
             for(i = 0; i < w; ++i){
