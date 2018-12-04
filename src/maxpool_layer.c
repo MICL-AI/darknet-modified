@@ -180,6 +180,25 @@ void forward_maxpool_layer(const maxpool_layer l, network net)
             }
         }
     }
+    int zero_n = 0, zero_c = 0;
+    for (int k = 0; k < l.out_c; k++)
+    { // per channle
+        // see if all <0.01
+        zero_n = 0;
+#pragma omp parallel for
+        for (int i = 0; i < l.out_h * l.out_w; i++)
+            if (fabs(l.output[k * l.out_h * l.out_w + i]) <= dp_epsilon)
+                zero_n++;
+        // if so, clean this channle
+        if (zero_n == l.out_h * l.out_w)
+        {
+            zero_c++;
+            memset(&l.output[k * l.out_h * l.out_w], 0x0, l.out_h * l.out_w * sizeof(float));
+        }
+    }
+    // printf("%d * %d, l.out_c = %d, zero_c = %d\n", l.out_w, l.out_h, l.out_c, zero_c);
+    printf("Mpoo layer, total parm: %d, saved param: %d\n", l.out_w * l.out_h * l.out_c, l.out_w * l.out_h * zero_c);
+    printf("In summary, total load = %d, saved = %d\n", total_load_param += l.out_w * l.out_h * l.out_c, total_saved_param += l.out_w * l.out_h * zero_c);
 }
 
 void backward_maxpool_layer(const maxpool_layer l, network net)

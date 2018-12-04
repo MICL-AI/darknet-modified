@@ -61,17 +61,31 @@ void forward_avgpool_layer(const avgpool_layer l, network net)
 {
     int b,i,k;
 
-    for(b = 0; b < l.batch; ++b){
-        for(k = 0; k < l.c; ++k){
+    for(b = 0; b < l.batch; ++b){ // slide in batch
+        for(k = 0; k < l.c; ++k){ // slide in channel
             int out_index = k + b*l.c;
             l.output[out_index] = 0;
-            for(i = 0; i < l.h*l.w; ++i){
+            for(i = 0; i < l.h*l.w; ++i){ // calc pooled ele
                 int in_index = i + l.h*l.w*(k + b*l.c);
                 l.output[out_index] += net.input[in_index];
             }
             l.output[out_index] /= l.h*l.w;
         }
     }
+
+    int zero_n = 0, zero_c = 0;
+#pragma omp parallel for
+    for (int k = 0; k < l.outputs * l.batch; k++)
+    {
+        zero_c = 0;
+        if (fabs(l.output[k]) <= dp_epsilon)
+        {
+            zero_c++;
+            l.output[k] = 0.00f;
+        }
+    }
+    printf("Apoo layer, total parm: %d, saved param: %d\n", l.outputs * l.batch, zero_c);
+    printf("In summary, total load = %d, saved = %d\n", total_load_param += l.outputs * l.batch, total_saved_param += zero_c);
 }
 void forward_avgpool_layer16(const avgpool_layer16 l, network16 net)
 {

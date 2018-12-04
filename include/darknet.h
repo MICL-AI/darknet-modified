@@ -35,6 +35,10 @@ extern int gpu_index;
 #endif
 #endif
 
+#define dp_epsilon 0.0f
+int total_load_param, total_saved_param;
+
+
 typedef struct
 {
     int classes;

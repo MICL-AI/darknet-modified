@@ -793,25 +793,27 @@ void forward_convolutional_layer(convolutional_layer l, network net)
     }
     // printf("call activate\n");
     activate_array(l.output, l.outputs * l.batch, l.activation);
-    //TL 181203 adding for dynamic pruning test.
+    /*TL 181203 adding for dynamic pruning test.*/
     int zero_n = 0, zero_c = 0;
     for (int k = 0; k < l.out_c; k++)
     { // per channle
         // see if all <0.01
         zero_n = 0;
+#pragma omp parallel for
         for (int i = 0; i < l.out_h * l.out_w; i++)
-            if (fabs(l.output[k * l.out_h * l.out_w + i]) == 0.f)
+            if (fabs(l.output[k * l.out_h * l.out_w + i]) <= dp_epsilon)
                 zero_n++;
         // if so, clean this channle
         if (zero_n == l.out_h * l.out_w)
         {
             zero_c++;
-            for (int i = 0; i < l.out_h * l.out_w; i++)
-                l.output[k * l.out_h * l.out_w + i] = 0;
+            memset(&l.output[k * l.out_h * l.out_w], 0x0, l.out_h * l.out_w * sizeof(float));
         }
     }
-    printf("%d * %d, l.out_c = %d, zero_c = %d\n", l.out_w, l.out_h, l.out_c, zero_c);
-
+    // printf("%d * %d, l.out_c = %d, zero_c = %d\n", l.out_w, l.out_h, l.out_c, zero_c);
+    printf("Conv layer, total parm: %d, saved param: %d\n", l.out_w * l.out_h * l.out_c, l.out_w * l.out_h * zero_c);
+    printf("In summary, total load = %d, saved = %d\n", total_load_param += l.out_w * l.out_h * l.out_c, total_saved_param += l.out_w * l.out_h * zero_c);
+    /*END TL 181203 adding for dynamic pruning test.*/
     if (l.binary || l.xnor)
         swap_binary(&l);
 }

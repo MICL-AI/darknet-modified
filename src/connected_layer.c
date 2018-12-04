@@ -277,14 +277,11 @@ void forward_connected_layer(layer l, network net)
     int n = l.outputs;
     float *a = net.input;
     float *b = l.weights;
-
-
-
     float *c = l.output;
+
     // printf("\nNOTE:in forward_connected_layer weights l.biases[33]=%f, l.biases[34]=%f\n", l.biases[33], l.biases[34]);
     if (net.flag_vec == 0)
     {
-        printf("in forward_connected_layer gemmtype:%d,transpose flg:%d\n",net.gemm_type,l.transpose);
         if (l.transpose == 1)
             gemm(0, 0, m, n, k, 1, a, k, b, n, 1, c, n);
         else
@@ -294,6 +291,7 @@ void forward_connected_layer(layer l, network net)
         else
             add_bias(l.output, l.biases, l.batch, l.outputs, 1);
         activate_array(l.output, l.outputs * l.batch, l.activation);
+        //printf("in forward_connected_layer gemmtype:%d, transpose flg:%d, outputs = %d, batch = %d, outputsize= %d \n", net.gemm_type, l.transpose, l.outputs, l.batch, sizeof(l.output) / sizeof(float));
     }
 
     else
@@ -307,6 +305,19 @@ void forward_connected_layer(layer l, network net)
 	    }
 	    activate_array16vec(l.output, l.outputs*l.batch, l.activation);*/
     }
+    int zero_n = 0, zero_c = 0;
+#pragma omp parallel for
+    for (int k = 0; k < l.outputs * l.batch; k++)
+    {
+        zero_c = 0;
+        if (fabs(l.output[k]) <= dp_epsilon)
+        {
+            zero_c++;
+            l.output[k] = 0.00f;
+        }
+    }
+    printf("Conn layer, total parm: %d, saved param: %d\n", l.outputs * l.batch, zero_c);
+    printf("In summary, total load = %d, saved = %d\n", total_load_param += l.outputs * l.batch, total_saved_param += zero_c);
 
     g_conn++;
 }
@@ -324,7 +335,7 @@ void forward_connected_layer16(layer16 l, network16 net)
     printf("\nNOTE:in forward_connected_layer16 weights l.biases[33]=%f, l.biases[34]=%f\n", l.biases[33], l.biases[34]);
     if (net.flag_vec == 0)
     {
-        printf("NOTE:in forward_connected_layer16 gemmtype:%d,transpose flg:%d\n",net.gemm_type,l.transpose);
+        printf("NOTE:in forward_connected_layer16 gemmtype:%d,transpose flg:%d\n", net.gemm_type, l.transpose);
         if (l.transpose == 1)
         {
             //printf("transpose\n");

@@ -154,9 +154,9 @@ void activate_array(float *x, const int n, const ACTIVATION a)
 
     int i, j;
     int batch, output;
-    batch = n / (sizeof(*x) / sizeof(float)); //batch
-    output = sizeof(*x) / sizeof(float);
-    for (i = 0; i < output * batch; ++i)
+    // batch = n / (sizeof(*x) / sizeof(float)); //batch
+    // output = sizeof(*x) / sizeof(float);
+    for (i = 0; i < n; ++i)
     {
         x[i] = activate(x[i], a);
     }
