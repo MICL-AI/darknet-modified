@@ -1,0 +1,45 @@
+layer_s:(null)
+layer:-1
+load_network
+cfg/squeezenet.cfg
+readdd cfg end
+
+ major:0,sizeof(int):4
+minor:2
+revision:0
+seen:140736668530848,sizeof(size_t):8
+SSSqueezeNet
+227 227
+net.n:50
+0.63
+0.24
+0.59
+0.70
+0.23
+0.56
+0.75
+0.25
+0.56
+0.74
+0.31
+0.61
+0.82
+0.28
+0.62
+0.77
+0.30
+0.71
+0.87
+0.46
+0.52
+0.70
+0.44
+0.93
+0.95
+0.26
+predictions:0.000000
+57.34%: dogsled
+17.16%: miniature schnauzer
+12.10%: malamute
+ 3.73%: Afghan hound
+ 2.21%: Eskimo dog

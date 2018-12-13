@@ -316,8 +316,8 @@ void forward_connected_layer(layer l, network net)
             l.output[k] = 0.00f;
         }
     }
-    printf("Conn layer, total parm: %d, saved param: %d\n", l.outputs * l.batch, zero_c);
-    printf("In summary, total load = %d, saved = %d\n", total_load_param += l.outputs * l.batch, total_saved_param += zero_c);
+    // printf("Conn layer, total parm: %d, saved param: %d\n", l.outputs * l.batch, zero_c);
+    // printf("In summary, total load = %ld, saved = %ld\n", total_load_param += l.outputs * l.batch, total_saved_param += zero_c);
 
     g_conn++;
 }

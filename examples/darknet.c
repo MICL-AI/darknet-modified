@@ -430,7 +430,7 @@ void visualize(char *cfgfile, char *weightfile)
 
 int main(int argc, char **argv)
 {
-
+    conv_reduce_min = 2;
     if (argc < 2)
     {
         fprintf(stderr, "usage: %s <function>\n", argv[0]);

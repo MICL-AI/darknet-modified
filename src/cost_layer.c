@@ -133,8 +133,8 @@ void forward_cost_layer(cost_layer l, network net)
             net.input[k] = 0.00f;
         }
     }
-    printf("Cost layer, total parm: %d, saved param: %d\n", l.inputs * l.batch, zero_c);
-    printf("In summary, total load = %d, saved = %d\n", total_load_param += l.inputs * l.batch, total_saved_param += zero_c);
+    // printf("Cost layer, total parm: %d, saved param: %d\n", l.inputs * l.batch, zero_c);
+    // printf("In summary, total load = %ld, saved = %ld\n", total_load_param += l.inputs * l.batch, total_saved_param += zero_c);
 }
 
 void backward_cost_layer(const cost_layer l, network net)

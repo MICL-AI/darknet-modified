@@ -591,7 +591,7 @@ void validate_classifier_single(char *datacfg, char *filename, char *weightfile,
     // printf("avg_acc:%f,avg_topk:%f\n",avg_acc,avg_topk);
     //TL: valid with 0-99 imgs.
     base = 0;
-    range = 50000;
+    range = 2000;
     //end TL:
     //for(i = 0; i < m; ++i){
     clock_t time;
@@ -664,6 +664,7 @@ void validate_classifier_single(char *datacfg, char *filename, char *weightfile,
         printf("avg_acc:%f,avg_topk:%f\n", avg_acc, avg_topk);
         printf("%s,class: %d, indexes[0]: %d, %d, %d, \n", paths[i], class, indexes[0], indexes[1], indexes[2]);
         //printf("%d: top 1: %f, top %d: %f\n", i, avg_acc/(i+1), topk, avg_topk/(i+1));
+        printf("image No %d, %d-%d  top 1: %f, top %d: %f\n", i, init, range - 1, avg_acc / (i + 1 - fails - init), topk, avg_topk / (i + 1 - fails - init));
         fprintf(stderr, "image No %d, %d-%d  top 1: %f, top %d: %f\n", i, init, range - 1, avg_acc / (i + 1 - fails - init), topk, avg_topk / (i + 1 - fails - init));
         printf("filed open:%d\n", fails);
         printf("\n");

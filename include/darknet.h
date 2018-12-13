@@ -36,8 +36,9 @@ extern int gpu_index;
 #endif
 
 #define dp_epsilon 0.0f
-int total_load_param, total_saved_param;
-
+long int total_load_param, total_saved_param, zero_param;
+float conv_reduce_max, conv_reduce_min;
+int conv_layer_cnt, conv_layer_reduced;
 
 typedef struct
 {

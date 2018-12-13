@@ -91,8 +91,8 @@ void forward_shortcut_layer(const layer l, network net)
             l.output[k] = 0.00f;
         }
     }
-    printf("Shrt layer, total parm: %d, saved param: %d\n", l.outputs * l.batch, zero_c);
-    printf("In summary, total load = %d, saved = %d\n", total_load_param += l.outputs * l.batch, total_saved_param += zero_c);
+    // printf("Shrt layer, total parm: %d, saved param: %d\n", l.outputs * l.batch, zero_c);
+    // printf("In summary, total load = %d, saved = %d\n", total_load_param += l.outputs * l.batch, total_saved_param += zero_c);
 }
 
 void backward_shortcut_layer(const layer l, network net)

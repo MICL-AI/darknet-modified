@@ -1,0 +1,26 @@
+layer_s:(null)
+layer:-1
+load_network
+cfg/alexnet.cfg
+readdd cfg end
+
+ major:0,sizeof(int):4
+minor:1
+revision:0
+seen:102400000
+NOTE:	[load_connected_weights]	l.transpose = 1
+NOTE:	[load_connected_weights]	l.transpose = 1
+NOTE:	[load_connected_weights]	l.transpose = 1
+227 227
+net.n:15
+0.83
+0.67
+0.56
+0.56
+0.80
+predictions:0.000002
+19.11%: golfcart
+18.16%: Siberian husky
+ 6.98%: malamute
+ 6.31%: tricycle
+ 4.17%: Eskimo dog

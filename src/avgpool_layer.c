@@ -84,8 +84,8 @@ void forward_avgpool_layer(const avgpool_layer l, network net)
             l.output[k] = 0.00f;
         }
     }
-    printf("Apoo layer, total parm: %d, saved param: %d\n", l.outputs * l.batch, zero_c);
-    printf("In summary, total load = %d, saved = %d\n", total_load_param += l.outputs * l.batch, total_saved_param += zero_c);
+    // printf("Apoo layer, total parm: %d, saved param: %d\n", l.outputs * l.batch, zero_c);
+    // printf("In summary, total load = %ld, saved = %ld\n", total_load_param += l.outputs * l.batch, total_saved_param += zero_c);
 }
 void forward_avgpool_layer16(const avgpool_layer16 l, network16 net)
 {
