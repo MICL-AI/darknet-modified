@@ -1,5 +1,0 @@
-layer_s:(null)
-layer:-1
-load_network
-cfg/alexnet.cfg
-readdd cfg end
