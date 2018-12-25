@@ -180,6 +180,7 @@ void forward_maxpool_layer(const maxpool_layer l, network net)
             }
         }
     }
+#ifdef PRUNE
     int zero_n = 0, zero_c = 0, zero_sum = 0;
     for (int k = 0; k < l.out_c; k++)
     { // per channle
@@ -201,6 +202,7 @@ void forward_maxpool_layer(const maxpool_layer l, network net)
     // printf("%d * %d, l.out_c = %d, zero_c = %d\n", l.out_w, l.out_h, l.out_c, zero_c);
     // printf("Mpoo layer, total parm: %d, saved param: %d, zeros: %d\n", l.out_w * l.out_h * l.out_c, l.out_w * l.out_h * zero_c, zero_sum);
     // printf("In summary, total load = %ld, saved = %ld, zeros = %ld\n", total_load_param += l.out_w * l.out_h * l.out_c, total_saved_param += l.out_w * l.out_h * zero_c, zero_param);
+#endif
 }
 
 void backward_maxpool_layer(const maxpool_layer l, network net)

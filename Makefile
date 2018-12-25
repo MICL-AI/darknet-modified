@@ -3,7 +3,8 @@ CUDNN=0
 OPENCV=0
 OPENMP=0
 DEBUG=0
-
+PRUNE=1
+QUANTIZE=0
 
 ARCH= -gencode arch=compute_30,code=sm_30 \
       -gencode arch=compute_35,code=sm_35 \
@@ -38,6 +39,14 @@ CFLAGS=-Wall -Wno-unknown-pragmas -Wfatal-errors -fPIC
 
 ifeq ($(OPENMP), 1) 
 CFLAGS+= -fopenmp
+endif
+
+ifeq ($(PRUNE), 1)
+CFLAGS+= -DPRUNE
+endif
+
+ifeq ($(QUANTIZE), 1)
+CFLAGS+= -DQUANTIZE
 endif
 
 ifeq ($(DEBUG), 1) 

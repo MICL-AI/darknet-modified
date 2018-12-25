@@ -37,10 +37,13 @@ extern int gpu_index;
 #endif
 #endif
 
-#define dp_epsilon 01.00f
+#ifdef PRUNE
+#define dp_epsilon 0.00f
 long int total_load_param, total_saved_param, zero_param, conn_total, conn_zero;
 float conv_reduce_max, conv_reduce_min;
+// conv_reduce_min = 2;
 int conv_layer_cnt, conv_layer_reduced;
+#endif
 
 typedef struct
 {

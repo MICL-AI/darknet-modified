@@ -143,12 +143,14 @@ void gemm_nn(int M, int N, int K, float ALPHA,
 {
     // puts("WHEREAMI:\t[gemm_nn]");
     int i, j, k;
-#pragma omp parallel for
+// #pragma omp parallel for
+    // printf("NKM%d,%d,%d\t",N,K,M);
     for (i = 0; i < M; ++i)
     {
         for (k = 0; k < K; ++k)
         {
             register float A_PART = ALPHA * A[i * lda + k];
+#pragma omp parallel for
             for (j = 0; j < N; ++j)
             {
                 C[i * ldc + j] += A_PART * B[k * ldb + j];

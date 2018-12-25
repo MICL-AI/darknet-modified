@@ -2025,37 +2025,37 @@ void load_convolutional_weights(layer l, FILE *fp)
         }
     }
     fread(l.weights, sizeof(float), num, fp);
+#ifdef QUANTIZE
+    printf("BEFORE, weight[%d]:%f,weight[%d]:%f\n", num - 2, l.weights[num - 2], num - 1, l.weights[num - 1]);
+    printf("loaded_conv_weights, sum = %d\n", num);
+    for (int i = 0; i < 100; i++)
+        printf("cov_w[%d]=%f\t", i, l.weights[i]);
+    puts("");
+    MARK: TL: 1024 cutting mantissa
+    for (int i = 0; i < num; i++)
+    {
+        int base = 12800;
+        int mantissa = 23;
+        union ui32_f32 {
+            float f;
+            uint32_t ui;
+        } uA;
+        //cut the mantissa and exponents
+        uA.f = l.weights[i];
+        //printf("BEFORE,WEIGHTS[%d]:%f \n", i, l.weights[i]);
+        //cut 20 mantissa
+        //uA.ui = (uA.ui >> (23 - mantissa)) << (23 - mantissa);
+        l.weights[i] = uA.f;
+        // printf("AFTER,WEIGHTS[%d]:%f \n", i, l.weights[i]);
+        //Find max/min in weights per layer
+        l.wei_max = l.wei_max > l.weights[i] ? l.wei_max : l.weights[i];
+        l.wei_min = l.wei_min < l.weights[i] ? l.wei_min : l.weights[i];
+        // printf("MAX:[%f]\tMIN:[%f]", l.wei_max, l.wei_min);
+    }
+    printf("MAX:[%f]\tMIN:[%f]\n", l.wei_max, l.wei_min);
 
-    // printf("BEFORE, weight[%d]:%f,weight[%d]:%f\n", num - 2, l.weights[num - 2], num - 1, l.weights[num - 1]);
-    // printf("loaded_conv_weights, sum = %d\n", num);
-    // for (int i = 0; i < 100; i++)
-    //     printf("cov_w[%d]=%f\t", i, l.weights[i]);
-    // puts("");
-    //MARK: TL: 1024 cutting mantissa
-    // for (int i = 0; i < num; i++)
-    // {
-    //     int base = 12800;
-    //     int mantissa = 23;
-    //     union ui32_f32 {
-    //         float f;
-    //         uint32_t ui;
-    //     } uA;
-    //     //cut the mantissa and exponents
-    //     uA.f = l.weights[i];
-    //     //printf("BEFORE,WEIGHTS[%d]:%f \n", i, l.weights[i]);
-    //     //cut 20 mantissa
-    //     //uA.ui = (uA.ui >> (23 - mantissa)) << (23 - mantissa);
-    //     l.weights[i] = uA.f;
-    //     // printf("AFTER,WEIGHTS[%d]:%f \n", i, l.weights[i]);
-    //     //Find max/min in weights per layer
-    //     l.wei_max = l.wei_max > l.weights[i] ? l.wei_max : l.weights[i];
-    //     l.wei_min = l.wei_min < l.weights[i] ? l.wei_min : l.weights[i];
-    //     // printf("MAX:[%f]\tMIN:[%f]", l.wei_max, l.wei_min);
-    // }
-    //printf("MAX:[%f]\tMIN:[%f]\n", l.wei_max, l.wei_min);
-
-    // printf("AFTER,weight[%d]:%f,weight[%d]:%f\n", num - 2, l.weights[num - 2], num - 1, l.weights[num - 1]);
-
+    printf("AFTER,weight[%d]:%f,weight[%d]:%f\n", num - 2, l.weights[num - 2], num - 1, l.weights[num - 1]);
+#endif
     //if(l.c == 3) scal_cpu(num, 1./256, l.weights, 1);
     if (l.flipped)
     {

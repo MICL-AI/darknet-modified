@@ -794,7 +794,9 @@ void forward_convolutional_layer(convolutional_layer l, network net)
     }
     // printf("call activate\n");
     activate_array(l.output, l.outputs * l.batch, l.activation);
-    /*TL 181203 adding for dynamic pruning test.*/
+    
+    /*TL 181203 adding for dynamic pruning test.*/ //Pruning
+#ifdef PRUNE
     int zero_n = 0, zero_c = 0, zero_sum = 0;
     for (int k = 0; k < l.out_c; k++)
     {   // per channle
@@ -825,6 +827,7 @@ void forward_convolutional_layer(convolutional_layer l, network net)
     // printf("%d/%d reduced min = %.2f\%, max = %.2f\%\n", conv_layer_reduced, conv_layer_cnt, conv_reduce_min * 100, conv_reduce_max * 100);
     // printf("layer_sparsity:%.2f\n", (float)zero_sum / (l.out_w * l.out_h * l.out_c)); //get sparsity
     /*END TL 181203 adding for dynamic pruning test.*/
+#endif
     if (l.binary || l.xnor)
         swap_binary(&l);
 }

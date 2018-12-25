@@ -139,6 +139,12 @@ __device__ float gradient_kernel(float x, ACTIVATION a)
     }
     return 0;
 }
+__device__ float prune_fmap(float x)
+{
+    float epsilon = 0.2; //MARK: set epsilon //TL: pruning
+    x = x > epsilon ? x : (x < -epsilon ? x : 0);
+    return x;
+}
 
 __global__ void binary_gradient_array_kernel(float *x, float *dy, int n, int s, BINARY_ACTIVATION a, float *dx)
 {
@@ -179,6 +185,7 @@ __global__ void activate_array_kernel(float *x, int n, ACTIVATION a)
 {
     int i = (blockIdx.x + blockIdx.y*gridDim.x) * blockDim.x + threadIdx.x;
     if(i < n) x[i] = activate_kernel(x[i], a);
+    //if(i < n) x[i] = prune_fmap(x[i]);
 }
 
 __global__ void gradient_array_kernel(float *x, int n, ACTIVATION a, float *delta)

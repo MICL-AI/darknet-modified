@@ -72,7 +72,7 @@ void forward_avgpool_layer(const avgpool_layer l, network net)
             l.output[out_index] /= l.h*l.w;
         }
     }
-
+#ifdef PRUNE
     int zero_n = 0, zero_c = 0;
 #pragma omp parallel for
     for (int k = 0; k < l.outputs * l.batch; k++)
@@ -86,6 +86,7 @@ void forward_avgpool_layer(const avgpool_layer l, network net)
     }
     // printf("Apoo layer, total parm: %d, saved param: %d\n", l.outputs * l.batch, zero_c);
     // printf("In summary, total load = %ld, saved = %ld\n", total_load_param += l.outputs * l.batch, total_saved_param += zero_c);
+#endif
 }
 void forward_avgpool_layer16(const avgpool_layer16 l, network16 net)
 {
