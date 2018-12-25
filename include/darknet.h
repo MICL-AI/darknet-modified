@@ -4,7 +4,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <pthread.h>
-#include <TL.h>
+#include <stdbool.h>
+
+#include "TL.h"
 #include "sparse.h"
 #define SECRET_NUM -1234
 extern int gpu_index;
@@ -35,8 +37,8 @@ extern int gpu_index;
 #endif
 #endif
 
-#define dp_epsilon 0.0f
-long int total_load_param, total_saved_param, zero_param;
+#define dp_epsilon 01.00f
+long int total_load_param, total_saved_param, zero_param, conn_total, conn_zero;
 float conv_reduce_max, conv_reduce_min;
 int conv_layer_cnt, conv_layer_reduced;
 
@@ -175,6 +177,7 @@ struct layer
     int truths;
     int h, w, c;
     int out_h, out_w, out_c;
+    bool *prune;
     int n;
     int max_boxes;
     int groups;

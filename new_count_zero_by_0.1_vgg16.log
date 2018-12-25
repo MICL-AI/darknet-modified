@@ -1,0 +1,34 @@
+layer_s:(null)
+layer:-1
+load_network
+cfg/vgg16.cfg
+readdd cfg end
+
+ major:925353388,sizeof(int):4
+minor:1063675494
+revision:973279855
+seen:7168000
+NOTE:	[load_connected_weights]	TRANSPOSE 
+NOTE:	[load_connected_weights]	TRANSPOSE 
+NOTE:	[load_connected_weights]	TRANSPOSE 
+256 256
+net.n:26
+Sparsity:0.45
+Sparsity:0.29
+Sparsity:0.39
+Sparsity:0.50
+Sparsity:0.50
+Sparsity:0.49
+Sparsity:0.66
+Sparsity:0.65
+Sparsity:0.70
+Sparsity:0.86
+Sparsity:0.76
+Sparsity:0.80
+Sparsity:0.93
+predictions:0.000005
+56.55%: malamute
+13.08%: Siberian husky
+10.28%: Eskimo dog
+ 2.40%: dogsled
+ 2.05%: Border collie

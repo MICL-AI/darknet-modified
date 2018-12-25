@@ -1,0 +1,68 @@
+layer_s:(null)
+layer:-1
+load_network
+cfg/resnet50.cfg
+readdd cfg end
+
+ major:0,sizeof(int):4
+minor:2
+revision:0
+seen:140737027909792,sizeof(size_t):8
+256 256
+net.n:70
+Sparsity:0.30
+Sparsity:0.19
+Sparsity:0.18
+Sparsity:0.06
+Sparsity:0.23
+Sparsity:0.18
+Sparsity:0.09
+Sparsity:0.26
+Sparsity:0.38
+Sparsity:0.10
+Sparsity:0.35
+Sparsity:0.32
+Sparsity:0.08
+Sparsity:0.37
+Sparsity:0.34
+Sparsity:0.08
+Sparsity:0.40
+Sparsity:0.40
+Sparsity:0.11
+Sparsity:0.41
+Sparsity:0.32
+Sparsity:0.12
+Sparsity:0.37
+Sparsity:0.33
+Sparsity:0.06
+Sparsity:0.41
+Sparsity:0.34
+Sparsity:0.08
+Sparsity:0.42
+Sparsity:0.33
+Sparsity:0.05
+Sparsity:0.43
+Sparsity:0.44
+Sparsity:0.10
+Sparsity:0.33
+Sparsity:0.33
+Sparsity:0.09
+Sparsity:0.34
+Sparsity:0.37
+Sparsity:0.05
+Sparsity:0.54
+Sparsity:0.50
+Sparsity:0.05
+Sparsity:0.49
+Sparsity:0.42
+Sparsity:0.02
+Sparsity:0.27
+Sparsity:0.28
+Sparsity:0.01
+Sparsity:0.03
+predictions:0.000000
+94.89%: malamute
+ 2.70%: Eskimo dog
+ 1.95%: Siberian husky
+ 0.34%: dogsled
+ 0.02%: German shepherd

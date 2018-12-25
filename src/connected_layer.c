@@ -309,16 +309,19 @@ void forward_connected_layer(layer l, network net)
 #pragma omp parallel for
     for (int k = 0; k < l.outputs * l.batch; k++)
     {
-        zero_c = 0;
         if (fabs(l.output[k]) <= dp_epsilon)
         {
             zero_c++;
+            // printf("%.2f\t", l.output[k]);
             l.output[k] = 0.00f;
         }
+        //
     }
-    // printf("Conn layer, total parm: %d, saved param: %d\n", l.outputs * l.batch, zero_c);
+    conn_total += l.outputs * l.batch;
+    conn_zero += zero_c;
+    printf("Conn layer, total parm: %d, saved param: %d\n", l.outputs * l.batch, zero_c);
     // printf("In summary, total load = %ld, saved = %ld\n", total_load_param += l.outputs * l.batch, total_saved_param += zero_c);
-
+    printf("*********%.2fCONN SPARSITY %d/%d=%.2f\%**********\n", dp_epsilon, conn_zero, conn_total, (float)conn_zero / conn_total * 100);
     g_conn++;
 }
 clock_t aa, bb;

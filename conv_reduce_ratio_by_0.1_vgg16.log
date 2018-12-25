@@ -1,0 +1,34 @@
+layer_s:(null)
+layer:-1
+load_network
+cfg/vgg16.cfg
+readdd cfg end
+
+ major:925353388,sizeof(int):4
+minor:1063675494
+revision:973279855
+seen:7168000
+NOTE:	[load_connected_weights]	TRANSPOSE 
+NOTE:	[load_connected_weights]	TRANSPOSE 
+NOTE:	[load_connected_weights]	TRANSPOSE 
+256 256
+net.n:26
+0/1 reduced min = 200.00%, max = 0.00%
+0/2 reduced min = 200.00%, max = 0.00%
+1/3 reduced min = 0.78%, max = 0.78%
+1/4 reduced min = 0.78%, max = 0.78%
+1/5 reduced min = 0.78%, max = 0.78%
+2/6 reduced min = 0.39%, max = 0.78%
+2/7 reduced min = 0.39%, max = 0.78%
+2/8 reduced min = 0.39%, max = 0.78%
+2/9 reduced min = 0.39%, max = 0.78%
+2/10 reduced min = 0.39%, max = 0.78%
+3/11 reduced min = 0.20%, max = 0.78%
+4/12 reduced min = 0.20%, max = 0.98%
+5/13 reduced min = 0.20%, max = 9.38%
+predictions:0.000005
+56.55%: malamute
+13.08%: Siberian husky
+10.28%: Eskimo dog
+ 2.40%: dogsled
+ 2.05%: Border collie

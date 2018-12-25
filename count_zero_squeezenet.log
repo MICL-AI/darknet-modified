@@ -1,0 +1,79 @@
+layer_s:(null)
+layer:-1
+load_network
+cfg/squeezenet.cfg
+readdd cfg end
+
+ major:0,sizeof(int):4
+minor:2
+revision:0
+seen:140736632567968,sizeof(size_t):8
+SSSqueezeNet
+227 227
+net.n:50
+Conv layer, total parm: 817216, saved param: 0, zeros: 382797
+In summary, total load = 817216, saved = 0, zeros = 382798
+Mpoo layer, total parm: 207936, saved param: 0, zeros: 51389
+In summary, total load = 1025152, saved = 0, zeros = 421418
+Conv layer, total parm: 51984, saved param: 0, zeros: 11253
+In summary, total load = 1077136, saved = 0, zeros = 431866
+Conv layer, total parm: 207936, saved param: 0, zeros: 112396
+In summary, total load = 1285072, saved = 0, zeros = 533009
+Conv layer, total parm: 207936, saved param: 0, zeros: 241278
+In summary, total load = 1493008, saved = 0, zeros = 661891
+Conv layer, total parm: 51984, saved param: 0, zeros: 251664
+In summary, total load = 1544992, saved = 0, zeros = 672277
+Conv layer, total parm: 207936, saved param: 0, zeros: 353757
+In summary, total load = 1752928, saved = 0, zeros = 774370
+Conv layer, total parm: 207936, saved param: 0, zeros: 502894
+In summary, total load = 1960864, saved = 0, zeros = 923507
+Mpoo layer, total parm: 107648, saved param: 0, zeros: 31238
+In summary, total load = 2068512, saved = 0, zeros = 951496
+Conv layer, total parm: 26912, saved param: 0, zeros: 6861
+In summary, total load = 2095424, saved = 0, zeros = 958016
+Conv layer, total parm: 107648, saved param: 0, zeros: 63121
+In summary, total load = 2203072, saved = 0, zeros = 1014276
+Conv layer, total parm: 107648, saved param: 0, zeros: 141559
+In summary, total load = 2310720, saved = 0, zeros = 1092714
+Conv layer, total parm: 26912, saved param: 0, zeros: 149659
+In summary, total load = 2337632, saved = 0, zeros = 1100814
+Conv layer, total parm: 107648, saved param: 841, zeros: 214507
+In summary, total load = 2445280, saved = 841, zeros = 1165662
+Conv layer, total parm: 107648, saved param: 0, zeros: 302307
+In summary, total load = 2552928, saved = 841, zeros = 1253462
+Mpoo layer, total parm: 57600, saved param: 225, zeros: 22509
+In summary, total load = 2610528, saved = 1066, zeros = 1275130
+Conv layer, total parm: 10800, saved param: 0, zeros: 3130
+In summary, total load = 2621328, saved = 1066, zeros = 1278179
+Conv layer, total parm: 43200, saved param: 0, zeros: 29792
+In summary, total load = 2664528, saved = 1066, zeros = 1304841
+Conv layer, total parm: 43200, saved param: 675, zeros: 63195
+In summary, total load = 2707728, saved = 1741, zeros = 1338244
+Conv layer, total parm: 10800, saved param: 0, zeros: 66479
+In summary, total load = 2718528, saved = 1741, zeros = 1341528
+Conv layer, total parm: 43200, saved param: 0, zeros: 97088
+In summary, total load = 2761728, saved = 1741, zeros = 1372137
+Conv layer, total parm: 43200, saved param: 450, zeros: 134646
+In summary, total load = 2804928, saved = 2191, zeros = 1409695
+Conv layer, total parm: 14400, saved param: 0, zeros: 141173
+In summary, total load = 2819328, saved = 2191, zeros = 1416222
+Conv layer, total parm: 57600, saved param: 0, zeros: 170880
+In summary, total load = 2876928, saved = 2191, zeros = 1445929
+Conv layer, total parm: 57600, saved param: 0, zeros: 211332
+In summary, total load = 2934528, saved = 2191, zeros = 1486381
+Conv layer, total parm: 14400, saved param: 0, zeros: 217695
+In summary, total load = 2948928, saved = 2191, zeros = 1492744
+Conv layer, total parm: 57600, saved param: 2250, zeros: 271149
+In summary, total load = 3006528, saved = 4441, zeros = 1546198
+Conv layer, total parm: 57600, saved param: 4950, zeros: 326108
+In summary, total load = 3064128, saved = 9391, zeros = 1601157
+Conv layer, total parm: 225000, saved param: 0, zeros: 382783
+In summary, total load = 3289128, saved = 9391, zeros = 1657832
+Apoo layer, total parm: 1000, saved param: 0
+In summary, total load = 3290128, saved = 9391
+predictions:0.000000
+57.34%: dogsled
+17.16%: miniature schnauzer
+12.10%: malamute
+ 3.73%: Afghan hound
+ 2.21%: Eskimo dog
