@@ -427,16 +427,18 @@ void visualize(char *cfgfile, char *weightfile)
     cvWaitKey(0);
 #endif
 }
+
 #ifdef PRUNE
     long int total_load_param, total_saved_param, zero_param, conn_total, conn_zero;
     float conv_reduce_max, conv_reduce_min;
     int conv_layer_cnt, conv_layer_reduced;
-    
 #endif
+
 int main(int argc, char **argv)
 {
 #ifdef PRUNE
     conv_reduce_min = 1.111f;
+    printf("prune=%f\n", dp_epsilon);
 #endif
     if (argc < 2)
     {

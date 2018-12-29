@@ -180,10 +180,7 @@ void forward_maxpool_layer(const maxpool_layer l, network net)
             }
         }
     }
-#ifdef PRUNE
-    extern long int total_load_param, total_saved_param, zero_param, conn_total, conn_zero;
-    extern float conv_reduce_max, conv_reduce_min;
-    extern int conv_layer_cnt, conv_layer_reduced;
+#ifdef PRUNE_ALL
     int zero_n = 0, zero_c = 0, zero_sum = 0;
     for (int k = 0; k < l.out_c; k++)
     { // per channle

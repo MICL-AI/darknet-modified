@@ -80,10 +80,7 @@ void forward_shortcut_layer(const layer l, network net)
     copy_cpu(l.outputs * l.batch, net.input, 1, l.output, 1);
     shortcut_cpu(l.batch, l.w, l.h, l.c, net.layers[l.index].output, l.out_w, l.out_h, l.out_c, l.output);
     activate_array(l.output, l.outputs * l.batch, l.activation);
-#ifdef PRUNE
-    extern long int total_load_param, total_saved_param, zero_param, conn_total, conn_zero;
-    extern float conv_reduce_max, conv_reduce_min;
-    extern int conv_layer_cnt, conv_layer_reduced;
+#ifdef PRUNE_ALL
     int zero_n = 0, zero_c = 0;
 #pragma omp parallel for
     for (int k = 0; k < l.outputs * l.batch; k++)
