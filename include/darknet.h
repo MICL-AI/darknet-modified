@@ -1,6 +1,3 @@
-#pragma once
-#ifndef __DARKNET_H__
-#define __DARKNET_H__
 #ifndef DARKNET_API
 #define DARKNET_API
 #include <stdlib.h>
@@ -1210,4 +1207,3 @@ int *read_intlist(char *s, int *n, int d);
 size_t rand_size_t();
 float rand_normal();
 #endif //API
-#endif //DARKNET_H

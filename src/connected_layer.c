@@ -306,6 +306,9 @@ void forward_connected_layer(layer l, network net)
 	    activate_array16vec(l.output, l.outputs*l.batch, l.activation);*/
     }
 #ifdef PRUNE
+    extern long int total_load_param, total_saved_param, zero_param, conn_total, conn_zero;
+    extern float conv_reduce_max, conv_reduce_min;
+    extern int conv_layer_cnt, conv_layer_reduced;
     int zero_n = 0, zero_c = 0;
 #pragma omp parallel for
     for (int k = 0; k < l.outputs * l.batch; k++)
