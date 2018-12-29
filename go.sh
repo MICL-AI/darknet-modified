@@ -1,11 +1,15 @@
 #!bin/bash
-# for net in mobilenet squeezenet tiny alexnet
-#     do
-#         ./darknet01 TL valid $net  > '01_'$net'.log'
-#     # sleep 20s
-# done
-for net in mobilenet squeezenet tiny alexnet vgg16 resnet50
+
+prune='0.0'
+beh='valid'
+for net in tiny vgg16 resnet50
     do
-        ./darknet TL predict $net  > 'bw_req'$1'_'$net'.log'
+        ./darknet TL $beh $net  > 'ep='$prune'_'$net'.log'
+    # sleep 20s
+done
+
+for net in mobilenet squeezenet alexnet 
+    do
+        ./darknet TL $beh $net  > 'ep='$prune'_'$net'.log'
     # sleep 20s
 done

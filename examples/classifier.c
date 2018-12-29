@@ -591,7 +591,7 @@ void validate_classifier_single(char *datacfg, char *filename, char *weightfile,
     // printf("avg_acc:%f,avg_topk:%f\n",avg_acc,avg_topk);
     //TL: valid with 0-99 imgs.
     base = 0;
-    range = 2000;
+    range = 50000;
     //end TL:
     //for(i = 0; i < m; ++i){
     clock_t time;
