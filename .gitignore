@@ -54,8 +54,7 @@ dkms.conf
 #Self added
 *.weights
 inet.val.list
-log*
-log16
+*log*
 darknet
 data/cifar
 *.swp

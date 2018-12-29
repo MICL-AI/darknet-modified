@@ -150,7 +150,6 @@ void gemm_nn(int M, int N, int K, float ALPHA,
         for (k = 0; k < K; ++k)
         {
             register float A_PART = ALPHA * A[i * lda + k];
-#pragma omp parallel for
             for (j = 0; j < N; ++j)
             {
                 C[i * ldc + j] += A_PART * B[k * ldb + j];
