@@ -1,3 +1,6 @@
+#pragma once
+#ifndef __DARKNET_H__
+#define __DARKNET_H__
 #ifndef DARKNET_API
 #define DARKNET_API
 #include <stdlib.h>
@@ -22,8 +25,8 @@ extern int gpu_index;
 
 #ifdef CUDNN
 #include "cudnn.h"
-#endif
-#endif
+#endif //CUDNN
+#endif //GPU
 
 #ifndef __cplusplus
 #ifdef OPENCV
@@ -33,9 +36,9 @@ extern int gpu_index;
 #if CV_MAJOR_VERSION == 3
 #include "opencv2/videoio/videoio_c.h"
 #include "opencv2/imgcodecs/imgcodecs_c.h"
-#endif
-#endif
-#endif
+#endif //CV
+#endif //OPENCV
+#endif //CPP
 
 #ifdef PRUNE
 #define dp_epsilon 0.00f
@@ -43,7 +46,7 @@ long int total_load_param, total_saved_param, zero_param, conn_total, conn_zero;
 float conv_reduce_max, conv_reduce_min;
 // conv_reduce_min = 2;
 int conv_layer_cnt, conv_layer_reduced;
-#endif
+#endif //PRUNE
 
 typedef struct
 {
@@ -1207,4 +1210,5 @@ void normalize_array(float *a, int n);
 int *read_intlist(char *s, int *n, int d);
 size_t rand_size_t();
 float rand_normal();
-#endif
+#endif //API
+#endif //DARKNET_H
