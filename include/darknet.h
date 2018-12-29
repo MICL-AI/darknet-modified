@@ -38,6 +38,9 @@ extern int gpu_index;
 #endif //CPP
 
 #ifdef PRUNE
+extern long int total_load_param, total_saved_param, zero_param, conn_total, conn_zero;
+extern float conv_reduce_max, conv_reduce_min;
+extern int conv_layer_cnt, conv_layer_reduced;
 #define dp_epsilon 0.00f
 #endif //PRUNE
 
@@ -661,7 +664,6 @@ struct layer16
 
     struct layer16 *wc;
     struct layer16 *wy;
-
 
 #ifdef GPU
     int *indexes_gpu;
