@@ -28,13 +28,21 @@ Now the nets are:
 
 - now added a compressed sparse row storage method in connected layers
 
+- added a feature map pruning, with Makefile PRUNE control to test the dynamic feature map pruning [paper here](https://arxiv.org/abs/1812.09922)
+
+## TODO
+
+- GPU Dynamic Pruning test
+
+- Quantization test
+
 ## Notes
 
-- see this issue for -O0 compile of YOLOv3 https://github.com/pjreddie/darknet/issues/170#issuecomment-435501658
+- see this issue for -O0 compile of [YOLOv3](https://github.com/pjreddie/darknet/issues/170#issuecomment-435501658)
 ## REF
 
 ### squeezenet-source
-convert from https://github.com/DeepScale/SqueezeNet/tree/master/SqueezeNet_v1.1
+convert from [here](https://github.com/DeepScale/SqueezeNet/tree/master/SqueezeNet_v1.1)
 
 validating on ImageNet 
 
