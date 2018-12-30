@@ -55,7 +55,7 @@ dkms.conf
 *.weights
 inet.val.list
 *log*
-darknet
+darknet*
 data/cifar
 *.swp
 *.bkup
