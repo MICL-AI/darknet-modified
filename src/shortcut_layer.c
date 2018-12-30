@@ -86,7 +86,7 @@ void forward_shortcut_layer(const layer l, network net)
     for (int k = 0; k < l.outputs * l.batch; k++)
     {
         zero_c = 0;
-        if (fabs(l.output[k]) <= dp_epsilon)
+        if (fabs(l.output[k]) <= DP_EPSILON)
         {
             zero_c++;
             l.output[k] = 0.00f;

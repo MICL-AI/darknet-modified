@@ -127,7 +127,7 @@ void forward_cost_layer(cost_layer l, network net)
     for (int k = 0; k < l.inputs * l.batch; k++)
     {
         zero_c = 0;
-        if (fabs(net.input[k]) <= dp_epsilon)
+        if (fabs(net.input[k]) <= DP_EPSILON)
         {
             zero_c++;
             net.input[k] = 0.00f;

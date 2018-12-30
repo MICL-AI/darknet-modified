@@ -187,7 +187,7 @@ void forward_maxpool_layer(const maxpool_layer l, network net)
         // see if all <0.01
 #pragma omp parallel for
         for (int i = 0; i < l.out_h * l.out_w; i++)
-            if (fabs(l.output[k * l.out_h * l.out_w + i]) <= dp_epsilon)
+            if (fabs(l.output[k * l.out_h * l.out_w + i]) <= DP_EPSILON)
                 zero_n++;
         // if so, clean this channle
         if (zero_n == l.out_h * l.out_w)

@@ -438,7 +438,7 @@ int main(int argc, char **argv)
 {
 #ifdef PRUNE
     conv_reduce_min = 1.111f;
-    printf("prune=%f\n", dp_epsilon);
+    printf("prune=%f\n", DP_EPSILON);
 #endif
     if (argc < 2)
     {

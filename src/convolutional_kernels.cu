@@ -126,27 +126,8 @@ void forward_convolutional_layer_gpu(convolutional_layer l, network net)
     }
 
     activate_array_gpu(l.output_gpu, l.outputs*l.batch, l.activation);
-#ifdef PRUNE
-    // printf("GGGGGPU,l.outputs=%d,l.batch=%d,l.out_w=%d,l.out_h=%d,l.out_c=%d,%d,%d\n",l.outputs,l.batch,l.out_w,l.out_h,l.out_c,l.outputs*l.batch,l.out_c*l.out_h*l.out_w);
-    int zero_n = 0, zero_c = 0, zero_sum = 0;
-    for (int k = 0; k < l.out_c; k++)
-    {   // per channle
-        // see if all <0.01
-        for (int i = 0; i < l.out_h * l.out_w; i++)
-            if ((l.output_gpu[k * l.out_h * l.out_w + i]) <= dp_epsilon && (l.output_gpu[k * l.out_h * l.out_w + i]) >= dp_epsilon)
-                zero_n++;
-        // if so, clean this channle
-        if (zero_n == l.out_h * l.out_w)
-        {
-            puts("cccccccccc-----zero");
-            zero_c++;
-            // memset(&l.output[k * l.out_h * l.out_w], 0x0, l.out_h * l.out_w * sizeof(float));
-            l.prune[l.out_c] = 1;
-        }
-        zero_param += zero_n;
-        zero_sum += zero_n;
-        zero_n = 0;
-    }
+#ifdef PRUNE_TODO
+    prune_channel_gpu(l.output_gpu, l.out_c, l.out_w, l.out_h);
 #endif
     //if(l.dot > 0) dot_error_gpu(l);
     if(l.binary || l.xnor) swap_binary(&l);
