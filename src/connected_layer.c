@@ -282,7 +282,8 @@ void forward_connected_layer(layer l, network net)
     // printf("\nNOTE:in forward_connected_layer weights l.biases[33]=%f, l.biases[34]=%f\n", l.biases[33], l.biases[34]);
     if (net.flag_vec == 0)
     {
-        if (l.transpose == 1)
+        printf("\nCCCCCCPU---transpooooooose???%d,k=%d,n=%d\n",l.transpose,k,n);
+        if (l.transpose == 1) //transpose
             gemm(0, 0, m, n, k, 1, a, k, b, n, 1, c, n);
         else
             gemm(0, 1, m, n, k, 1, a, k, b, k, 1, c, n);
@@ -341,7 +342,7 @@ void forward_connected_layer16(layer16 l, network16 net)
     if (net.flag_vec == 0)
     {
         printf("NOTE:in forward_connected_layer16 gemmtype:%d,transpose flg:%d\n", net.gemm_type, l.transpose);
-        if (l.transpose == 1)
+        if (l.transpose == 1) //transpose in fp16
         {
             //printf("transpose\n");
             //transpose_matrix16(l.weights,n,k);
@@ -523,7 +524,10 @@ void forward_connected_layer_gpu(layer l, network net)
     float *a = net.input_gpu;
     float *b = l.weights_gpu;
     float *c = l.output_gpu;
-    gemm_gpu(0, 1, m, n, k, 1, a, k, b, k, 1, c, n);
+    if (l.transpose == 1) //TL alexnet transpose fix 181230
+        gemm_gpu(0, 0, m, n, k, 1, a, k, b, n, 1, c, n);
+    else //original
+        gemm_gpu(0, 1, m, n, k, 1, a, k, b, k, 1, c, n);
 
     if (l.batch_normalize)
     {
