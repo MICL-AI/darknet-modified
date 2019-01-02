@@ -1769,7 +1769,7 @@ void load_connected_weights(layer l, FILE *fp, int transpose)
     fread(l.biases, sizeof(float), l.outputs, fp);
 
     float *wei = calloc(l.outputs * l.inputs, sizeof(float));
-#ifndef NO_CSR
+#ifdef CSR
     fread(wei, sizeof(float), l.outputs * l.inputs, fp);
     l.spmt = vec2csr(wei, l.outputs, l.inputs);
     memcpy(l.weights, csr2vec(&l.spmt), sizeof(float) * (l.outputs * l.inputs));

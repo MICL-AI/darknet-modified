@@ -1,9 +1,10 @@
 #ifndef __PRUNE_H__
 #define __PRUNE_H__
+
 #include "darknet.h"
 
 #ifdef PRUNE
-#define DP_EPSILON 0.500f
+#define DP_EPSILON 0.10f
 
 void prune_channel(float *output, int channel, int width, int height);
 #endif //PRUNE

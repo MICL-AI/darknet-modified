@@ -29,8 +29,6 @@ OBJDIR=./obj/
 CC=gcc  
 #CC=gpt-gcc  -O2
 
-
-
 NVCC=nvcc -D_FORCE_INLINES
 AR=ar
 ARFLAGS=rcs

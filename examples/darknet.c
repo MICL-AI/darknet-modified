@@ -433,7 +433,12 @@ int main(int argc, char **argv)
 #ifdef PRUNE
     extern float conv_reduce_min;
     conv_reduce_min = 1.111f;
-    printf("prune=%f\n", DP_EPSILON);
+    printf("----------EPSILON=%f----------", DP_EPSILON);
+#ifdef GPU
+    puts("GPU----------");
+#else
+    puts("CPU----------");
+#endif
 #endif
     if (argc < 2)
     {

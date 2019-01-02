@@ -30,8 +30,8 @@ void prune_channel(float *output, int channel, int width, int height)
         zero_n = 0;
     }
     // printf("%d * %d, channel = %d, zero_c = %d\n", width, height, channel, zero_c);
-    // printf("Conv layer, total parm: %d, saved param: %d, zeros: %ld\n", width * height * channel, width * height * zero_c, zero_sum);
-    // printf("In summary, total load = %ld, saved = %ld, zeros = %ld, reduced = %.2f\%, fmap sparsity:%.2f\%\n", total_load_param += width * height * channel, total_saved_param += width * height * zero_c, zero_param, ((float)total_saved_param / total_load_param) * 100, (float)zero_param / total_load_param * 100);
+    printf("Conv layer, total parm: %d, saved param: %d, zeros: %ld\n", width * height * channel, width * height * zero_c, zero_sum);
+    printf("In summary, total load = %ld, saved = %ld, zeros = %ld, reduced = %.2f\%, fmap sparsity:%.2f\%\n", total_load_param += width * height * channel, total_saved_param += width * height * zero_c, zero_param, ((float)total_saved_param / total_load_param) * 100, (float)zero_param / total_load_param * 100);
     conv_layer_cnt++;
     conv_layer_reduced += (zero_c > 0);
     conv_reduce_max = (float)zero_c / channel > conv_reduce_max ? (float)zero_c / channel : conv_reduce_max;
