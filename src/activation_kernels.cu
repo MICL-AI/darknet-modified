@@ -139,12 +139,6 @@ __device__ float gradient_kernel(float x, ACTIVATION a)
     }
     return 0;
 }
-__device__ float prune_fmap(float x)
-{
-    float epsilon = 0.2; //MARK: set epsilon //TL: pruning
-    x = x > epsilon ? x : (x < -epsilon ? x : 0);
-    return x;
-}
 
 __global__ void binary_gradient_array_kernel(float *x, float *dy, int n, int s, BINARY_ACTIVATION a, float *dx)
 {
@@ -199,48 +193,6 @@ extern "C" void activate_array_gpu(float *x, int n, ACTIVATION a)
     activate_array_kernel<<<cuda_gridsize(n), BLOCK>>>(x, n, a);
     check_error(cudaPeekAtLastError());
 }
-
-// __global__ void prune_kernel(float *output, int size_c, int size_w, int size_h)
-// {
-//     int index = (blockIdx.x + blockIdx.y*gridDim.x) * blockDim.x + threadIdx.x;
-//     // int zero_n, zero_c;
-//     // if (index < size_c * size_h * size_w)
-//     // {
-//     //     for (int k = 0; k < size_c; k++)
-//     //     {// per channle
-//     //         // check if all element < epsilon
-//     //         for (int i = 0; i < size_h * size_w; i++)
-//     //             if ((output[k * size_h * size_w + i]) <= DP_EPSILON && (output[k * size_h * size_w + i]) >= -DP_EPSILON)
-//     //                 zero_n++;
-//     //         // if so, clean this channle
-//     //         if (zero_n == size_h * size_w)
-//     //         {
-//     //             for (int i = 0; i < size_h * size_w; i++)
-//     //             {
-//     //                 output[i] = 0.f;
-//     //             }
-//     //             zero_c++;
-//     //             // l.prune[size_c] = 1;
-//     //         }
-//     //     }
-//     // }
-//     // another way to make this function...
-//     if (index >= size_c * size_h * size_w) return;
-//     // int c = index % size_c;
-//     // index /= size_c;
-//     // int w = index % size_w;
-//     // index /= size_w;
-//     // int h = index;
-
-    
-// }
-
-// extern "C" void prune_channel_gpu(float *output, int size_c, int size_w, int size_h)
-// {
-//     // int num = size_c * size_h * size_w;
-//     // prune_kernel<<<cuda_gridsize(num), BLOCK>>>(output, size_c, size_w, size_h);
-//     check_error(cudaPeekAtLastError());
-// }
 
 extern "C" void gradient_array_gpu(float *x, int n, ACTIVATION a, float *delta) 
 {

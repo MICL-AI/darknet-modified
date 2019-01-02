@@ -6,11 +6,15 @@
 #include <pthread.h>
 #include <stdbool.h>
 
-#include "TL.h"
+#ifdef PRUNE
+#include "prune.h"
+#endif
 #include "sparse.h"
-#define SECRET_NUM -1234
-extern int gpu_index;
 #include <FP16.h>
+
+#define SECRET_NUM -1234
+
+extern int gpu_index;
 //#include <vec.h>
 
 #ifdef GPU
@@ -37,12 +41,7 @@ extern int gpu_index;
 #endif //OPENCV
 #endif //CPP
 
-#ifdef PRUNE
-extern long int total_load_param, total_saved_param, zero_param, conn_total, conn_zero;
-extern float conv_reduce_max, conv_reduce_min;
-extern int conv_layer_cnt, conv_layer_reduced;
-#define DP_EPSILON 0.00f
-#endif //PRUNE
+
 
 typedef struct
 {

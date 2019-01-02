@@ -282,7 +282,6 @@ void forward_connected_layer(layer l, network net)
     // printf("\nNOTE:in forward_connected_layer weights l.biases[33]=%f, l.biases[34]=%f\n", l.biases[33], l.biases[34]);
     if (net.flag_vec == 0)
     {
-        printf("\nCCCCCCPU---transpooooooose???%d,k=%d,n=%d\n",l.transpose,k,n);
         if (l.transpose == 1) //transpose
             gemm(0, 0, m, n, k, 1, a, k, b, n, 1, c, n);
         else
