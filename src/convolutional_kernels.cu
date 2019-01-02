@@ -126,7 +126,7 @@ void forward_convolutional_layer_gpu(convolutional_layer l, network net)
     }
 
     activate_array_gpu(l.output_gpu, l.outputs*l.batch, l.activation);
-#ifdef PRUNE_TODO
+#ifdef PRUNE
     prune_channel_gpu(l.output_gpu, l.out_c, l.out_w, l.out_h);
 #endif
     //if(l.dot > 0) dot_error_gpu(l);

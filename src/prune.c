@@ -1,4 +1,8 @@
 #include "prune.h"
+
+#include <stdio.h>
+#include <stdlib.h>
+
 #ifdef PRUNE
 long int total_load_param, total_saved_param, zero_param, conn_total, conn_zero;
 float conv_reduce_max, conv_reduce_min;

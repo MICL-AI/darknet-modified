@@ -1,16 +1,11 @@
 #include "cuda_runtime.h"
 #include "curand.h"
 #include "cublas_v2.h"
-#include "prune.h"
+
+
 extern "C" {
-#include "convolutional_layer.h"
-#include "batchnorm_layer.h"
-#include "gemm.h"
-#include "blas.h"
-#include "im2col.h"
-#include "col2im.h"
-#include "utils.h"
 #include "cuda.h"
+#include "prune.h"
 }
 
 __device__ float prune_ele_kernel(float x){return (x > -DP_EPSILON && x < DP_EPSILON) ? .00f : x;} //element wise prune TL190102
