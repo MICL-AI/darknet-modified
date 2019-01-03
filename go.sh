@@ -1,12 +1,12 @@
 #!bin/bash
 
-beh='valid'
+# valid OR predict to select behaviour
+beh=$1
 
-for prune in 00 01 02 03 04 05
-    do
-    for net in tiny vgg16 resnet50 mobilenet squeezenet alexnet
+for prune in P0 P1 P2 P3 P4 P5
+do
+    for net in alexnet mobilenet resnet50 squeezenet tiny vgg16
         do
-            ./darknet$prune TL $beh $net  > 'ep='$prune'_'$net'.log'
-        # sleep 20s
+            ./darknet$prune TL $beh $net  > $prune'_'$net'.log'
     done
 done

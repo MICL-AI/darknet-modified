@@ -37,6 +37,37 @@ OPTS=-O0
 LDFLAGS= -lm -lpthread  
 COMMON= -Iinclude/ -Isrc/
 CFLAGS=-Wall -Wno-unknown-pragmas -Wfatal-errors -fPIC
+# adding this to test different pruning epsilon, it should be optimized
+ifeq ($(P0), 1)
+EXEC=darknetP0
+CFLAGS+= -DP0
+endif
+
+
+ifeq ($(P1), 1)
+EXEC=darknetP1
+CFLAGS+= -DP1
+endif
+
+ifeq ($(P2), 1)
+EXEC=darknetP2
+CFLAGS+= -DP2
+endif
+
+ifeq ($(P3), 1)
+EXEC=darknetP3
+CFLAGS+= -DP3
+endif
+
+ifeq ($(P4), 1)
+EXEC=darknetP4
+CFLAGS+= -DP4
+endif
+
+ifeq ($(P5), 1)
+EXEC=darknetP5
+CFLAGS+= -DP5
+endif
 
 ifeq ($(OPENMP), 1) 
 CFLAGS+= -fopenmp
