@@ -10,14 +10,14 @@ extern "C" {
 }
 
 __device__ float prune_ele_kernel(float x){return (fabs(x) <= DP_EPSILON) ? .00f : x;} //element wise prune TL190102
-#TODO: FIXME:
+//TODO: FIXME:
 __global__ void prune_kernel(float *output, int size_c, int size_w, int size_h)
 {
     int zero_n = 0, zero_c = 0, zero_sum = 0;
     for (int k = 0; k < size_c; k++)
     {   // per channle, check if all < DP_EPSILON
         for (int i = 0; i < size_h * size_w; i++)
-            if ((output[k * size_h * size_w + i]) <= DP_EPSILON)
+            if (fabs(output[k * size_h * size_w + i]) <= DP_EPSILON)
                 zero_n++;
         // if so, clean this channle
         if (zero_n == size_h * size_w)
