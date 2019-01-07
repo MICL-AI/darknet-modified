@@ -80,21 +80,7 @@ void forward_shortcut_layer(const layer l, network net)
     copy_cpu(l.outputs * l.batch, net.input, 1, l.output, 1);
     shortcut_cpu(l.batch, l.w, l.h, l.c, net.layers[l.index].output, l.out_w, l.out_h, l.out_c, l.output);
     activate_array(l.output, l.outputs * l.batch, l.activation);
-#ifdef PRUNE_ALL
-    int zero_n = 0, zero_c = 0;
-#pragma omp parallel for
-    for (int k = 0; k < l.outputs * l.batch; k++)
-    {
-        zero_c = 0;
-        if (fabs(l.output[k]) <= DP_EPSILON)
-        {
-            zero_c++;
-            l.output[k] = 0.00f;
-        }
-    }
-    // printf("Shrt layer, total parm: %d, saved param: %d\n", l.outputs * l.batch, zero_c);
-    // printf("In summary, total load = %d, saved = %d\n", total_load_param += l.outputs * l.batch, total_saved_param += zero_c);
-#endif
+
 }
 
 void backward_shortcut_layer(const layer l, network net)

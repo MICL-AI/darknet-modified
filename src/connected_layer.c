@@ -305,25 +305,7 @@ void forward_connected_layer(layer l, network net)
 	    }
 	    activate_array16vec(l.output, l.outputs*l.batch, l.activation);*/
     }
-#ifdef PRUNE_ALL
-    int zero_n = 0, zero_c = 0;
-#pragma omp parallel for
-    for (int k = 0; k < l.outputs * l.batch; k++)
-    {
-        if (fabs(l.output[k]) <= DP_EPSILON)
-        {
-            zero_c++;
-            // printf("%.2f\t", l.output[k]);
-            l.output[k] = 0.00f;
-        }
-        //
-    }
-    conn_total += l.outputs * l.batch;
-    conn_zero += zero_c;
-    printf("Conn layer, total parm: %d, saved param: %d\n", l.outputs * l.batch, zero_c);
-    // printf("In summary, total load = %ld, saved = %ld\n", total_load_param += l.outputs * l.batch, total_saved_param += zero_c);
-    printf("*********%.2fCONN SPARSITY %d/%d=%.2f\%**********\n", DP_EPSILON, conn_zero, conn_total, (float)conn_zero / conn_total * 100);
-#endif
+
     g_conn++;
 }
 clock_t aa, bb;

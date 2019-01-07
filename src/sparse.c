@@ -142,7 +142,7 @@ spa_mat ele2csr(ele *e, count_t num_row, count_t num_col, count_t num_ele)
 */
 ele *csr2ele(spa_mat *m)
 {
-    count_t row = 0, k = 0;
+    count_t row = 0;
     ele *e = calloc(m->num_row * m->num_col, sizeof(ele));
     for (count_t j = 0; j < m->num_nzd; j++)
     {

@@ -121,21 +121,7 @@ void forward_cost_layer(cost_layer l, network net)
         l2_cpu(l.batch*l.inputs, net.input, net.truth, l.delta, l.output);
     }
     l.cost[0] = sum_array(l.output, l.batch*l.inputs);
-#ifdef PRUNE_ALL
-    int zero_n = 0, zero_c = 0;
-#pragma omp parallel for
-    for (int k = 0; k < l.inputs * l.batch; k++)
-    {
-        zero_c = 0;
-        if (fabs(net.input[k]) <= DP_EPSILON)
-        {
-            zero_c++;
-            net.input[k] = 0.00f;
-        }
-    }
-    // printf("Cost layer, total parm: %d, saved param: %d\n", l.inputs * l.batch, zero_c);
-    // printf("In summary, total load = %ld, saved = %ld\n", total_load_param += l.inputs * l.batch, total_saved_param += zero_c);
-#endif
+
 }
 
 void backward_cost_layer(const cost_layer l, network net)

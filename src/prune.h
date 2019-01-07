@@ -4,24 +4,11 @@
 #include "darknet.h"
 
 #ifdef PRUNE
-#ifdef P0 //could be optimized here with Makefile
+
+#ifndef DP_EPSILON
 #define DP_EPSILON 0.00f
-#endif
-#ifdef P1
-#define DP_EPSILON 0.10f
-#endif
-#ifdef P2
-#define DP_EPSILON 0.20f
-#endif
-#ifdef P3
-#define DP_EPSILON 0.30f
-#endif
-#ifdef P4
-#define DP_EPSILON 0.40f
-#endif
-#ifdef P5
-#define DP_EPSILON 0.50f
-#endif
+#endif //EPSILON
+
 void prune_channel(float *output, int channel, int width, int height);
 #endif //PRUNE
 
