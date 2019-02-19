@@ -207,13 +207,13 @@ spa_mat mat2csr_partation(val_t *a, count_t src_row, count_t src_col, count_t ds
     spmt.offset_row = calloc(dst_row, sizeof(offset_row_t));
 
     /* put into CSR */
-    for (count_t i = start_row; i < dst_row; i++)
+    for (count_t i = start_row; i < start_row + dst_row; i++)
     {
-        for (count_t j = start_col; j < dst_col; j++)
+        for (count_t j = start_col; j < start_col + dst_col; j++)
         {
             if (*(a + i * src_col + j) != 0)
             {
-                if (i > last_nzd_row || !spmt.num_nzd && !last_nzd_row) //next row or first row
+                if ((i - start_row) > last_nzd_row || !spmt.num_nzd && !last_nzd_row) //next row or first row
                 {
                     offset(spmt)[ofst] = spmt.num_nzd;
                     if (ofst > 0)
@@ -221,9 +221,9 @@ spa_mat mat2csr_partation(val_t *a, count_t src_row, count_t src_col, count_t ds
                     ofst += 1;
                 }
                 val(spmt)[spmt.num_nzd] = *(a + i * src_col + j);
-                index(spmt)[spmt.num_nzd] = j;
+                index(spmt)[spmt.num_nzd] = j - start_col;
                 spmt.num_nzd += 1;
-                last_nzd_row = i;
+                last_nzd_row = i - start_row;
             }
             else
                 spmt.num_zd += 1;
@@ -243,7 +243,7 @@ spa_mat *mat2csr_divide(val_t *a, count_t src_row, count_t src_col, count_t dst_
     spa_mat spmt[part_col * part_row];
     spa_mat spmt_tmp;
 
-    printf("partation number %d * %d\n", part_row, part_col);
+    // printf("partation number %d * %d\n", part_row, part_col);
 
     count_t start_col = 0;
     count_t start_row = 0;
@@ -254,9 +254,9 @@ spa_mat *mat2csr_divide(val_t *a, count_t src_row, count_t src_col, count_t dst_
             {
                 if (i < part_row && j < part_col)
                 {
-                    printf("\nworking on subset %d(%d, %d)\n", i * part_col + j, i, j);
-                    *(spmt + i *part_col + j) = mat2csr_partation(a, src_row, src_col, dst_row, dst_col, i, j);
-                    printf("***num_nzd=%d", (spmt + i * part_col + j)->num_nzd);
+                    // printf("\nworking on subset %d(%d, %d)\n", i * part_col + j, i, j);
+                    spmt[i * part_col + j] = mat2csr_partation(a, src_row, src_col, dst_row, dst_col, i, j);
+                    // printf("***num_nzd=%d", (spmt + i * part_col + j)->num_nzd);
                 }
                 else if (i == part_row && j < part_col)
                     ;
@@ -270,15 +270,15 @@ spa_mat *mat2csr_divide(val_t *a, count_t src_row, count_t src_col, count_t dst_
     // print_csr(&spmt_tmp);
     // puts("-----");
 
-    // print_csr(spmt);
-    // puts("-----");
-    // print_csr(spmt+1);
-    // puts("-----");
-    // print_csr(&spmt[2]);
-    // puts("-----");
-    // print_csr(&spmt[3]);
-    // puts("-----");
-    // return spmt;
+    print_csr(spmt);
+    puts("-----");
+    print_csr(spmt+1);
+    puts("-----");
+    print_csr(&spmt[2]);
+    puts("-----");
+    print_csr(&spmt[3]);
+    puts("-----");
+    return spmt;
 }
 
 //----------------------------------------DECOMPRESSION----------------------------------------//
@@ -469,8 +469,8 @@ int main(int argc, char const *argv[])
                             0, 2, 8, 0, 0, 5,
                             5, 0, 3, 9, 0, 6,
                             0, 6, 0, 4, 0, 0,
-                            0, 0, 0, 0, 1, 1,
-                            1, 0, 1, 0, 6, 6};
+                            0, 0, 0, 0, 0, 0,
+                            1, 0, 1, 0, 0, 6};
     // number of ele
     count_t num_row = 6, num_col = 6;
     //count_t num_row = 4, num_col = 4;
@@ -502,15 +502,15 @@ int main(int argc, char const *argv[])
     // puts("---------------");
     // print_vec(csr2vec(&spmat), 6, 6);
     // puts("\n---------------");
-    spa_mat *spmt_arry = mat2csr_divide(mat_norm, num_row, num_col, 2, 3);
+    spa_mat *spmt_arry = mat2csr_divide(mat_norm, num_row, num_col, 3, 3);
     //print_csr(*spmt_arry[0]);
     puts("\n---------------");
-    // spa_mat spmt_norm = mat2csr_partation(mat_norm, num_row, num_col, 3, 3, 0, 0);
-    // print_csr(&spmt_norm);
-    // puts("\n---------------");
+    spa_mat spmt_norm = mat2csr(mat_norm, num_row, num_col);
+    print_csr(&spmt_norm);
+    puts("\n---------------");
     spa_mat spmt_norm2 = vec2csr(mat_norm, num_row, num_col);
     print_csr(&spmt_norm2);
-    puts("\n---------------");
+    // puts("\n---------------");
     // spa_mat spmt_full = mat2csr(mat_full, num_row, num_col);
     // print_csr(&spmt_full);
     // spa_mat spmt_full2 = vec2csr(mat_full, num_row, num_col);
