@@ -1770,9 +1770,10 @@ void load_connected_weights(layer l, FILE *fp, int transpose)
 
     float *wei = calloc(l.outputs * l.inputs, sizeof(float));
 #ifdef CSR
+    printf("----CSR----\n", l.outputs, l.inputs, l.outputs * l.inputs);
     fread(wei, sizeof(float), l.outputs * l.inputs, fp);
-    l.spmt = vec2csr(wei, l.outputs, l.inputs);
-    memcpy(l.weights, csr2vec(&l.spmt), sizeof(float) * (l.outputs * l.inputs));
+    l.spmt = mat2csr_partation(wei, l.outputs, l.inputs, l.outputs, l.inputs, 0, 0);
+    memcpy(l.weights, csr2mat(&l.spmt), sizeof(float) * (l.outputs * l.inputs));
 #else
     fread(l.weights, sizeof(float), l.outputs * l.inputs, fp);
 #endif
@@ -2031,8 +2032,9 @@ void load_convolutional_weights(layer l, FILE *fp)
     for (int i = 0; i < 100; i++)
         printf("cov_w[%d]=%f\t", i, l.weights[i]);
     puts("");
-    MARK: TL: 1024 cutting mantissa
-    for (int i = 0; i < num; i++)
+MARK:
+TL:
+    1024 cutting mantissa for (int i = 0; i < num; i++)
     {
         int base = 12800;
         int mantissa = 23;

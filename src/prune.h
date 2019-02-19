@@ -10,11 +10,12 @@
 #endif //EPSILON
 
 void prune_channel(float *output, int channel, int width, int height);
+void print_channel(float *output, int channel, int width, int height);
 #endif //PRUNE
 
 #ifdef GPU
-// #include "cuda.h"
-void prune_channel_gpu(float *output, int size_c, int size_w, int size_h);
+    // #include "cuda.h"
+    void prune_channel_gpu(float *output, int size_c, int size_w, int size_h);
 #endif //GPU
 
 #endif //__PRUNE_H__

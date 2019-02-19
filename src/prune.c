@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 
 #ifdef PRUNE
 long int fmap_total_load, fmap_total_reduce, fmap_total_zero, conn_total, conn_zero;
@@ -12,9 +13,9 @@ void prune_channel(float *output, int channel, int width, int height)
 {
     int zero_n = 0, zero_c = 0, zero_sum = 0;
     for (int k = 0; k < channel; k++)
-    {   // per channel
+    { // per channel
         // check if all < DP_EPSILON
-// #pragma omp parallel for
+        // #pragma omp parallel for
         for (int i = 0; i < height * width; i++)
             if (fabs(output[k * height * width + i]) <= DP_EPSILON)
                 zero_n++;
@@ -40,6 +41,19 @@ void prune_channel(float *output, int channel, int width, int height)
     // printf("%d/%d reduced min = %.2f\%, max = %.2f\%\n", conv_layer_reduced, layer_conv_sum, conv_reduce_min * 100, conv_reduce_max * 100);
     // printf("layer_sparsity:%.2f\n", (float)zero_sum / (width * height * channel)); //get sparsity
     /*END TL 181203 adding for dynamic pruning test.*/
+}
+void print_channel(float *output, int channel, int width, int height)
+{
+    for (int k = 0; k < channel; k++)
+    {
+        printf("ch:%d---------\n", k);
+        for (int j = 0; j < height; j++)
+        {
+            for (int i = 0; i < width; i++)
+                printf("%d ", fabs(output[k * width * height + j * height + i]) ? 1 : 0); //fabs(floor(output[k * width * height + j * height + i])));
+            printf("\n");
+        }
+    }
 }
 
 #endif

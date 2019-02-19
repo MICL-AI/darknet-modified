@@ -1,4 +1,4 @@
-GPU=1
+GPU=0
 CUDNN=0
 OPENCV=0
 OPENMP=0
@@ -6,13 +6,15 @@ DEBUG=0
 #TL added
 PRUNE=1
 QUANTIZE=0
+CSR=1
+
 
 ARCH= -gencode arch=compute_30,code=sm_30 \
       -gencode arch=compute_35,code=sm_35 \
       -gencode arch=compute_50,code=[sm_50,compute_50] \
       -gencode arch=compute_52,code=[sm_52,compute_52] \
 #	  -gencode arch=compute_75,code=[sm_75,compute_75] #for RTX2080
-#      	-gencode arch=compute_20,code=[sm_20,sm_21] \ This one is deprecated?
+#      	-gencode arch=compute_20,code=[sm_20,sm_21] \ This one is deprecated? --Yep
 
 # This is what I use, uncomment if you know your arch and want to specify, see http://arnon.dk/matching-sm-architectures-arch-and-gencode-for-various-nvidia-cards/
 # ARCH= -gencode arch=compute_52,code=compute_52
@@ -45,6 +47,10 @@ endif
 
 ifeq ($(QUANTIZE), 1)
 CFLAGS+= -DQUANTIZE
+endif
+
+ifeq ($(CSR), 1)
+CFLAGS+= -DCSR
 endif
 
 ifeq ($(DEBUG), 1) 

@@ -141,10 +141,10 @@ void train_classifier(char *datacfg, char *cfgfile, char *weightfile, int *gpus,
         if (avg_loss == -1)
             avg_loss = loss;
         avg_loss = avg_loss * .9 + loss * .1;
-        printf("%ld, %.3f: %f, %f avg, %f rate, %lf seconds, %ld images\n", get_current_batch(net), (float)(*net->seen) / N, loss, avg_loss, get_current_rate(net), what_time_is_it_now() - time, *net->seen);
+        printf("batch: %ld, epoch: %.3f, loss: %f, avg_loss: %f, rate: %f, %lf seconds, %ld images\n", get_current_batch(net), (float)(*net->seen) / N, loss, avg_loss, get_current_rate(net), what_time_is_it_now() - time, *net->seen);
         free_data(train);
         if (*net->seen / N > epoch)
-        {
+        { 
             epoch = *net->seen / N;
             char buff[256];
             sprintf(buff, "%s/%s_%d.weights", backup_directory, base, epoch);
