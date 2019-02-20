@@ -1772,8 +1772,8 @@ void load_connected_weights(layer l, FILE *fp, int transpose)
 #ifdef CSR
     printf("----CSR----\n", l.outputs, l.inputs, l.outputs * l.inputs);
     fread(wei, sizeof(float), l.outputs * l.inputs, fp);
-    l.spmt = mat2csr_partation(wei, l.outputs, l.inputs, l.outputs, l.inputs, 0, 0);
-    memcpy(l.weights, csr2mat(&l.spmt), sizeof(float) * (l.outputs * l.inputs));
+    l.spmt = mat2csr_divide(wei, l.outputs, l.inputs, l.outputs, l.inputs);
+    memcpy(l.weights, csr2mat_comb(l.spmt), sizeof(float) * (l.outputs * l.inputs));
 #else
     fread(l.weights, sizeof(float), l.outputs * l.inputs, fp);
 #endif

@@ -207,16 +207,16 @@ spa_mat mat2csr_partation(val_t *a, count_t src_row, count_t src_col, count_t ds
     size_t part_col = ceil((float)src_col / dst_col);
     size_t part_row = ceil((float)src_col / dst_col);
     if (index_row == part_row - 1 && index_col < part_col - 1) //bottom (south)
-        dst_row = src_row % dst_row;
+        dst_row = (src_row % dst_row) ? (src_row % dst_row) : dst_row;
     else if (index_row < part_row - 1 && index_col == part_col - 1) //right (east)
-        dst_col = src_col % dst_col;
+        dst_col = (src_col % dst_col) ? (src_col % dst_col) : dst_col;
     else if (index_row == part_row - 1 && index_col == part_col - 1) //corner (south east)
     {
-        dst_row = src_row % dst_row;
-        dst_col = src_col % dst_col;
+        dst_row = (src_row % dst_row) ? (src_row % dst_row) : dst_row;
+        dst_col = (src_col % dst_col) ? (src_col % dst_col) : dst_col;
     }
 
-    printf("-----------------start pos:%d,%d-----------------\n", start_row, start_col);
+    printf("------sub(%d,%d)start pos:%d,%d\tshape(%d,%d)------\n", index_row, index_col, start_row, start_col, dst_row, dst_col);
     count_t num_nzd = 0;
     /*count number of none zero data*/
     for (count_t i = start_row; i < start_row + dst_row; i++)
@@ -225,19 +225,27 @@ spa_mat mat2csr_partation(val_t *a, count_t src_row, count_t src_col, count_t ds
             if (*(a + i * src_col + j))
             {
                 num_nzd += 1;
-                printf("**%d, %d=%.2f\t", i, j, *(a + i * src_col + j));
+                printf("ele(%d,%d)=%.2f\t", i, j, *(a + i * src_col + j));
             }
         }
-    printf("num of nzd =%d\t", num_nzd);
-    puts("counting finished");
+    // printf("num of nzd =%d\t", num_nzd);
+    // puts("counting finished");
     /*spmt init*/
     count_t ofst = 0;
     count_t last_nzd_row = 0;
     spa_mat spmt = {};
-    spmt.num_row = dst_row;
-    spmt.num_col = dst_col;
+
     spmt.idx_col = index_col;
     spmt.idx_row = index_row;
+    spmt.ori_col = src_col;
+    spmt.ori_row = src_row;
+    spmt.dst_col = dst_col;
+    spmt.dst_row = dst_row;
+    spmt.num_row = dst_row;
+    spmt.num_col = dst_col;
+    spmt.part_col = part_col;
+    spmt.part_row = part_row;
+
     spmt.val = calloc(num_nzd, sizeof(val_t));
     spmt.col_index = calloc(num_nzd, sizeof(index_t));
     spmt.offset = calloc(dst_row + 1, sizeof(offset_t));
@@ -250,11 +258,13 @@ spa_mat mat2csr_partation(val_t *a, count_t src_row, count_t src_col, count_t ds
         {
             if (*(a + src_col * (i + start_row) + j + start_col) != 0)
             {
+                printf("sub info:ele(%d,%d)=%.2f,while last_row=%d,nzd=%d\n", i, j, *(a + src_col * (i + start_row) + j + start_col), last_nzd_row, spmt.num_nzd);
+
                 //this block should be optimized
                 if (i > last_nzd_row || !spmt.num_nzd && !last_nzd_row) //next row or first row
                 {
                     offset(spmt)[ofst] = spmt.num_nzd;
-
+                    // printf("~~~~~~~~working~~~~ofst=%d~~~\n", spmt.num_nzd);
                     if (ofst > 0) //calc offset_row (ele num of row)
                         offset_row(spmt)[ofst - 1] = offset(spmt)[ofst] - offset(spmt)[ofst - 1];
 
@@ -288,7 +298,9 @@ spa_mat mat2csr_partation(val_t *a, count_t src_row, count_t src_col, count_t ds
     //finish offset val
     offset(spmt)[ofst] = spmt.num_nzd;
     offset_row(spmt)[ofst - 1] = offset(spmt)[ofst] - offset(spmt)[ofst - 1];
+
     return spmt;
+
     //finish offset val
 }
 
@@ -297,10 +309,10 @@ spa_mat *mat2csr_divide(val_t *a, count_t src_row, count_t src_col, count_t dst_
     size_t part_col = ceil((float)src_col / dst_col);
     size_t part_row = ceil((float)src_col / dst_col);
     //so can the index of partition be (part_row, part_col)
-    printf("partation number %d * %d\n", part_row, part_col);
+    // printf("partation number %d * %d\n", part_row, part_col);
 
-    spa_mat *spmt = (spa_mat *)malloc(part_col * part_row * sizeof(spa_mat));
-    //spa_mat spmt[4];
+    spa_mat *spmt = malloc(part_col * part_row * sizeof(spa_mat));
+    // spa_mat spmt[9];
 
     count_t start_col = 0;
     count_t start_row = 0;
@@ -309,20 +321,24 @@ spa_mat *mat2csr_divide(val_t *a, count_t src_row, count_t src_col, count_t dst_
         {
             if (src_col >= dst_col && src_row >= dst_row) //make sure dst less than src
             {
-                // printf("\nworking on subset %d(%d, %d)\n", i * part_col + j, i, j);
-                spmt[i * part_col + j] = mat2csr_partation(a, src_row, src_col, dst_row, dst_col, i, j);
+                printf("\n-------working on subset %d(%d, %d)-------\n", i * part_col + j, i, j);
+                *(spmt + i * part_col + j) = mat2csr_partation(a, src_row, src_col, dst_row, dst_col, i, j);
+                // spmt[i * part_col + j] = mat2csr_partation(a, src_row, src_col, dst_row, dst_col, i, j);
+                puts("---->>>");
+                print_csr(&spmt[i * part_col + j], 1);
                 // printf("***num_nzd=%d", (spmt + i * part_col + j)->num_nzd);
-                { // original shape of matrix
-                    spmt[i * part_col + j].part_col = part_col;
-                    spmt[i * part_col + j].part_row = part_row;
-                    spmt[i * part_col + j].ori_col = src_col;
-                    spmt[i * part_col + j].ori_row = src_row;
-                }
             }
-            else
+            else //TODO: add larger partation
                 ;
         }
-    return spmt;
+    // printf("szofspmt:%d,%d", sizeof(spa_mat), sizeof(spmt));
+    puts("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    print_csr(&spmt[0], 1);
+    print_csr(&spmt[1], 1);
+    print_csr(&spmt[2], 1);
+    print_csr(&spmt[3], 1);
+    //print_csr(spmt, 0);
+    // return spmt;
 }
 
 //----------------------------------------DECOMPRESSION----------------------------------------//
@@ -395,7 +411,7 @@ val_t *csr2mat(spa_mat *m)
     return mat;
 }
 
-val_t *csr2mat_new(spa_mat *m)
+val_t *csr2mat_bynum(spa_mat *m)
 {
     val_t *mat = calloc(m->num_col * m->num_row, sizeof(val_t));
     count_t row_idx = 0;
@@ -422,6 +438,53 @@ val_t *csr2mat_new(spa_mat *m)
     return mat;
 }
 
+val_t *csr2mat_comb(spa_mat *spmt)
+{
+    count_t ori_col = spmt->ori_col;
+    count_t ori_row = spmt->ori_row;
+    count_t part_col = spmt->part_col;
+    count_t part_row = spmt->part_row;
+    // count_t part_col = spmt->part_col;
+    // count_t part_col = spmt->part_col;
+    spa_mat spmt_tmp = {};
+    count_t row_idx = 0;
+    count_t row_val_used = 0;
+    count_t submat_base = 0;
+
+    val_t *mat = calloc(ori_col * ori_row, sizeof(val_t)); //should be calloc,with zero init
+
+    for (count_t i = 0; i < part_row; i++)
+        for (count_t j = 0; j < part_col; j++)
+        {
+            spmt_tmp = *(spmt + i * part_col + j);
+            //print_csr(&spmt_tmp);
+            row_idx = 0;
+            row_val_used = 0;
+            submat_base = i * ori_col * spmt_tmp.dst_row + j * spmt_tmp.dst_col;
+            // printf("base(%d,%d)=%d,shape(%d,%d)\n", i, j, submat_base, spmt_tmp.num_row, spmt_tmp.num_col);
+            for (count_t k = 0; k < spmt_tmp.num_nzd; k++)
+            {
+                for (; spmt_tmp.offset_row[row_idx] == 0; row_idx++)
+                    ; //skip zero row
+
+                if (row_val_used < spmt_tmp.offset_row[row_idx])
+                { //not all used then use one
+                    mat[submat_base + ori_col * row_idx + spmt_tmp.col_index[k]] = spmt_tmp.val[k];
+                    row_val_used += 1;
+                }
+                else
+                { // all ele used, move to next row
+                    row_idx += 1;
+                    for (; spmt_tmp.offset_row[row_idx] == 0; row_idx++)
+                        ; //zero row move to next
+                    mat[submat_base + ori_col * row_idx + spmt_tmp.col_index[k]] = spmt_tmp.val[k];
+                    row_val_used = 1;
+                }
+            }
+        }
+    retrun mat;
+}
+
 //----------------------------------------PRINT_FUNCTION----------------------------------------//
 /*  Function name:  print_compress_sparse
     Discreption:    print csr
@@ -429,33 +492,40 @@ val_t *csr2mat_new(spa_mat *m)
         @m          struct of sparse matrix.
     Return:         null
 */
-void print_csr(spa_mat *m)
+void print_csr(spa_mat *m, int single)
 {
-    printf("total partation (%d,%d) index (%d,%d)\n", m->part_row, m->part_col, m->idx_row, m->idx_col);
 
-    printf("num_nzd = %ld, num_zd = %ld, shape(%ld,%ld), ori shape(%ld,%ld)\n",
-           m->num_nzd, m->num_zd, m->num_row, m->num_col, m->ori_row, m->ori_col);
-    printf("value =");
-    for (unsigned long i = 0; i < m->num_nzd; i++)
+    if (single)
     {
-        printf(" %f", val(*m)[i]);
+        printf("total partation (%d,%d) index (%d,%d)\n", m->part_row, m->part_col, m->idx_row, m->idx_col);
+
+        printf("num_nzd = %ld, num_zd = %ld, shape(%ld,%ld), ori shape(%ld,%ld)\n",
+               m->num_nzd, m->num_zd, m->num_row, m->num_col, m->ori_row, m->ori_col);
+        printf("value =");
+        for (unsigned long i = 0; i < m->num_nzd; i++)
+        {
+            printf(" %f", val(*m)[i]);
+        }
+        printf("\n");
+
+        printf("index =");
+        for (unsigned long i = 0; i < m->num_nzd; i++)
+            printf(" %lu", index(*m)[i]);
+        printf("\n");
+
+        printf("ofset =");
+        for (unsigned long i = 0; i < m->num_row + 1; i++)
+            printf(" %lu", offset(*m)[i]);
+        printf("\n");
+
+        printf("ofstr =");
+        for (unsigned long i = 0; i < m->num_row; i++)
+            printf(" %lu", offset_row(*m)[i]);
+        printf("\n-------------\n");
     }
-    printf("\n");
-
-    printf("index =");
-    for (unsigned long i = 0; i < m->num_nzd; i++)
-        printf(" %lu", index(*m)[i]);
-    printf("\n");
-
-    printf("ofset =");
-    for (unsigned long i = 0; i < m->num_row + 1; i++)
-        printf(" %lu", offset(*m)[i]);
-    printf("\n");
-
-    printf("ofstr =");
-    for (unsigned long i = 0; i < m->num_row; i++)
-        printf(" %lu", offset_row(*m)[i]);
-    printf("\n");
+    else
+        for (int k = 0; k < m->part_col * m->part_row; k++)
+            print_csr(m + k, 1);
 }
 
 /*  Function name:  print_ele
@@ -532,9 +602,29 @@ int main(int argc, char const *argv[])
     // ele,index -> num of ele; offset -> number of row
     print_vec(mat_norm, num_row, num_col);
     puts("\n---------------------------------");
-
+    // spa_mat *spmt = mat2csr_divide(mat_norm, num_row, num_col, 4, 5);
+    spa_mat *spmt = mat2csr_divide(mat_norm, num_row, num_col, 3, 3);
+    // spa_mat *spmt = mat2csr_divide(mat_norm, num_row, num_col, 2, 2);
+    // val_t *csr = csr2mat_comb(spmt);
+    // print_vec(csr, num_row, num_col);
+    puts("\n---------------------------------");
+    // puts("\n---------------");
+    // print_csr(spmt + 1);
+    // puts("\n---------------");
+    // print_csr(spmt + 2);
+    // puts("\n---------------");
+    // print_csr(spmt + 3);
+    // puts("\n---------------");
+    // print_csr(spmt + 4);
+    // puts("\n---------------");
+    // print_csr(spmt + 5);
+    // puts("\n---------------");
+    // for (int k = 0; k < 36; k++)
+    //     printf("%.1f", *(csr+k));
+    // if (csr[k] == mat_norm[k])
+    //     puts("WRONG！！！");
     // spa_mat spmat = vec2csr(mat_norm, num_row, num_col);
-    // print_csr(&spmat);
+    // print_csr(spmt, 0);
     // puts("\n---------------------------------");
 
     // // ele *e = vec2ele(mat_norm, num_row, num_col);
@@ -556,18 +646,16 @@ int main(int argc, char const *argv[])
     // puts("---------------");
     // print_vec(csr2vec(&spmat), 6, 6);
     // puts("\n---------------");
-    spa_mat *spmt = mat2csr_divide(mat_norm, num_row, num_col, 4, 5);
+    print_csr(spmt, 1);
+    puts("-----");
+    print_csr(spmt + 1, 1);
+    puts("-----");
+    print_csr(spmt + 2, 1);
+    puts("-----");
+    print_csr(spmt + 3, 1);
+    puts("-----");
+    // // print_csr(*spmt_arry[0]);
 
-    print_csr(spmt);
-    puts("-----");
-    print_csr(spmt + 1);
-    puts("-----");
-    print_csr(&spmt[2]);
-    puts("-----");
-    print_csr(&spmt[3]);
-    puts("-----");
-    // print_csr(*spmt_arry[0]);
-    puts("\n---------------");
     // spa_mat spmt_norm = mat2csr(mat_norm, num_row, num_col);
     // print_csr(&spmt_norm);
     // print_vec(csr2mat(&spmt_norm), num_row, num_col);

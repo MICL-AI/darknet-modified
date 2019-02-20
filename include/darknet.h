@@ -271,7 +271,8 @@ struct layer
     float *bn_scale; //liuj0918
     float *scale_updates;
 
-    spa_mat spmt;           //sparse storage TL 181113
+    // spa_mat spmt;           //sparse storage TL 181113
+    spa_mat *spmt;           //sparse storage TL 181113-->190220
     float con_max, con_min; //TL 181017 fin max/min in conn/conv
     float wei_max, wei_min;
 
