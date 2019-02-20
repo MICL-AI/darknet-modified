@@ -331,14 +331,14 @@ spa_mat *mat2csr_divide(val_t *a, count_t src_row, count_t src_col, count_t dst_
             else //TODO: add larger partation
                 ;
         }
-    // printf("szofspmt:%d,%d", sizeof(spa_mat), sizeof(spmt));
+    printf("szofspmt:%d,%d", sizeof(spa_mat), sizeof(*spmt));
     puts("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
     print_csr(&spmt[0], 1);
     print_csr(&spmt[1], 1);
     print_csr(&spmt[2], 1);
     print_csr(&spmt[3], 1);
     //print_csr(spmt, 0);
-    // return spmt;
+    return spmt;
 }
 
 //----------------------------------------DECOMPRESSION----------------------------------------//
@@ -603,11 +603,12 @@ int main(int argc, char const *argv[])
     print_vec(mat_norm, num_row, num_col);
     puts("\n---------------------------------");
     // spa_mat *spmt = mat2csr_divide(mat_norm, num_row, num_col, 4, 5);
-    spa_mat *spmt = mat2csr_divide(mat_norm, num_row, num_col, 3, 3);
-    // spa_mat *spmt = mat2csr_divide(mat_norm, num_row, num_col, 2, 2);
+    // spa_mat *spmt = mat2csr_divide(mat_norm, num_row, num_col, 3, 3);
+    spa_mat *spmt = mat2csr_divide(mat_norm, num_row, num_col, 2, 2);
     // val_t *csr = csr2mat_comb(spmt);
-    // print_vec(csr, num_row, num_col);
+    printf("szofapmt:%d", sizeof(spmt));
     puts("\n---------------------------------");
+    // print_csr(mat2csr_divide(mat_norm, num_row, num_col, 2, 2),0);
     // puts("\n---------------");
     // print_csr(spmt + 1);
     // puts("\n---------------");
@@ -646,14 +647,14 @@ int main(int argc, char const *argv[])
     // puts("---------------");
     // print_vec(csr2vec(&spmat), 6, 6);
     // puts("\n---------------");
-    print_csr(spmt, 1);
-    puts("-----");
-    print_csr(spmt + 1, 1);
-    puts("-----");
-    print_csr(spmt + 2, 1);
-    puts("-----");
-    print_csr(spmt + 3, 1);
-    puts("-----");
+    // print_csr(spmt, 1);
+    // puts("-----");
+    // print_csr(spmt + 1, 1);
+    // puts("-----");
+    // print_csr(spmt + 2, 1);
+    // puts("-----");
+    // print_csr(spmt + 3, 1);
+    // puts("-----");
     // // print_csr(*spmt_arry[0]);
 
     // spa_mat spmt_norm = mat2csr(mat_norm, num_row, num_col);
