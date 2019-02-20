@@ -32,6 +32,8 @@ typedef struct sparse_matrix
     count_t num_nzd, num_zd;    //num of elements
     count_t num_col, num_row;   //shape
     count_t idx_col, idx_row;   //index for the partation
+    count_t part_col, part_row; //total number of partation
+    count_t ori_col, ori_row;   //original shap
     struct sparse_matrix *next; //link to next part
 } spa_mat;
 
