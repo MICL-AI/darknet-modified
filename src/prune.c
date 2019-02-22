@@ -40,6 +40,7 @@ void prune_channel(float *output, int channel, int width, int height)
     // printf("%.2f\t%.2f\n", 16 * (float)(width * height * zero_c) / 1000 / 1000, 16 * (float)(width * height * (channel - zero_c)) / 1000 / 1000);
     // printf("%d/%d reduced min = %.2f\%, max = %.2f\%\n", conv_layer_reduced, layer_conv_sum, conv_reduce_min * 100, conv_reduce_max * 100);
     // printf("layer_sparsity:%.2f\n", (float)zero_sum / (width * height * channel)); //get sparsity
+    
     /*END TL 181203 adding for dynamic pruning test.*/
 }
 void print_channel(float *output, int channel, int width, int height)

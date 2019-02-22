@@ -1767,16 +1767,18 @@ void load_connected_weights(layer l, FILE *fp, int transpose)
 {
 
     fread(l.biases, sizeof(float), l.outputs, fp);
-
-    float *wei = calloc(l.outputs * l.inputs, sizeof(float));
+    
 #ifdef CSR
-    printf("----CSR----\n", l.outputs, l.inputs, l.outputs * l.inputs);
+    printf("----CSR---- input %d*%d\n", l.outputs, l.inputs, l.outputs * l.inputs);
+    float *wei = calloc(l.outputs * l.inputs, sizeof(float));
     fread(wei, sizeof(float), l.outputs * l.inputs, fp);
-    l.spmt = mat2csr_divide(wei, l.outputs, l.inputs, l.outputs, l.inputs);
+    l.spmt = mat2csr_divide(wei, l.outputs, l.inputs, 4096, 9216);
+    // l.spmt = mat2csr_divide(wei, l.outputs, l.inputs, l.outputs, l.inputs);
     memcpy(l.weights, csr2mat_comb(l.spmt), sizeof(float) * (l.outputs * l.inputs));
 #else
     fread(l.weights, sizeof(float), l.outputs * l.inputs, fp);
 #endif
+
     //TL 1017 adding convert from float to int, then back to float
     for (int i = 0; i < l.outputs * l.inputs; i++)
     {

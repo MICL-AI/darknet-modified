@@ -6,7 +6,7 @@ DEBUG=0
 #TL added
 PRUNE=1
 QUANTIZE=0
-CSR=1
+CSR=0
 
 
 ARCH= -gencode arch=compute_30,code=sm_30 \

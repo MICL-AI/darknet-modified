@@ -798,7 +798,7 @@ void forward_convolutional_layer(convolutional_layer l, network net)
     /*TL 181203 adding for dynamic pruning test.*/ //Pruning
 #ifdef PRUNE
     //print_channel(l.output, l.out_c, l.out_h, l.out_w);
-    puts("*********");
+    puts("*********pruing*********");
     prune_channel(l.output, l.out_c, l.out_h, l.out_w);
 #endif
     if (l.binary || l.xnor)

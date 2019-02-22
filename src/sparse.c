@@ -205,7 +205,7 @@ spa_mat mat2csr_partation(val_t *a, count_t src_row, count_t src_col, count_t ds
     count_t start_col = index_col * dst_col;
     //solve corner cases
     size_t part_col = ceil((float)src_col / dst_col);
-    size_t part_row = ceil((float)src_col / dst_col);
+    size_t part_row = ceil((float)src_row / dst_row);
     if (index_row == part_row - 1 && index_col < part_col - 1) //bottom (south)
         dst_row = (src_row % dst_row) ? (src_row % dst_row) : dst_row;
     else if (index_row < part_row - 1 && index_col == part_col - 1) //right (east)
@@ -258,37 +258,41 @@ spa_mat mat2csr_partation(val_t *a, count_t src_row, count_t src_col, count_t ds
         {
             if (*(a + src_col * (i + start_row) + j + start_col) != 0)
             {
+                offset_row(spmt)[i]++;
                 // printf("sub info:ele(%d,%d)=%.2f,while last_row=%d,nzd=%d\n", i, j, *(a + src_col * (i + start_row) + j + start_col), last_nzd_row, spmt.num_nzd);
 
-                //this block should be optimized
-                if (i > last_nzd_row || !spmt.num_nzd && !last_nzd_row) //next row or first row
-                {
-                    offset(spmt)[ofst] = spmt.num_nzd;
-                    // printf("~~~~~~~~working~~~~ofst=%d~~~\n", spmt.num_nzd);
-                    if (ofst > 0) //calc offset_row (ele num of row)
-                        offset_row(spmt)[ofst - 1] = offset(spmt)[ofst] - offset(spmt)[ofst - 1];
+                //this block should be optimized, it's for the offset value
+                // if (i > last_nzd_row || !spmt.num_nzd && !last_nzd_row)
+                // //next row or first row
+                // {
+                //     // in case of first row all zero
+                //     if (last_nzd_row == 0)
+                //     {
+                //         offset(spmt)[ofst] = 0;
+                //         ofst += 1;
+                //     }
 
-                    for (count_t k = 1; i > (last_nzd_row + k); k++)
-                    { //solving all zero row
-                        offset(spmt)[ofst] = spmt.num_nzd;
-                        ofst += 1;
-                        offset(spmt)[ofst] = spmt.num_nzd;
-                        offset_row(spmt)[ofst - 1] = 0; // nothing in this row
-                    }
+                //     for (count_t k = 1; i > (last_nzd_row + k); k++)
+                //     { //solving all zero row
+                //         offset(spmt)[ofst] = spmt.num_nzd;
+                //         ofst += 1;
+                //         offset(spmt)[ofst] = spmt.num_nzd;
+                //     }
 
-                    if (last_nzd_row == 0)
-                    { // first row is zero
-                        offset(spmt)[ofst] = 0;
-                        ofst += 1;
-                    }
+                //     offset(spmt)[ofst] = spmt.num_nzd;
 
-                    ofst += 1;
+                //     if (ofst > 0) //calc offset_row (ele num of row)
 
-                    // ofst += 1;
-                }
+                //     ofst += 1;
+
+                //     // ofst += 1;
+                // }
+                //give value and index info to spmt
                 val(spmt)[spmt.num_nzd] = *(a + src_col * (i + start_row) + j + start_col);
                 index(spmt)[spmt.num_nzd] = j;
+                //count nzd number
                 spmt.num_nzd += 1;
+                //remember last row number
                 last_nzd_row = i;
             }
             else
@@ -307,9 +311,9 @@ spa_mat mat2csr_partation(val_t *a, count_t src_row, count_t src_col, count_t ds
 spa_mat *mat2csr_divide(val_t *a, count_t src_row, count_t src_col, count_t dst_row, count_t dst_col)
 {
     size_t part_col = ceil((float)src_col / dst_col);
-    size_t part_row = ceil((float)src_col / dst_col);
+    size_t part_row = ceil((float)src_row / dst_row);
     //so can the index of partition be (part_row, part_col)
-    // printf("partation number %d * %d\n", part_row, part_col);
+    printf("partation number %d * %d\n", part_row, part_col);
 
     spa_mat *spmt = malloc(part_col * part_row * sizeof(spa_mat));
     // spa_mat spmt[9];
@@ -319,6 +323,9 @@ spa_mat *mat2csr_divide(val_t *a, count_t src_row, count_t src_col, count_t dst_
     for (count_t i = 0; i < part_row; i++)
         for (count_t j = 0; j < part_col; j++)
         {
+            dst_col = src_col > dst_col ? dst_col : src_col;
+            dst_row = src_row > dst_row ? dst_row : src_row;
+
             if (src_col >= dst_col && src_row >= dst_row) //make sure dst less than src
             {
                 // printf("\n-------working on subset %d(%d, %d)-------\n", i * part_col + j, i, j);
@@ -451,7 +458,8 @@ val_t *csr2mat_comb(spa_mat *spmt)
     count_t row_val_used = 0;
     count_t submat_base = 0;
 
-    val_t *mat = calloc(ori_col * ori_row, sizeof(val_t)); //should be calloc,with zero init
+    //should be calloc,with zero initiation
+    val_t *mat = calloc(ori_col * ori_row, sizeof(val_t));
 
     for (count_t i = 0; i < part_row; i++)
         for (count_t j = 0; j < part_col; j++)
@@ -504,7 +512,7 @@ void print_csr(spa_mat *m, int single)
         printf("value =");
         for (unsigned long i = 0; i < m->num_nzd; i++)
         {
-            printf(" %f", val(*m)[i]);
+            printf(" %.1f", val(*m)[i]);
         }
         printf("\n");
 
@@ -564,6 +572,21 @@ void print_vec(val_t *a, count_t num_row, count_t num_col)
             printf("\n%.1f  ", a[i]);
     }
 }
+
+int valid_mat(val_t *ori, val_t *decomp, count_t num_row, count_t num_col)
+{
+    int brk = 0;
+    for (count_t k = 0; k < num_row * num_col; k++)
+        if (*(ori + k) != *(decomp + k))
+        {
+            printf("WRONG!!!(%d,%d)=%.1f,not%.1f\n", k / num_row, k % num_col, *(ori + k), *(decomp + k));
+            brk++;
+        }
+    if (!brk)
+        puts("ALL RIGHT!!");
+
+    //return 1;
+}
 //----------------------------------------TEST----------------------------------------//
 #ifndef CSR
 int main(int argc, char const *argv[])
@@ -588,13 +611,13 @@ int main(int argc, char const *argv[])
         9, 6, 9, 4, 9, 9,
         9, 9, 9, 9, 1, 1,
         1, 9, 1, 9, 6, 6};
-    float mat_norm[6][6] = {//*****
-                            0, 0, 0, 0, 0, 0,
-                            0, 2, 8, 0, 0, 5,
-                            5, 0, 3, 9, 0, 6,
-                            0, 0, 0, 0, 0, 0,
-                            0, 0, 0, 0, 0, 0,
-                            1, 0, 1, 0, 0, 6};
+    float mat_norm[] = {//*****
+                        0, 0, 0, 0, 0, 0,
+                        0, 2, 8, 0, 0, 5,
+                        5, 0, 3, 9, 0, 6,
+                        0, 0, 0, 0, 0, 0,
+                        0, 0, 0, 0, 0, 0,
+                        1, 0, 1, 0, 0, 6};
     // number of ele
     count_t num_row = 6, num_col = 6;
     //count_t num_row = 4, num_col = 4;
@@ -602,13 +625,25 @@ int main(int argc, char const *argv[])
     // ele,index -> num of ele; offset -> number of row
     print_vec(mat_norm, num_row, num_col);
     puts("\n---------------------------------");
-    // spa_mat *spmt = mat2csr_divide(mat_norm, num_row, num_col, 4, 5);
+    spa_mat *spmt;
+    val_t *csr;
+    // spa_mat *spmt = mat2csr_divide(mat_norm, num_row, num_col, 2, 6);
+    for (int kr = 1; kr < 6; kr++)
+        for (int kc = 1; kc < 6; kc++)
+        {
+            printf("\npartation information: kr=%d, kc=%d\n", kr, kc);
+            spmt = mat2csr_divide(mat_norm, num_row, num_col, kr, kc);
+            csr = csr2mat_comb(spmt);
+            valid_mat(mat_norm, csr, num_row, num_col);
+        }
+           
     // spa_mat *spmt = mat2csr_divide(mat_norm, num_row, num_col, 3, 3);
-    spa_mat *spmt = mat2csr_divide(mat_norm, num_row, num_col, 2, 2);
-    print_csr(spmt, 0);
-    // val_t *csr = csr2mat_comb(spmt);
-    // printf("szofapmt:%d,%d", sizeof(spmt),sizeof(*spmt));
+    // spa_mat *spmt = mat2csr_divide(mat_norm, num_row, num_col, 6, 1);
+    // spa_mat *spmt = mat2csr_divide(mat_norm, num_row, num_col, 2, 2);
+    // print_csr(spmt, 0);
     puts("\n---------------------------------");
+    // print_vec(csr, num_row, num_col);
+    
     // print_csr(mat2csr_divide(mat_norm, num_row, num_col, 2, 2),0);
     // puts("\n---------------");
     // print_csr(spmt + 1);
@@ -621,10 +656,7 @@ int main(int argc, char const *argv[])
     // puts("\n---------------");
     // print_csr(spmt + 5);
     // puts("\n---------------");
-    // for (int k = 0; k < 36; k++)
-    //     printf("%.1f", *(csr+k));
-    // if (csr[k] == mat_norm[k])
-    //     puts("WRONG！！！");
+
     // spa_mat spmat = vec2csr(mat_norm, num_row, num_col);
     // print_csr(spmt, 0);
     // puts("\n---------------------------------");
