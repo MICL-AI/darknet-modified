@@ -1769,7 +1769,7 @@ void load_connected_weights(layer l, FILE *fp, int transpose)
     fread(l.biases, sizeof(float), l.outputs, fp);
     
 #ifdef CSR
-    printf("----CSR---- input %d*%d\n", l.outputs, l.inputs, l.outputs * l.inputs);
+    printf("----CSR in Conn---- input %d*%d=%d\n", l.outputs, l.inputs, l.outputs * l.inputs);
     float *wei = calloc(l.outputs * l.inputs, sizeof(float));
     fread(wei, sizeof(float), l.outputs * l.inputs, fp);
     l.spmt = mat2csr_divide(wei, l.outputs, l.inputs, 1024, 256);
@@ -2027,7 +2027,18 @@ void load_convolutional_weights(layer l, FILE *fp)
             printf("\n");
         }
     }
+    
+#ifdef CSR
+    printf("----CSR in Conv---- input %d\n", num);
+    float *wei = calloc(num, sizeof(float));
+    fread(wei, sizeof(float), num, fp);
+    l.spmt = mat2csr_divide(wei, 1, num, 1024, 256);
+    // l.spmt = mat2csr_divide(wei, l.outputs, l.inputs, l.outputs, l.inputs);
+    memcpy(l.weights, csr2mat_comb(l.spmt), sizeof(float) * num);
+#else
     fread(l.weights, sizeof(float), num, fp);
+#endif
+
 #ifdef QUANTIZE
     printf("BEFORE, weight[%d]:%f,weight[%d]:%f\n", num - 2, l.weights[num - 2], num - 1, l.weights[num - 1]);
     printf("loaded_conv_weights, sum = %d\n", num);

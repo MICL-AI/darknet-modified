@@ -1,12 +1,12 @@
-GPU=1
+GPU=0
 CUDNN=0
 OPENCV=0
 OPENMP=0
 DEBUG=0
 #TL added
-PRUNE=1
+PRUNE=0
 QUANTIZE=0
-CSR=0
+CSR=1
 
 
 ARCH= -gencode arch=compute_30,code=sm_30 \

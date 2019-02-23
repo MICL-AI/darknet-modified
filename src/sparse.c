@@ -83,8 +83,6 @@ spa_mat mat2csr(val_t *a, count_t num_row, count_t num_col)
                     }
 
                     ofst += 1;
-
-                    // ofst += 1;
                 }
                 val(spmt)[spmt.num_nzd] = *(a + num_col * i + j);
                 index(spmt)[spmt.num_nzd] = j;
