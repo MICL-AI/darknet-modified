@@ -1767,9 +1767,9 @@ void load_connected_weights(layer l, FILE *fp, int transpose)
 {
 
     fread(l.biases, sizeof(float), l.outputs, fp);
-    
+
 #ifdef CSR
-    printf("----CSR in Conn---- input %d*%d=%d\n", l.outputs, l.inputs, l.outputs * l.inputs);
+    printf("----CSR in Conn---- outputs * inputs (%d*%d)=%d\n", l.outputs, l.inputs, l.outputs * l.inputs);
     float *wei = calloc(l.outputs * l.inputs, sizeof(float));
     fread(wei, sizeof(float), l.outputs * l.inputs, fp);
     l.spmt = mat2csr_divide(wei, l.outputs, l.inputs, 1024, 256);
@@ -1778,6 +1778,14 @@ void load_connected_weights(layer l, FILE *fp, int transpose)
 #else
     fread(l.weights, sizeof(float), l.outputs * l.inputs, fp);
 #endif
+
+    puts("\nconverted conn");
+    for (int j = 0; j < 3; j++) //row
+    {
+        for (int k = 290; k < 310; k++) //col
+            printf("%.1f ", l.weights[j * l.inputs + k]);
+        printf("\n");
+    }
 
     //TL 1017 adding convert from float to int, then back to float
     for (int i = 0; i < l.outputs * l.inputs; i++)
@@ -1788,13 +1796,13 @@ void load_connected_weights(layer l, FILE *fp, int transpose)
 
     if (transpose)
     {
-        printf("NOTE:\t[load_connected_weights]\tTRANSPOSE \n");
+        // printf("NOTE:\t[load_connected_weights]\tTRANSPOSE \n");
 
         transpose_matrix(l.weights, l.inputs, l.outputs);
     }
     if (l.transpose)
     {
-        printf("NOTE:\t[load_connected_weights]\tl.transpose = 1\n");
+        // printf("NOTE:\t[load_connected_weights]\tl.transpose = 1\n");
 
         transpose_matrix(l.weights, l.outputs, l.inputs);
     }
@@ -2027,12 +2035,10 @@ void load_convolutional_weights(layer l, FILE *fp)
             printf("\n");
         }
     }
-    
+
 #ifdef CSR
-    printf("----CSR in Conv---- input %d\n", num);
+    printf("----CSR in Conv---- c/grps * n * size * size (%d/%d*%d*%d^2)=%d\n", l.c, l.groups, l.n, l.size, num);
     float *wei = calloc(num, sizeof(float));
-    fread(wei, sizeof(float), num, fp);
-    l.spmt = mat2csr_divide(wei, 1, num, 1024, 256);
     // l.spmt = mat2csr_divide(wei, l.outputs, l.inputs, l.outputs, l.inputs);
     memcpy(l.weights, csr2mat_comb(l.spmt), sizeof(float) * num);
 #else
@@ -2094,7 +2100,7 @@ void load_weights_upto(network *net, char *filename, int start, int cutoff)
         cuda_set_device(net->gpu_index);
     }
 #endif
-    fprintf(stderr, "Loading weights from %s...", filename);
+    fprintf(stderr, "Loading weights from %s...\n", filename);
     fflush(stdout);
     FILE *fp = fopen(filename, "rb");
     if (!fp)
@@ -2104,22 +2110,22 @@ void load_weights_upto(network *net, char *filename, int start, int cutoff)
     int minor;
     int revision;
     fread(&major, sizeof(int), 1, fp);
-    printf("\n major:%d,sizeof(int):%d\n", major, sizeof(int));
+    // printf("\n major:%d,sizeof(int):%d\n", major, sizeof(int));
     fread(&minor, sizeof(int), 1, fp);
-    printf("minor:%d\n", minor);
+    // printf("minor:%d\n", minor);
     fread(&revision, sizeof(int), 1, fp);
-    printf("revision:%d\n", revision);
+    // printf("revision:%d\n", revision);
     if ((major * 10 + minor) >= 2 && major < 1000 && minor < 1000)
     {
         fread(net->seen, sizeof(size_t), 1, fp);
-        printf("seen:%ld,sizeof(size_t):%d\n", net->seen, sizeof(size_t));
+        // printf("seen:%ld,sizeof(size_t):%d\n", net->seen, sizeof(size_t));
     }
     else
     {
         int iseen = 0;
         fread(&iseen, sizeof(int), 1, fp);
         *net->seen = iseen;
-        printf("seen:%d\n", iseen);
+        // printf("seen:%d\n", iseen);
     }
     int transpose = (major > 1000) || (minor > 1000);
 
@@ -2196,7 +2202,7 @@ void load_weights_upto(network *net, char *filename, int start, int cutoff)
 #endif
         }
     }
-    fprintf(stderr, "Done!\n");
+    fprintf(stderr, "Load weiths Done!\n");
     fclose(fp);
 }
 

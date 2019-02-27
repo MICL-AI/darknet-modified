@@ -144,7 +144,7 @@ void train_classifier(char *datacfg, char *cfgfile, char *weightfile, int *gpus,
         printf("batch: %ld, epoch: %.3f, loss: %f, avg_loss: %f, rate: %f, %lf seconds, %ld images\n", get_current_batch(net), (float)(*net->seen) / N, loss, avg_loss, get_current_rate(net), what_time_is_it_now() - time, *net->seen);
         free_data(train);
         if (*net->seen / N > epoch)
-        { 
+        {
             epoch = *net->seen / N;
             char buff[256];
             sprintf(buff, "%s/%s_%d.weights", backup_directory, base, epoch);
@@ -921,6 +921,35 @@ void predict_classifier16(char *datacfg, char *cfgfile, char *weightfile, char *
             break;
     }
 }
+//TL 190225 generate test data
+void convert_weights_classifier(char *datacfg, char *cfgfile, char *weightfile, char *filename)
+{
+    network *net = load_network(cfgfile, weightfile, 0);
+    //weights_cleanner(net);
+    for (int i = 0; i < net->n; ++i)
+    {
+        layer l = net->layers[i];
+
+        if (l.type == CONNECTED)
+        {
+            for (int j = 0; j < l.outputs; j++)    //row
+                for (int k = 0; k < l.inputs; k++) //col
+                {
+                    // if (k%5 && k%6 && k%7) // by row
+                    if ( 200 <= k && k <= 300) // by row
+                        l.weights[j * l.inputs + k] = 0.f;
+                    else
+                        l.weights[j * l.inputs + k] = 1.f;
+                }
+            // load_connected_weights(l, fp, transpose);
+        }
+        else
+            free(&l);
+    }
+    save_weights(net, strcat(weightfile, ""));
+    puts("weights file converted!");
+}
+
 void predict_classifier(char *datacfg, char *cfgfile, char *weightfile, char *filename, int top)
 {
     network *net = load_network(cfgfile, weightfile, 0);
@@ -1420,15 +1449,21 @@ void run_classifier(int argc, char **argv)
     int cam_index = find_int_arg(argc, argv, "-c", 0);
     int top = find_int_arg(argc, argv, "-t", 0);
     int clear = find_arg(argc, argv, "-clear");
-    char *data = argv[3];
-    char *cfg = argv[4];
-    char *weights = (argc > 5) ? argv[5] : 0;
+    char *data = argv[3];                     //patth to data file
+    char *cfg = argv[4];                      //path to cfg file
+    char *weights = (argc > 5) ? argv[5] : 0; //path to weights file
     char *filename = (argc > 6) ? argv[6] : 0;
     char *layer_s = (argc > 7) ? argv[7] : 0;
     printf("layer_s:%s\n", layer_s);
     int layer = layer_s ? atoi(layer_s) : -1;
     printf("layer:%d\n", layer);
-    if (0 == strcmp(argv[2], "predict"))
+
+    if (0 == strcmp(argv[2], "convert"))
+    {
+        convert_weights_classifier(data, cfg, weights, filename);
+        predict_classifier(data, cfg, weights, filename, top);
+    }
+    else if (0 == strcmp(argv[2], "predict"))
         predict_classifier(data, cfg, weights, filename, top);
     else if (0 == strcmp(argv[2], "predict16"))
         predict_classifier16(data, cfg, weights, filename, top);
