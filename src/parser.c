@@ -1772,20 +1772,21 @@ void load_connected_weights(layer l, FILE *fp, int transpose)
     printf("----CSR in Conn---- outputs * inputs (%d*%d)=%d\n", l.outputs, l.inputs, l.outputs * l.inputs);
     float *wei = calloc(l.outputs * l.inputs, sizeof(float));
     fread(wei, sizeof(float), l.outputs * l.inputs, fp);
-    l.spmt = mat2csr_divide(wei, l.outputs, l.inputs, 1024, 256);
     // l.spmt = mat2csr_divide(wei, l.outputs, l.inputs, l.outputs, l.inputs);
+    l.spmt = mat2csr_divide(wei, l.outputs, l.inputs, 1024, 256);
+    // memcpy(l.weights, wei, sizeof(float) * (l.outputs * l.inputs));
     memcpy(l.weights, csr2mat_comb(l.spmt), sizeof(float) * (l.outputs * l.inputs));
 #else
     fread(l.weights, sizeof(float), l.outputs * l.inputs, fp);
 #endif
 
-    puts("\nconverted conn");
-    for (int j = 0; j < 3; j++) //row
-    {
-        for (int k = 290; k < 310; k++) //col
-            printf("%.1f ", l.weights[j * l.inputs + k]);
-        printf("\n");
-    }
+    // printf("connected layer with %d*%d\n", l.outputs, l.inputs);
+    // for (int j = 0; j < 3; j++) //row
+    // {
+    //     for (int k = 0; k < 30; k++) //col
+    //         printf("%.1f ", l.weights[j * l.inputs + k]);
+    //     printf("\n");
+    // }
 
     //TL 1017 adding convert from float to int, then back to float
     for (int i = 0; i < l.outputs * l.inputs; i++)
@@ -2039,11 +2040,14 @@ void load_convolutional_weights(layer l, FILE *fp)
 #ifdef CSR
     printf("----CSR in Conv---- c/grps * n * size * size (%d/%d*%d*%d^2)=%d\n", l.c, l.groups, l.n, l.size, num);
     float *wei = calloc(num, sizeof(float));
-    // l.spmt = mat2csr_divide(wei, l.outputs, l.inputs, l.outputs, l.inputs);
+    fread(wei, sizeof(float), num, fp);
+    l.spmt = mat2csr_divide(wei, 1, num, 1024, 256);
     memcpy(l.weights, csr2mat_comb(l.spmt), sizeof(float) * num);
 #else
     fread(l.weights, sizeof(float), num, fp);
 #endif
+
+    sparsity_stastic("----LOAD_CONV_WEI----", l.weights, num, 1, 1);
 
 #ifdef QUANTIZE
     printf("BEFORE, weight[%d]:%f,weight[%d]:%f\n", num - 2, l.weights[num - 2], num - 1, l.weights[num - 1]);

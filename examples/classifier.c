@@ -932,11 +932,45 @@ void convert_weights_classifier(char *datacfg, char *cfgfile, char *weightfile, 
 
         if (l.type == CONNECTED)
         {
+            printf("connected layer with %d*%d\n", l.outputs, l.inputs);
             for (int j = 0; j < l.outputs; j++)    //row
                 for (int k = 0; k < l.inputs; k++) //col
                 {
-                    // if (k%5 && k%6 && k%7) // by row
-                    if ( 200 <= k && k <= 300) // by row
+                    l.weights[j * l.inputs + k] = 0.f;
+                }
+        }
+        else
+            free(&l);
+    }
+    save_weights(net, "weights/conn.weights.allzero");
+
+    for (int i = 0; i < net->n; ++i)
+    {
+        layer l = net->layers[i];
+
+        if (l.type == CONNECTED)
+        {
+            for (int j = 0; j < l.outputs; j++)    //row
+                for (int k = 0; k < l.inputs; k++) //col
+                {
+                    l.weights[j * l.inputs + k] = 1.f;
+                }
+            // load_connected_weights(l, fp, transpose);
+        }
+        else
+            free(&l);
+    }
+    save_weights(net, "weights/conn.weights.allone");
+    for (int i = 0; i < net->n; ++i)
+    {
+        layer l = net->layers[i];
+
+        if (l.type == CONNECTED)
+        {
+            for (int j = 0; j < l.outputs; j++)    //row
+                for (int k = 0; k < l.inputs; k++) //col
+                {
+                    if (k % 2) // by col
                         l.weights[j * l.inputs + k] = 0.f;
                     else
                         l.weights[j * l.inputs + k] = 1.f;
@@ -946,7 +980,49 @@ void convert_weights_classifier(char *datacfg, char *cfgfile, char *weightfile, 
         else
             free(&l);
     }
-    save_weights(net, strcat(weightfile, ""));
+    save_weights(net, "weights/conn.weights.col10");
+    for (int i = 0; i < net->n; ++i)
+    {
+        layer l = net->layers[i];
+
+        if (l.type == CONNECTED)
+        {
+            for (int j = 0; j < l.outputs; j++)    //row
+                for (int k = 0; k < l.inputs; k++) //col
+                {
+                    if (j % 2) // by row
+                        l.weights[j * l.inputs + k] = 0.f;
+                    else
+                        l.weights[j * l.inputs + k] = 1.f;
+                }
+            // load_connected_weights(l, fp, transpose);
+        }
+        else
+            free(&l);
+    }
+    save_weights(net, "weights/conn.weights.row10");
+    
+    for (int i = 0; i < net->n; ++i)
+    {
+        layer l = net->layers[i];
+
+        if (l.type == CONNECTED)
+        {
+            for (int j = 0; j < l.outputs; j++)    //row
+                for (int k = 0; k < l.inputs; k++) //col
+                {
+                    if (5 < k % 10 && k % 10 < 9) // by row
+                        l.weights[j * l.inputs + k] = 0.f;
+                    else
+                        l.weights[j * l.inputs + k] = 1.f;
+                }
+            // load_connected_weights(l, fp, transpose);
+        }
+        else
+            free(&l);
+    }
+    save_weights(net, "weights/conn.weights.row6-8zero");
+
     puts("weights file converted!");
 }
 
