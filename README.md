@@ -1,3 +1,4 @@
+# turn to darkent repository(https://github.com/liangtailin/darknet) for futher pruning and quantize, but without fp16(half precision) path.
 # darknet-modified  
 A Darknet branch modified to FP16 excution.  
 No weights file uploaded.  
